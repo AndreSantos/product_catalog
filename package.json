@@ -4,9 +4,9 @@
   "description": "Best second hand deals!",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsc && npm run build:cp-public",
-    "build:cp-public": "cp ./public/** ./dist",
-    "type": "tsc --noEmit"
+    "build": "tsc",
+    "type": "tsc --noEmit",
+    "start": "node ./dist/index.js"
   },
   "repository": {
     "type": "git",
