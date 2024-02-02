@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "target": "ES6",
+    "strict": true
+	}
+}
