@@ -8,6 +8,9 @@
     "build:cp-public": "cp ./public/** ./dist",
     "type": "tsc --noEmit"
   },
+  "dependencies": {
+    "puppeteer": "^21.0.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AndreSantos/product_catalog.git"
