@@ -8,9 +8,6 @@
     "type": "tsc --noEmit",
     "start": "node ./dist/index.js"
   },
-  "dependencies": {
-    "puppeteer": "^21.0.3"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AndreSantos/product_catalog.git"
@@ -20,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/AndreSantos/product_catalog/issues"
   },
-  "homepage": "https://github.com/AndreSantos/product_catalog#readme"
+  "type": "module",
+  "homepage": "https://github.com/AndreSantos/product_catalog#readme",
+  "dependencies": {
+    "puppeteer-core": "^21.11.0"
+  }
 }

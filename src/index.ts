@@ -1,4 +1,4 @@
-import {searchItems} from './vinted';
+import {searchItems} from './vinted.js';
 
 function init() {
 	setInterval(() => {
@@ -10,7 +10,7 @@ function init() {
 // init();
 
 async function iteration() {
-	const items = await searchItems('lego');
+	const items = await searchItems({text: 'lego'});
 	console.log(items);
 }
 

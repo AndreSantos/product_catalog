@@ -1,10 +1,17 @@
 {
 	"compilerOptions": {
-		"allowJs": true,
-		"checkJs": true,
+		//"allowJs": true,
+		//"checkJs": true,
     "outDir": "dist",
-    "sourceMap": true,
+    //"sourceMap": true,
     "target": "ES6",
-    "strict": true
+    //"strict": true,
+    "moduleResolution": "node",
+    "baseUrl": "src/",
+    "paths": {
+      "*": [
+        "node_modules/*",
+      ]
+    }
 	}
 }
