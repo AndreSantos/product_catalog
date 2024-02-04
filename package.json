@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "type": "tsc --noEmit",
-    "start": "node ./dist/index.js"
+    "start": "node ./src/index.js",
+    "watch": "nodemon -e js -x \"npm run start\""
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,11 @@
   "type": "module",
   "homepage": "https://github.com/AndreSantos/product_catalog#readme",
   "dependencies": {
-    "puppeteer-core": "^21.11.0"
+    "cookie": "^0.6.0",
+    "https-proxy-agent": "^7.0.2",
+    "node-fetch": "^3.3.2",
+    "puppeteer-core": "^21.11.0",
+    "typescript": "^5.3.3",
+    "user-agents": "^1.1.105"
   }
 }

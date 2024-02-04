@@ -7,7 +7,7 @@
     "target": "ES6",
     //"strict": true,
     "moduleResolution": "node",
-    "baseUrl": "src/",
+    "baseUrl": ".",
     "paths": {
       "*": [
         "node_modules/*",
