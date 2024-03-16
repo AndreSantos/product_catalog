@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('header.ejs') %>
+<body>
+  <%- include('head.ejs', {isJobRunning, jobRunningIn}) %>
+  <ul>
+    <li>Number of sets: <%= Object.keys(items).length %></li>
+  </ul>
+  <table class="items">
+    <thead>
+      <th>Set</th>
+      <th>Thumbnail</th>
+      <!-- <th>Count</th> -->
+      <th class="price">Max</th>
+      <th class="sets">Prices</th>
+    </thead>
+    <tbody>
+      <% Object.keys(items).filter(item => !["", "discarded", "undetermined"].includes(item)).forEach(function(setId) { %>
+        <tr data-set-id="<%= setId %>">
+          <td>
+            <a href="https://www.vinted.pt/catalog?search_text=lego%20<%= setId %>&order=price_low_to_high"><%= setId %><a/>
+            <button class="item-delete-button" onclick="unwantedSet(<%= setId %>)">X</button>
+          </td>
+          <td>
+            <a href='https://www.bricklink.com/v2/catalog/catalogitem.page?S=<%= setId %>-1#O={"ii":0}'>
+              <img class="thumbnail" src="<%= `https://img.bricklink.com/ItemImage/SN/0/${setId}-1.png` %>" />
+            </a>
+          </td>
+          <!-- <td><%= items[setId].length %></td> -->
+          <td class="price"><input data-set="<%= setId %>" value="<%= prices[setId] %>"></input>
+          <td class="sets">
+            <ul>
+            <% items[setId].filter((item, pos) => pos < 5).map(function (item, i) { %>
+              <li data-item-id="<%= item.id %>">
+                <!-- <% if (i > 0) { %>
+                  ,
+                <% } %> -->
+                <a href="<%= item.url %>"><%= parseInt(item.price) %>€</a>
+                <% if (item.status.startsWith("Novo")) { %>
+                  <span class="is-new">N</span>
+                <% } %>
+                <% if (item.discount) { %>
+                  <span class="discount"><%= Math.round(parseFloat(item.discount) * 100) %>%</span>
+                <% } %>
+                <button class="item-delete-button" onclick="deleteItem(<%= setId %>, <%= item.id %>)">X</button>
+              </li>
+            <% }); %>
+          </ul>
+          </td>
+        </tr>
+      <% }); %>
+    </thead>
+  </table>
+</body>
+</html>

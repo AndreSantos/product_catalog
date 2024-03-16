@@ -1,0 +1,124 @@
+
+> product_catalog@1.0.0 start
+> node ./src/index.js
+
+15/03/2024, 23:32:30 Starting new iteration.
+15/03/2024, 23:32:32 Processing new item...
+https://lens.google.com/uploadbyurl?re=df&url=https%3A%2F%2Fimages1.vinted.net%2Ft%2F01_020fa_bCX6BXfHuK3wYcYPeQwjNZPh%2Ff800%2F1710545360.jpeg%3Fs%3Dfe6e830ff58851a53d189f7b362196851198e26c&hl=en&re=df&st=1710545554025&ep=gisbubu
+TimeoutError: Navigation timeout of 60000 ms exceeded
+    at new Deferred (file:///home/andre/code/node_modules/puppeteer-core/lib/esm/puppeteer/util/Deferred.js:51:34)
+    at Deferred.create (file:///home/andre/code/node_modules/puppeteer-core/lib/esm/puppeteer/util/Deferred.js:13:16)
+    at new LifecycleWatcher (file:///home/andre/code/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/LifecycleWatcher.js:62:46)
+    at CdpFrame.goto (file:///home/andre/code/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Frame.js:132:29)
+    at CdpFrame.<anonymous> (file:///home/andre/code/node_modules/puppeteer-core/lib/esm/puppeteer/util/decorators.js:94:27)
+    at CdpPage.goto (file:///home/andre/code/node_modules/puppeteer-core/lib/esm/puppeteer/api/Page.js:576:43)
+    at lens (file:///home/andre/code/src/image/lens_puppeteer.js:47:20)
+    at async iterationFn (file:///home/andre/code/src/index.js:152:24)
+15/03/2024, 23:34:28 {
+  id: 4228105944,
+  title: 'Lego - Op zoek naar de verloren krachten',
+  price: '7.4',
+  brand: '',
+  discount: undefined,
+  status: 'Novo sem etiquetas',
+  url: 'https://www.vinted.pt/items/4228105944-lego-op-zoek-naar-de-verloren-krachten',
+  user_id: 84789038,
+  photos: [
+    'https://images1.vinted.net/t/01_020fa_bCX6BXfHuK3wYcYPeQwjNZPh/f800/1710545360.jpeg?s=fe6e830ff58851a53d189f7b362196851198e26c',
+    'https://images1.vinted.net/t/03_0116e_Wo317sY9PXwSCEMBhA77bsQG/f800/1710545360.jpeg?s=50a0e9c94d294993c4b60f004f93524d5560f3e2'
+  ],
+  time: '2024-03-16T00:29:21+01:00',
+  infer: { title: undefined, description: undefined, photo: undefined },
+  description: 'Op zoek naar de verloren krachten \n' +
+    'Copertina rigida \n' +
+    'Edizione Olandese  \n' +
+    'di Tracey West'
+}
+15/03/2024, 23:34:28 undetermined
+15/03/2024, 23:34:29 Processing new item...
+https://lens.google.com/uploadbyurl?re=df&url=https%3A%2F%2Fimages1.vinted.net%2Ft%2F01_00dfd_1bLN2jdu2uKpTbAKffpFCo61%2Ff800%2F1710545357.jpeg%3Fs%3D476b2ca0e3ba71f307395f641b6e246e60c27b02&hl=en&re=df&st=1710545670763&ep=gisbubu
+15/03/2024, 23:34:58 {
+  id: 4228105898,
+  title: 'Personagem em Lego ',
+  price: '4.0',
+  brand: 'LEGO',
+  discount: null,
+  status: 'Novo sem etiquetas',
+  url: 'https://www.vinted.pt/items/4228105898-personagem-em-lego',
+  user_id: 147702192,
+  photos: [
+    'https://images1.vinted.net/t/01_00dfd_1bLN2jdu2uKpTbAKffpFCo61/f800/1710545357.jpeg?s=476b2ca0e3ba71f307395f641b6e246e60c27b02'
+  ],
+  time: 2024-03-15T23:32:30.065Z,
+  infer: { title: undefined, photo: '60222' }
+}
+15/03/2024, 23:34:58 60222
+15/03/2024, 23:34:58 Processing new item...
+https://lens.google.com/uploadbyurl?re=df&url=https%3A%2F%2Fimages1.vinted.net%2Ft%2F03_00b0c_iCETyduADitjfXjkj8q42ZJK%2Ff800%2F1710545066.jpeg%3Fs%3Dba0f8719c46d65226fb8afd9417d1fe4f97961b2&hl=en&re=df&st=1710545699387&ep=gisbubu
+15/03/2024, 23:35:22 {
+  id: 4228101667,
+  title: 'Lego beci',
+  price: '50.0',
+  brand: 'LEGO',
+  discount: undefined,
+  status: 'Novo com etiquetas',
+  url: 'https://www.vinted.pt/items/4228101667-lego-beci',
+  user_id: 193232987,
+  photos: [
+    'https://images1.vinted.net/t/03_00b0c_iCETyduADitjfXjkj8q42ZJK/f800/1710545066.jpeg?s=ba0f8719c46d65226fb8afd9417d1fe4f97961b2',
+    'https://images1.vinted.net/t/02_00db4_ffmAU37wQPMgPHQP8zaBRBCk/f800/1710545066.jpeg?s=e1b8c2ec497c69504f8d8cde3eec466ca1604f8d'
+  ],
+  time: '2024-03-16T00:24:27+01:00',
+  infer: { title: undefined, description: undefined, photo: undefined },
+  description: 'Lego nuevo a estrenar'
+}
+15/03/2024, 23:35:22 undetermined
+15/03/2024, 23:35:23 Processing new item...
+15/03/2024, 23:35:23 Processing new item...
+15/03/2024, 23:35:23 Processing new item...
+https://lens.google.com/uploadbyurl?re=df&url=https%3A%2F%2Fimages1.vinted.net%2Ft%2F01_010fa_NFk7148Ge8ATv3nQTteDBcn7%2Ff800%2F1709849678.jpeg%3Fs%3Dcd825dad3a67c243e5a6240d06b0747772077d18&hl=en&re=df&st=1710545724762&ep=gisbubu
+15/03/2024, 23:35:50 {
+  id: 4195013899,
+  title: 'LEGO Duplo Mon Premier Puzzle Amusant',
+  price: '12.0',
+  brand: 'LEGO Duplo',
+  discount: '0.25',
+  status: 'Bom',
+  url: 'https://www.vinted.pt/items/4195013899-lego-duplo-mon-premier-puzzle-amusant',
+  user_id: 84224221,
+  photos: [
+    'https://images1.vinted.net/t/01_010fa_NFk7148Ge8ATv3nQTteDBcn7/f800/1709849678.jpeg?s=cd825dad3a67c243e5a6240d06b0747772077d18',
+    'https://images1.vinted.net/t/01_00107_W54EwJxGxMxb1Jm3ZZL6rQty/f800/1709849678.jpeg?s=7a0f9e67334f65256773507545ca4b2d2efa93f7',
+    'https://images1.vinted.net/t/02_01989_Fk5985Ja8cAqAXXkR3XDkzXZ/f800/1709849678.jpeg?s=284259a8fae0dc1a761154fab55fe704a9d3c5e7',
+    'https://images1.vinted.net/t/03_01173_1qQeFDVbZThKgJws5omuF9Hh/f800/1709849678.jpeg?s=46fffc9cd9d6987ff44c41ecf8db0178ba94b740',
+    'https://images1.vinted.net/t/02_007c3_ev5tnJQwuFT1ozdK92mrnoyJ/f800/1709849678.jpeg?s=6ad98bfd1022dd79c5977b83ad56e211dd1c493c',
+    'https://images1.vinted.net/t/02_003b9_KyvYaF9XCX1tb2sphJMke7aX/f800/r3/1709849678.jpeg?s=9d6e76d788dc7e2f0ed941da2a2b10f3b4a1ec79'
+  ],
+  time: '2024-03-16T00:18:21+01:00',
+  infer: { title: undefined, description: undefined, photo: '10885' },
+  description: 'Comprend 5 animaux LEGO DUPLO à construire un flamant rose un zèbre une girafe un crocodile et un tigre\n' +
+    "Permet à l'enfant de maîtriser les compétences de construction de base et la motricité lors qu’il empile les briques pour compléter ces puzzles faciles\n" +
+    "Permet le développement du langage et des compétences sociales et affectives que les enfants apprennent en s'amusant avec ces animaux mignons\n" +
+    'Les possibilités illimitées de jeu créatif des jouets LEGO DUPLO permettent aux tout-petits de devenir des penseurs créatifs\n' +
+    'Les produits LEGO DUPLO sont amusants et sûrs pour les tout-petits\n' +
+    'Ce jouet empilable fait un cadeau idéal pour les enfants d’ ge préscolaire\n' +
+    'Chaque animal mesure plus de 12 cm de haut 6 cm de large et 3 cm de profondeur.\n' +
+    'A partir de 18 mois.\n' +
+    'Prix neuf : 39€'
+}
+15/03/2024, 23:35:50 10885
+15/03/2024, 23:35:50 {
+  start: 2024-03-15T23:32:30.065Z,
+  totalItems: 48,
+  pastItems: 42,
+  unwantedItems: 0,
+  unwantedUsers: 0,
+  addedItems: 2,
+  discardedItems: 2,
+  titleInfered: 0,
+  descriptionInfered: 0,
+  photoInfered: 2,
+  possibleGold: 0,
+  end: 2024-03-15T23:35:50.944Z
+}
+15/03/2024, 23:35:50 Scheduling next call in 56.65201666666667min

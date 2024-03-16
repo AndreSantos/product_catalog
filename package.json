@@ -7,6 +7,7 @@
     "build": "tsc",
     "type": "tsc --noEmit",
     "start": "node ./src/index.js",
+    "start_server": "node ./src/server/server.js",
     "watch": "nodemon -e js -x \"npm run start\""
   },
   "repository": {
@@ -21,10 +22,16 @@
   "type": "module",
   "homepage": "https://github.com/AndreSantos/product_catalog#readme",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "cookie": "^0.6.0",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
     "https-proxy-agent": "^7.0.2",
+    "mongodb": "^6.3.0",
     "node-fetch": "^3.3.2",
+    "nodemailer": "^6.9.12",
     "puppeteer-core": "^21.11.0",
+    "rand-user-agent": "^2.0.49",
     "typescript": "^5.3.3",
     "user-agents": "^1.1.105"
   }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('header.ejs') %>
+<body>
+  <%- include('head.ejs', {isJobRunning, jobRunningIn}) %>
+  <ul>
+    <li>Number of prices defined: <%= Object.keys(prices).length %></li>
+  </ul>
+  <table class="items">
+    <thead>
+      <th>Set</th>
+      <th>Thumbnail</th>
+      <th>Price</th>
+    </thead>
+    <tbody>
+      <% Object.keys(prices).forEach(function(setId) { %>
+        <tr data-set-id="<%= setId %>">
+          <td>
+            <a href="https://www.vinted.pt/catalog?search_text=lego%20<%= setId %>&order=price_low_to_high"><%= setId %><a/>
+            <button class="item-delete-button" onclick="unwantedSet(<%= setId %>)">X</button>
+          </td>
+          <td>
+            <a href="https://www.bricklink.com/v2/catalog/catalogitem.page?S=<%= setId %>-1">
+              <img class="thumbnail" src="<%= `https://img.bricklink.com/ItemImage/SN/0/${setId}-1.png` %>" />
+            </a>
+          </td>
+          <td><input class="price" data-set="<%= setId %>" value="<%= prices[setId] %>"></input>
+        </tr>
+      <% }); %>
+    </thead>
+  </table>
+</body>
+</html>

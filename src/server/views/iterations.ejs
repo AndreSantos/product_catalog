@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('header.ejs') %>
+<body>
+  <%- include('head.ejs', {isJobRunning, jobRunningIn}) %>
+  <table class="iterations">
+    <thead>
+      <th class="start">Start</th>
+      <th class="end">End</th>
+      <th>#</th>
+      <th>New</th>
+      <th>T?</th>
+      <th>D?</th>
+      <th>P?</th>
+      <th>Gold?</th>
+      <th>Old</th>
+      <th>-Sets</th>
+      <th>-Users</th>
+    </thead>
+    <tbody>
+      <% iterations.reverse().forEach(function (iteration) { %>
+        <tr>
+          <td><%= iteration.start.replace("T", " ").slice(5, -8) %></td>
+          <td><%= iteration.end.replace("T", " ").slice(5, -8) %></td>
+          <td><%= iteration.totalItems %></td>
+          <td><%= iteration.addedItems %></td>
+          <td><%= iteration.titleInfered %></td>
+          <td><%= iteration.descriptionInfered %></td>
+          <td><%= iteration.photoInfered %></td>
+          <td><%= iteration.possibleGold %></td>
+          <td><%= iteration.pastItems %></td>
+          <td><%= iteration.unwantedItems %></td>
+          <td><%= iteration.unwantedUsers %></td>
+        </tr>
+      <% }); %>
+    </thead>
+  </table>
+</body>
+</html>

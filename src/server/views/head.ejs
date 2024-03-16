@@ -1,0 +1,11 @@
+<div class="notification"></div>
+<ul>
+    <li><a href="/">Back</a></li>
+    <li class="job-status-placeholder">
+      <% if (!isJobRunning) { %>
+        Job running...
+      <% } else { %>
+        Job running in <%= jobRunningIn %>. <button class="start-job-button" onclick="startJob();">Run now</button>
+      <% } %>
+    </li>
+</ul>

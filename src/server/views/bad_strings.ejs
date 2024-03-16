@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('header.ejs') %>
+<body>
+  <%- include('head.ejs', {isJobRunning, jobRunningIn}) %>
+  <ul>
+    <li>Number of bad strings: <%= Object.keys(badStrings).length %></li>
+  </ul>
+  <ul class="bad-strings">
+    <% badStrings.forEach(function (badString) { %>
+      <li>
+        <input class="bad-string-input" onchange="updateBadString(<%= badString %>)" value="<%= badString %>"></input>
+      </li>
+    <% }); %>
+  </ul>
+</body>
+</html>
