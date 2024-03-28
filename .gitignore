@@ -1,0 +1,6 @@
+node_modules
+package-lock.json
+src/secret/
+dump/items_read.txt
+dump/items.txt
+dump/unwanted_items.txt

@@ -23,7 +23,7 @@ async function runJob() {
 	} else if (iterationStats.pastItems < 20) {
 		waitingTimeInMins = 12;
 	} else if (iterationStats.pastItems < 30) {
-		waitingTimeInMins = 16;
+		waitingTimeInMins = 15;
 	} else {
 		waitingTimeInMins = 25;
 	}

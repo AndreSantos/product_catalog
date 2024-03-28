@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import { readFileSync } from 'node:fs';
 
 function getEmailCredentials() {
-  const emailCredentials = readFileSync('src/emailcredentials.txt', 'utf8');
+  const emailCredentials = readFileSync('src/secret/emailcredentials.txt', 'utf8');
   return {
     user: emailCredentials.split("/")[0],
     pass: emailCredentials.split("/")[1],
