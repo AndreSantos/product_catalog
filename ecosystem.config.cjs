@@ -11,7 +11,7 @@ module.exports = {
        "ref"  : "origin/main",
        "repo" : "git@github.com:AndreSantos/product_catalog.git",
        "path" : "/home/andre/project",
-       "post-deploy" : "npm install"
+       "post-deploy" : "npm install && pm2 reload ecosystem.config.js"
     }
   }
 }
