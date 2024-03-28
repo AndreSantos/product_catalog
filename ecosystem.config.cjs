@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name   : "job",
-    script : "./src/job/job.js"
+    script : "./src/job/index.js"
   },{
     name   : "server",
     script : "./src/server/server.js"
