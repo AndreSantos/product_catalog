@@ -8,7 +8,7 @@ module.exports = {
     production : {
        "user" : "andre",
        "host" : ["raspberrypi.local"],
-       "ref"  : "origin/master",
+       "ref"  : "origin/main",
        "repo" : "git@github.com:AndreSantos/product_catalog.git",
        "path" : "/home/andre/project",
        "post-deploy" : "npm install"
