@@ -52,11 +52,3 @@ export function readIterations() {
     const iterations = JSON.parse(readFileSync('dump/iterations.txt', 'utf8'));
     return iterations;
 }
-
-export function readBadStrings() {
-    return JSON.parse(readFileSync('dump/bad_strings.txt', 'utf8'));
-}
-
-export function writeBadStrings(badStrings) {
-    writeFileSync('dump/bad_strings.txt', JSON.stringify(badStrings));
-}

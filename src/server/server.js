@@ -1,22 +1,12 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import {readBadStrings, readData, persistPrices, persistUnwantedItems, persistUnwantedSets} from '../db/db.js';
-import { spawn } from 'child_process';
-import { createWriteStream } from 'node:fs';
+import {readData, persistPrices, persistUnwantedItems, persistUnwantedSets} from '../db/db.js';
 
 const PAGE_SIZE = 500;
 
 let job_process;
 let job_start_time;
-
-process
-  .on('unhandledRejection', (reason, p) => {
-    console.log(reason, 'Unhandled Rejection at Promise', p);
-  })
-  .on('uncaughtException', err => {
-    console.log(err, 'Uncaught Exception thrown');
-  });
 
 function uptime() {
   const now = new Date();
@@ -26,30 +16,6 @@ function uptime() {
   }
   interval = Math.round(interval / 60);
   // ... 
-}
-
-function scheduleJob() {
-  setTimeout(() => {
-//    startJob();
-  }, 5000);
-}
-
-function startJob() {
-  if (job_process) {
-    return;
-  }
-  const logStream = createWriteStream('./src/server/logs/job.txt');
-  job_process = spawn('node', ['./src/job/index.js']);
-  
-  job_process.stdout.pipe(logStream);
-  job_process.stderr.pipe(logStream);
-
-  job_process.on('exit', function (code, signal) {
-    console.log(`Job process exited with code ${code} and signal ${signal}`);
-    job_process = null;
-    scheduleJob();
-  });
-  job_start_time = new Date();
 }
 
 function createPage(items, pageNo) {
@@ -75,8 +41,6 @@ function iterationViewData() {
 export function initializeServer() {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-
-    scheduleJob();
 
     const port = 8080;
     const app = express();
@@ -118,14 +82,11 @@ export function initializeServer() {
       console.log(paginationData);
       res.render('unwanted_sets', {unwantedSets, ...iterationViewData(), paginationData});
     });
-    app.get('/bad_strings', (req, res) => {
-      const badStrings = readBadStrings();
-      res.render('bad_strings', {badStrings, ...iterationViewData()});
-    });
     app.get('/items/:theme?', (req, res) => {
       const data = readData();
       const prices = data.prices;
       const items = {};
+      console.log(data.itemsCache);
       Object.keys(data.itemsCache).filter(setStr => {
         if (req.query.onlyNoPrice && prices[setStr]) {
           return false;
