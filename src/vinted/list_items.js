@@ -26,6 +26,7 @@ export async function searchItems(query) {
       status: item.status,
       url: item.url,
       user_id: item.user.id,
+      user_login: item.user.login,
       photos: item.photo ? [item.photo.url] : [],
     }))
   };

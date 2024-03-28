@@ -6,8 +6,9 @@
   "scripts": {
     "build": "tsc",
     "type": "tsc --noEmit",
-    "start": "node ./src/index.js",
+    "start": "node ./src/job/index.js",
     "start_server": "node ./src/server/server.js",
+    "start_qr_code": "node ./src/qr_codes.js",
     "watch": "nodemon -e js -x \"npm run start\""
   },
   "repository": {
@@ -27,6 +28,8 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "https-proxy-agent": "^7.0.2",
+    "jimp": "^0.22.12",
+    "jsqr": "^1.4.0",
     "mongodb": "^6.3.0",
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.12",

@@ -2,7 +2,7 @@
 <html lang="en">
 <%- include('header.ejs') %>
 <body>
-  <%- include('head.ejs', {isJobRunning, jobRunningIn}) %>
+  <%- include('head.ejs', {isJobRunning}) %>
   <ul>
     <li>Number of bad strings: <%= Object.keys(badStrings).length %></li>
   </ul>

@@ -4,7 +4,8 @@
 <body>
   <%- include('head.ejs', {isJobRunning}) %>
   <ul>
-    <li>Number of unwanted sets: <%= Object.keys(unwantedSets).length %></li>
+    <li>Number of unwanted sets: <%= paginationData.itemsCount %></li>
+    <li>Pages: <%- include('pages.ejs', {...paginationData}) %></li>
   </ul>
   <table class="items">
     <thead>

@@ -1,40 +1,49 @@
-import {searchItems} from './vinted/list_items.js';
-import {viewItem} from './vinted/view_item.js';
-import {readData, persistData, persistIterations} from './db/db.js';
-import {lens} from './image/lens_puppeteer.js';
-import {sendMail} from './mail.js';
+import {searchItems} from '../vinted/list_items.js';
+import {viewItem} from '../vinted/view_item.js';
+import {readData, persistData} from '../db/db.js';
+import {lens} from '../image/lens_puppeteer.js';
+import {sendMail} from '../mail.js';
 
 const BAD_STRINGS = [
 	// MOC
 	'MOC',
 	// Only Instructions
 	/solo (instrucciones|istruzioni)/i,
+	/^libretto istruzioni/i,
 	'notices Lego',
 	'carte Lego',
 	/^Notices?\s+(\w+\s+)?Lego/i,
 	/^(Lego\s+)?Manuales?(\s+Lego)?/i,
-	/^(Catalog|Catálogo)s?\s+Lego/i,
 	/^Lego\s+(\w+\s+)?instructieboekje/i,
 	/^Livret instructions/i,
 	/^Instrucciones(\s+y\s+pegatinas)?/i,
+	// Catalog, maganizes
+	/^(Catalog|Catálogo)s?\s+Lego/i,
+	/^Lego\s+(\w+\s+)?magazine/i, 
 	// Only Box
 	/Bo(i|î)te(s)? vide/i,
+	/(Scatole vuote|Caixa vazia)/i,
 	// Wall Support
-	/^(Lego )?Supporto/i,
+	/^(Lego )?(Supporto|Stand)/i,
 	// Misc Lego
 	'Lego lotto da ',
 	// Only Minifigs
-	'lot figurines',
-	/(minifig|minifigure|Figurine)s?\s+(\w+\s+)?(Lego|Compatible)/i,
-	/Lego\s+(\w+\s+)?(minifig|minifigure|Figurine)(s)?/i,
-	/(cas|col|cty|hol|mar|njo|sh|sw)\d{3,6}/i,
-	/^Figuras? de lego/,
+	/lot\s*(de\s+\d+)\s*(mini)?figurines/i,
+	/(minifig|minifigure|minifigura|Figurine)s?\s+(\w+\s+)?(Lego|Compatible)/i,
+	/Lego\s+(\w+\s+)?(minifig|minifigure|minifigura|Figurine)(s)?/i,
+	/(cas|col|cty|hol|loc|mar|njo|sh|sw)\d{3,6}/i,
+	/^Figuras? de lego/i,
+	// No Minifigs,
+	/(no|sans) minifigures/i,
+	// Baseplate
+	/^Lego\s+(\d+\s+)?(Baseplate|grondplaat|plaque|pièces?|pieces?)/i,
+	/^(Baseplate|grondplaat|plaque|pièces?|pieces?)\s+Lego/i,
 	// Animals, Parts
-	/\d{4}(c\d{2}|pb\d{2})+/i,
+	/\d{4}(c|p|pb|px)\d{1,2}/i,
 	// Polybag
 	'polybag',
 	// DVD
-	/(Dvd|Jeu switch|Playstation|Xbox)/i,
+	/(Dvd|Jeu switch|Playstation|Xbox|wii)/i,
 	// Keys
 	'Portachiavi',
 	/porte.?cl(e|é)/i,
@@ -44,8 +53,10 @@ const BAD_STRINGS = [
 	'Chaqueta',
 	/(Tee|T-|T )shirt/i,
 	// Non-Lego
-	/(Tipo|Type|Style|Compatible|compatibili)s?\s+(\w+\s+)?lego/i,
+	/(Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile)s?\s+(\w+\s+)?lego/i,
 	/(Ensemble Playmobil|^Playmobil)/i,
+	/pas de la marque Lego/i,
+	/^lego no oficial/i,
 	'Figurine Compatible',
 	'Briques de construction',
 	'Lepin',
@@ -61,6 +72,7 @@ const BAD_STRINGS = [
 	'Lego Primo',
 	'Lego Star Wars',
 	'Lego DOTS',
+	'nexo knights',
 	'Chima',
 	'Vidiyo'
 ];
@@ -69,8 +81,9 @@ function log(str) {
 	console.log(new Date().toLocaleString(), str);
 }
 
-function shouldDiscard(str) {
-	return BAD_STRINGS.some(bad => bad instanceof RegExp ? !!str.match(bad) : str.toLowerCase().includes(bad.toLowerCase()));
+function shouldDiscard(str, userLogin) {
+	const s = str.replaceAll(`#${userLogin}`, '').toLowerCase();
+	return BAD_STRINGS.some(bad => bad instanceof RegExp ? !!s.match(bad) : s.includes(bad.toLowerCase()));
 }
 
 export async function job() {
@@ -79,7 +92,7 @@ export async function job() {
 	const itemsRead = data.itemsRead;
 	const unwantedSets = data.unwantedSets;
 	const prices = data.prices;
-	const unwantedUsers = data.unwantedUsers || [];
+	const unwantedUsers = data.unwantedUsers;
 
 	const iteration = {
 		start: new Date(),
@@ -95,6 +108,7 @@ export async function job() {
 		descriptionTest: 0,
 		photoTest: 0,
 		possibleGold: 0,
+		photoFailure: 0,
 	};
 	log('Starting new iteration.');
 	const response = await searchItems({text: 'lego'});
@@ -107,13 +121,12 @@ export async function job() {
 		log(`Processing item ${index}...`);
 		itemsRead[item.id] = iteration.start;
 		item.time = iteration.start;
-
-		if (shouldDiscard(item.title)) {
-			iteration.discardedItems++;
-			continue;
-		}
 		if (unwantedUsers.includes(item.user_id)) {
 			iteration.unwantedUsers++;
+			continue;
+		}
+		if (shouldDiscard(item.title, item.user_login)) {
+			iteration.discardedItems++;
 			continue;
 		}
 		const titleSets = [...item.title.matchAll(/[^0-9]*(\d{4,6})[^0-9]?\D*/g)].map(m => m[1]).filter(set => set > 2500);
@@ -138,7 +151,7 @@ export async function job() {
 				item.infer.descriptionExtra = descriptionSets;
 			}
 			
-			if (shouldDiscard(item.description)) {
+			if (shouldDiscard(item.description, item.user_login)) {
 				iteration.discardedItems++;
 				continue;
 			}
@@ -146,7 +159,11 @@ export async function job() {
 		if (!item.infer.title && !item.infer.description) {
 			if (item.photos && item.photos.length > 0) {
 				iteration.photoTest++;
-				item.infer.photo = await lens(item.photos[0]); 
+				try {
+					item.infer.photo = await lens(item.photos[0]); 
+				} catch (e) {
+					iteration.photoFailure++;
+				}
 			}
 		}
 		const cacheKey = item.infer.title || item.infer.description || item.infer.photo || 'undetermined';

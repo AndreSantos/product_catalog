@@ -2,9 +2,10 @@
 <html lang="en">
 <%- include('header.ejs') %>
 <body>
-  <%- include('head.ejs', {isJobRunning, jobRunningIn}) %>
+  <%- include('head.ejs', {isJobRunning}) %>
   <ul>
-    <li>Number of prices defined: <%= Object.keys(prices).length %></li>
+    <li>Number of prices defined: <%= paginationData.itemsCount %></li>
+    <li>Pages: <%- include('pages.ejs', {...paginationData}) %></li>
   </ul>
   <table class="items">
     <thead>

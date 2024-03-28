@@ -50,7 +50,7 @@ export async function lens(photoUrl) {
         console.error(e);
         
         // Close browser and reinitialize.
-        browser?.close();
+        await browser.close();
         browser = undefined;
         page = await getOrInitializeBrowser();
         

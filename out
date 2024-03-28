@@ -1,0 +1,24 @@
+Example app listening on port 8080
+SyntaxError: Unterminated string in JSON at position 1054956
+    at JSON.parse (<anonymous>)
+    at readData (file:///home/andre/code/src/db/db.js:38:29)
+    at file:///home/andre/code/src/server/server.js:161:20
+    at Layer.handle [as handle_request] (/home/andre/code/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/andre/code/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/home/andre/code/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/home/andre/code/node_modules/express/lib/router/layer.js:95:5)
+    at /home/andre/code/node_modules/express/lib/router/index.js:284:15
+    at param (/home/andre/code/node_modules/express/lib/router/index.js:365:14)
+    at param (/home/andre/code/node_modules/express/lib/router/index.js:376:14)
+Job process exited with code 1 and signal null
+SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at readData (file:///home/andre/code/src/db/db.js:38:29)
+    at file:///home/andre/code/src/server/server.js:161:20
+    at Layer.handle [as handle_request] (/home/andre/code/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/andre/code/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/home/andre/code/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/home/andre/code/node_modules/express/lib/router/layer.js:95:5)
+    at /home/andre/code/node_modules/express/lib/router/index.js:284:15
+    at param (/home/andre/code/node_modules/express/lib/router/index.js:365:14)
+    at param (/home/andre/code/node_modules/express/lib/router/index.js:376:14)
