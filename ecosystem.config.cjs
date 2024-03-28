@@ -1,7 +1,10 @@
 module.exports = {
   apps : [{
-    name   : "telegram",
-    script : "./src/telegram.js"
+    name   : "job",
+    script : "./src/job/job.js"
+  },{
+    name   : "server",
+    script : "./src/server/server.js"
   }],
   // Deployment Configuration
   deploy : {
@@ -11,7 +14,7 @@ module.exports = {
        "ref"  : "origin/main",
        "repo" : "git@github.com:AndreSantos/product_catalog.git",
        "path" : "/home/andre/project",
-       "post-deploy" : "npm install && pm2 reload ecosystem.config.js"
+       "post-deploy" : "pm2 reload ecosystem.config.js"
     }
   }
 }
