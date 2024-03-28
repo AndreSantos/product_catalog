@@ -40,7 +40,10 @@ export function readData() {
     const iterations = readIterations();
     const prices = JSON.parse(readFileSync('dump/prices.txt', 'utf8'));
     const unwantedSets = JSON.parse(readFileSync('dump/unwanted_sets.txt', 'utf8'));
-    const unwantedItems = JSON.parse(readFileSync('dump/unwanted_items.txt', 'utf8'));
+    let unwantedItems;
+    try {
+        unwantedItems = JSON.parse(readFileSync('dump/unwanted_items.txt', 'utf8'));
+    } catch (e) { unwantedItems = {};}
     const unwantedUsers = JSON.parse(readFileSync('dump/unwanted_users.txt', 'utf8'));
     return {itemsCache, itemsRead, iterations, prices, unwantedSets, unwantedItems, unwantedUsers};
 }
