@@ -14,7 +14,7 @@ module.exports = {
        "ref"  : "origin/main",
        "repo" : "git@github.com:AndreSantos/product_catalog.git",
        "path" : "/home/andre/project",
-       "post-deploy" : "pm2 reload ecosystem.config.js"
+       "post-deploy" : "pm2 reload ecosystem.config.cjs"
     }
   }
 }
