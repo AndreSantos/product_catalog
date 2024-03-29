@@ -1,12 +1,11 @@
 import {job} from './job.js';
 import {readIterations, persistIterations} from '../db/db.js';
 
-let nextIterationDate;
 let nextIterationTimeout;
 async function runJob() {
-    nextIterationDate = undefined;
     nextIterationTimeout = undefined;
     
+    console.log("starting job");
     const iterationStats = await job();
     const iterations = readIterations();
     iterations.push(iterationStats);
@@ -32,7 +31,6 @@ async function runJob() {
 
     const iterationLength = iterationStats.end - iterationStats.start;
     const waitingTime = waitingTimeInMins * 60 * 1000 - iterationLength;
-    nextIterationDate = iterationStats.end.getTime() + waitingTime;
     nextIterationTimeout = setTimeout(() => runJob(), waitingTime);
 }
 
