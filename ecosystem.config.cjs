@@ -1,10 +1,14 @@
 module.exports = {
   apps : [{
     name   : "job",
-    script : "./src/job/index.js"
+    script : "./src/job/index.js",
+    // Enable or disable auto restart after process failure
+    autorestart: true
   },{
     name   : "server",
-    script : "./src/server/server.js"
+    script : "./src/server/server.js",
+    // Enable or disable auto restart after process failure
+    autorestart: true
   }],
   // Deployment Configuration
   deploy : {

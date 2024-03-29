@@ -65,7 +65,6 @@ export function initializeServer() {
         pages: Math.ceil(itemsCount / PAGE_SIZE),
         url: '/prices?page='
       };
-      console.log(paginationData);
       res.render('prices', {prices, ...iterationViewData(), paginationData});
     });
     app.get('/unwanted_sets', (req, res) => {
