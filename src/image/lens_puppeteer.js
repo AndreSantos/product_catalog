@@ -37,6 +37,10 @@ async function getOrInitializeBrowser() {
     return page;
 }
 
+function log(str) {
+	console.log(new Date().toLocaleString(), str);
+}
+
 export async function lens(photoUrl) {
     // const platform = ['mobile', 'desktop'];
     // const browser = ['chrome', 'safari', 'firefox'];
@@ -45,7 +49,7 @@ export async function lens(photoUrl) {
     const encodedURL = encodeURIComponent(photoUrl);
     const requestURL = `https://lens.google.com/uploadbyurl?re=df&url=${encodedURL}&hl=en&re=df&st=${+ new Date()}&ep=gisbubu`;
     let page = await getOrInitializeBrowser();
-    console.log(requestURL);
+    log(requestURL);
     try {
         await page.goto(requestURL);
     } catch (e) {
