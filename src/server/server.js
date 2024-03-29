@@ -78,7 +78,6 @@ export function initializeServer() {
         pages: Math.ceil(itemsCount / PAGE_SIZE),
         url: '/unwanted_sets?page='
       }
-      console.log(paginationData);
       res.render('unwanted_sets', {unwantedSets, ...iterationViewData(), paginationData});
     });
     app.get('/items/:theme?', (req, res) => {

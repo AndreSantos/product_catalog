@@ -1,11 +1,8 @@
 import {job} from './job.js';
 import {readIterations, persistIterations} from '../db/db.js';
+import {clearVintedCookie} from '../vinted/cookie.js';
 
-let nextIterationTimeout;
 async function runJob() {
-    nextIterationTimeout = undefined;
-    
-    console.log("starting job");
     const iterationStats = await job();
     const iterations = readIterations();
     iterations.push(iterationStats);
@@ -31,7 +28,7 @@ async function runJob() {
 
     const iterationLength = iterationStats.end - iterationStats.start;
     const waitingTime = waitingTimeInMins * 60 * 1000 - iterationLength;
-    nextIterationTimeout = setTimeout(() => runJob(), waitingTime);
+    setTimeout(() => runJob(), waitingTime);
 }
 
 runJob();
