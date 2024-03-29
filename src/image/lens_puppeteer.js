@@ -6,13 +6,16 @@ import puppeteer from 'puppeteer-core';
 let browser;
 let page;
 
-process.on('SIGINT', async function () {
+async function cleanup() {
     // Close browser.
     if (browser) {
         await browser.close();
         process.exit();
     }
-});
+}
+process.on('SIGINT', cleanup);
+process.on('SIGTERM', cleanup);
+process.on('SIGQUIT', cleanup);
 
 async function getOrInitializeBrowser() {
     if (!browser) {

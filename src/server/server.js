@@ -85,7 +85,6 @@ export function initializeServer() {
       const data = readData();
       const prices = data.prices;
       const items = {};
-      console.log(data.itemsCache);
       Object.keys(data.itemsCache).filter(setStr => {
         if (req.query.onlyNoPrice && prices[setStr]) {
           return false;
