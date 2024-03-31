@@ -127,7 +127,7 @@ export async function job() {
 			iteration.unwantedUsers++;
 			continue;
 		}
-		if (shouldDiscard(item.title, item.user_login)) {
+		if (shouldDiscard(item.title)) {
 			iteration.discardedItems++;
 			continue;
 		}
@@ -164,7 +164,7 @@ export async function job() {
 				item.infer.descriptionExtra = descriptionSets;
 			}
 			
-			if (shouldDiscard(item.description, item.user_login)) {
+			if (shouldDiscard(item.description)) {
 				iteration.discardedItems++;
 				continue;
 			}
