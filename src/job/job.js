@@ -104,11 +104,14 @@ export async function job() {
 		titleInfered: 0,
 		descriptionInfered: 0,
 		photoInfered: 0,
+		vintedXhrs: 1,
+		descriptionCache: 0,
 		descriptionTest: 0,
 		photoTest: 0,
 		possibleGold: 0,
 		photoFailure: 0,
 	};
+	const descriptionCache = {};
 	log('Starting new iteration.');
 	const response = await searchItems({text: 'lego'});
 	iteration.totalItems = response.items.length;
@@ -139,8 +142,17 @@ export async function job() {
 		let viewItemReturn;
 		if (!item.infer.title) {
 			iteration.descriptionTest++;
+			descriptionCache[item.user_id] = descriptionCache[item.user_id] || [];
+			if (descriptionCache[item.user_id].length === 0) {
+				descriptionCache[item.user_id] = await viewItem(item);
+				iteration.vintedXhrs++;
+			}
+			viewItemReturn = descriptionCache[item.user_id].filter(i => i.id === item.id).map(i => ({
+				...item,
+				...i
+			}))[0];
 			// It may happen that the item is not found.
-			viewItemReturn = await viewItem(item);
+			// viewItemReturn = await viewItem(item);
 		}
 		if (viewItemReturn) {
 			item = viewItemReturn;
