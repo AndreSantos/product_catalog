@@ -24,7 +24,8 @@ async function runJob() {
 		waitingTimeInMins = 25;
 	}
     const isPrimeTime = iterationStats.end.getHours() >= 7 && iterationStats.end.getHours() <= 22;
-    waitingTimeInMins *= isPrimeTime ? 1 : 2.5;
+    const isSleepTime = iterationStats.end.getHours() >= 2 && iterationStats.end.getHours() <= 6;
+    waitingTimeInMins *= isPrimeTime ? 1 : isSleepTime ? 3.5 : 2.5;
 
     const iterationLength = iterationStats.end - iterationStats.start;
     const waitingTime = waitingTimeInMins * 60 * 1000 - iterationLength;
