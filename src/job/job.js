@@ -2,7 +2,7 @@ import {searchItems} from '../vinted/list_items.js';
 import {viewItem} from '../vinted/view_item.js';
 import {readData, persistData} from '../db/db.js';
 import {lens} from '../image/lens_puppeteer.js';
-import {sendMail} from '../mail.js';
+import {sendMail} from './mail.js';
 
 const BAD_STRINGS = [
 	// MOC
