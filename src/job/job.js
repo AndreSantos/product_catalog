@@ -81,8 +81,7 @@ function log(str) {
 	console.log(new Date().toLocaleString(), str);
 }
 
-function shouldDiscard(str, userLogin) {
-	const s = str.replaceAll(`#${userLogin}`, '').toLowerCase();
+function shouldDiscard(str) {
 	return BAD_STRINGS.some(bad => bad instanceof RegExp ? !!s.match(bad) : s.includes(bad.toLowerCase()));
 }
 
@@ -129,7 +128,8 @@ export async function job() {
 			iteration.discardedItems++;
 			continue;
 		}
-		const titleSets = [...item.title.matchAll(/[^0-9]*(\d{4,6})[^0-9]?\D*/g)].map(m => m[1]).filter(set => set > 2500);
+		const title = item.title.replaceAll(`#${item.user_login}`, '').toLowerCase();
+		const titleSets = [...title.matchAll(/[^0-9]*(\d{4,6})[^0-9]?\D*/g)].map(m => m[1]).filter(set => set > 2500);
 		item.infer = {
 			title: titleSets[0],
 		};
@@ -144,7 +144,8 @@ export async function job() {
 		}
 		if (viewItemReturn) {
 			item = viewItemReturn;
-			const descriptionSets = [...item.description.matchAll(/[^0-9]*(\d{4,6})[^0-9]?\D*/g)].map(m => m[1]).filter(set => set > 2500);
+			const description = item.description.replaceAll(`#${item.user_login}`, '').toLowerCase();
+			const descriptionSets = [...description.matchAll(/[^0-9]*(\d{4,6})[^0-9]?\D*/g)].map(m => m[1]).filter(set => set > 2500);
 
 			item.infer.description = descriptionSets[0];
 			if (descriptionSets.length > 1) {
