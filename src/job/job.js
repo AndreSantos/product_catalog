@@ -10,8 +10,10 @@ const BAD_STRINGS = [
 	// Only Instructions
 	/solo (instrucciones|istruzioni|box)/i,
 	/^libretto istruzioni/i,
+	/^Lego istruzioni/i,
 	'notices Lego',
 	'carte Lego',
+	/Notice only/i,
 	/^Notices?\s+(\w+\s+)?Lego/i,
 	/^Lego\s+(\w+\s+)?Notice/i,
 	/^(Lego\s+)?Manuales?(\s+Lego)?/i,
@@ -23,7 +25,7 @@ const BAD_STRINGS = [
 	/^Lego\s+(\w+\s+)?magazine/i, 
 	// Only Box
 	/Bo(i|î)te(s)? vide/i,
-	/(Scatole vuote|Caixa vazia)/i,
+	/(Scatole vuote|Scatola vuota|Caixa vazia)/i,
 	// Wall Support
 	/^(Lego )?(Supporto|Stand)/i,
 	// Misc Lego
@@ -31,9 +33,9 @@ const BAD_STRINGS = [
 	// Only Minifigs
 	/lot\s*(de\s+\d+)\s*(mini)?figurines/i,
 	/(minifig|minifigure|minifigura|Figurine)s?\s+(\w+\s+)?(Lego|Compatible)/i,
+	/^(minifig|minifigure|minifigura|Figurine|Figura)/i,
 	/Lego\s+(\w+\s+)?(minifig|minifigure|minifigura|Figurine)s?/i,
-	/(cas|col|cty|hol|loc|mar|njo|sh|sp|sw)\d{3,6}/i,
-	/^Figuras? de lego/i,
+	/(cas|col|cty|hol|hp|loc|mar|njo|sh|sp|sw)\d{3,6}/i,
 	// No Minifigs,
 	/(no|sans) minifigures/i,
 	// Baseplate
@@ -41,12 +43,13 @@ const BAD_STRINGS = [
 	/^(Baseplate|grondplaat|plaque|pièces?|pieces?|Base)\s+(\w+\s+)?Lego/i,
 	// Animals, Parts
 	/\d{4}(bpb|c|p|pb|px)\d{1,3}/i,
-	/^Accessoires Lego/i,
+	/^(Accessoires|Accessorios) Lego/i,
 	/^Lot d'accessoires/i,
+	/^Lot de plate/i,
 	// Polybag
 	'polybag',
 	// DVD
-	/(Dvd|Jeu switch|Jeu vid|Playstation|Xbox|wii)/i,
+	/(Dvd|videogame|Nintendo|Jeu switch|Jeu vid|Playstation|PS3|Xbox|wii)/i,
 	// Keys
 	/(Portachiavi|sleutelhanger|keychain)/i,
 	/porte.?cl(e|é)/i,
@@ -55,22 +58,18 @@ const BAD_STRINGS = [
 	/(Chaqueta|Toalla|pyjama)/i,
 	/Costume\s+(\w+\s+)?Lego/i,
 	/De?é?guisement/i,
-	/(Tee|T-|T )shirt/i,
+	/(Tee-?|T-?)shirt/i,
+	/(nachtlamp|orologio)/i,
 	// Non-Lego
 	/(Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile)s?\s+(\w+\s+)?lego/i,
 	/Compatibile o simile/i,
 	/(Ensemble Playmobil|^Playmobil)/i,
-	/pas de la marque Lego/i,
-	/^lego no oficial/i,
+	/pas de (la marque|vrais) Lego/i,
+	/lego no oficial/i,
+	/Geen originele/i,
 	'Figurine Compatible',
 	'Briques de construction',
-	'Montini',
-	'Lepin',
-	'mini lego',
-	'lego girls',
-	'abrick',
-	'Mould king',
-	'guerra',
+	/(Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki)/i,
 	/M(e|é)ga bloc?ks/i,
 	// Legos I don't care about
 	'Brick Headz',
@@ -95,6 +94,10 @@ function shouldDiscard(str) {
 	return BAD_STRINGS.some(bad => bad instanceof RegExp ? !!s.match(bad) : s.includes(bad.toLowerCase()));
 }
 
+function shouldDiscardBrand(brand) {
+	return !brand || brand.trim().length === 0 || brand.match(/lego/i);
+}
+
 export async function job() {
 	const data = readData();
 	const itemsCache = data.itemsCache;
@@ -115,7 +118,6 @@ export async function job() {
 		descriptionInfered: 0,
 		photoInfered: 0,
 		vintedXhrs: 1,
-		descriptionCache: 0,
 		descriptionTest: 0,
 		photoTest: 0,
 		possibleGold: 0,
@@ -141,6 +143,10 @@ export async function job() {
 			iteration.discardedItems++;
 			continue;
 		}
+		if (shouldDiscardBrand(item.brand)) {
+			iteration.discardedItems++;
+			continue;
+		}
 		const title = item.title.replaceAll(`#${item.user_login}`, '');
 		const titleSets = [...title.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]).filter(set => set > 2500);
 		item.infer = {
@@ -161,8 +167,6 @@ export async function job() {
 				...item,
 				...i
 			}))[0];
-			// It may happen that the item is not found.
-			// viewItemReturn = await viewItem(item);
 		}
 		if (viewItemReturn) {
 			item = viewItemReturn;
@@ -198,7 +202,6 @@ export async function job() {
 			iteration.photoInfered++, iteration.addedItems++;
 		}
 		log(item);
-		log(cacheKey);
 		if (unwantedSets[cacheKey]) {
 			iteration.unwantedItems++;
 		} else {
