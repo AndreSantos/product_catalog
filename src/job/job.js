@@ -95,7 +95,11 @@ function shouldDiscard(str) {
 }
 
 function shouldDiscardBrand(brand) {
-	return !brand || brand.trim().length === 0 || brand.match(/lego/i);
+	if (!brand || brand.trim().length === 0) {
+		return false;
+	}
+	const isLego = !!brand.match(/lego/i);
+	return !isLego;
 }
 
 export async function job() {
@@ -143,8 +147,6 @@ export async function job() {
 			iteration.discardedItems++;
 			continue;
 		}
-		log(item.brand);
-		log(shouldDiscardBrand(item.brand));
 		if (shouldDiscardBrand(item.brand)) {
 			iteration.discardedItems++;
 			continue;
