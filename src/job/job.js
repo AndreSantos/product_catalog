@@ -143,6 +143,8 @@ export async function job() {
 			iteration.discardedItems++;
 			continue;
 		}
+		log(item.brand);
+		log(shouldDiscardBrand(item.brand));
 		if (shouldDiscardBrand(item.brand)) {
 			iteration.discardedItems++;
 			continue;
