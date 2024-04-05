@@ -31,7 +31,17 @@ export function sendMail(set, item, minPrice) {
     from: email,
     to: email,
     subject: `Price alert: Set ${set} price: ${item.price}€ (${minPrice}€), discount: ${item.discount}`,
-    text: `<a href="${item.url}"'>Link</a>`
+    text: ``,
+    html: `
+      <ul>
+        <li><a href="${item.url}">Item</a></li>
+        <li><a href="https://www.vinted.pt/catalog?search_text=lego%20${set}&order=price_low_to_high">Sets in vinted</a></li>
+        <li><a href="https://www.bricklink.com/v2/catalog/catalogitem.page?S=${set}-1#O={"ii":0}"'>Bricklink</a></li>
+        <li>Title: ${item.title}</li>
+        <li>Description: ${item.description}</li>
+      </ul>
+      <img width="200" src="https://img.bricklink.com/ItemImage/SN/0/${setId}-1.png" />
+    `
   };
 
   transporter.sendMail(mailOptions, function(error, info) {
