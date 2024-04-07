@@ -8,8 +8,9 @@ const BAD_STRINGS = [
 	// MOC
 	'MOC',
 	// Only Instructions
-	/solo (instrucciones|istruzioni|box)/i,
+	/solo (manuali|instrucciones|istruzioni|box)/i,
 	/^libretto istruzioni/i,
+	/^libretto (\w+\s+)?Lego/i,
 	/^Lego istruzioni/i,
 	'notices Lego',
 	'carte Lego',
@@ -35,17 +36,22 @@ const BAD_STRINGS = [
 	/(minifig|minifigure|minifigura|Figurine)s?\s+(\w+\s+)?(Lego|Compatible)/i,
 	/^(minifig|minifigure|minifigura|Figurine|Figura)/i,
 	/Lego\s+(\w+\s+)?(minifig|minifigure|minifigura|Figurine)s?/i,
-	/(cas|col|cty|hol|hp|loc|mar|njo|sh|sp|sw)\d{3,6}/i,
+	/(cas|col|cty|hol|hp|loc|mar|njo|pi|sh|sp|sw)\d{3,6}/i,
 	// No Minifigs,
-	/(no|sans) minifigures/i,
+	/(no|sans) (figurines|minifigures|personnage)/i,
 	// Baseplate
-	/^Lego\s+(\d+\s+)?(Baseplate|wege?n?plate?n?|grondplaat|plaque|pièces?|pieces?)/i,
+	/^Lego\s+(\d+\s+)?(Basisplaat|Baseplate|wege?n?plate?n?|grondplaat|plaque|pièces?|pieces?)/i,
 	/^(Baseplate|grondplaat|plaque|pièces?|pieces?|Base)\s+(\w+\s+)?Lego/i,
+	/Solo la struttura/i,
 	// Animals, Parts
 	/\d{4}(bpb|c|p|pb|px)\d{1,3}/i,
 	/^(Accessoires|Accessorios) Lego/i,
 	/^Lot d'accessoires/i,
 	/^Lot de plate/i,
+	// Telecommande
+	/^T\w?l\w?commande/i,
+	// Telecommande
+	/Light My Bricks/i,
 	// Polybag
 	'polybag',
 	// DVD
@@ -61,7 +67,7 @@ const BAD_STRINGS = [
 	/(Tee-?|T-?)shirt/i,
 	/(nachtlamp|orologio)/i,
 	// Non-Lego
-	/(Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile)s?\s+(\w+\s+)?lego/i,
+	/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile)s?\s+(\w+\s+)?lego/i,
 	/Compatibile o simile/i,
 	/(Ensemble Playmobil|^Playmobil)/i,
 	/pas de (la marque|vrais) Lego/i,
