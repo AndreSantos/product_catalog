@@ -117,8 +117,9 @@ export function initializeServer() {
             }
             interval /= 24;
             item.ago = interval.toFixed(0) + 'd';
-          }  
+          }
         });
+      });
       res.render('items', {items, prices, ...iterationViewData()});
     });
     app.get('/discarded', (req, res) => {

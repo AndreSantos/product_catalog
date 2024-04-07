@@ -67,7 +67,7 @@ const BAD_STRINGS = [
 	/(Tee-?|T-?)shirt/i,
 	/(nachtlamp|orologio)/i,
 	// Non-Lego
-	/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile)s?\s+(\w+\s+)?lego/i,
+	/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?\s+(\w+\s+)?lego/i,
 	/Compatibile o simile/i,
 	/(Ensemble Playmobil|^Playmobil)/i,
 	/pas de (la marque|vrais) Lego/i,
