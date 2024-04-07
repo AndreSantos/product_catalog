@@ -84,7 +84,11 @@ export function initializeServer() {
       const data = readData();
       const prices = data.prices;
       const items = {};
+      const currentDate = new Date();
       Object.keys(data.itemsCache).filter(setStr => {
+        if (["", "discarded", "undetermined"].includes(setStr)) {
+          return false;
+        }
         if (req.query.onlyNoPrice && prices[setStr]) {
           return false;
         }
@@ -100,8 +104,21 @@ export function initializeServer() {
             return true;
         }
       }).forEach(key => {
-        items[key] = data.itemsCache[key];
-      });
+        items[key] = data.itemsCache[key].map(i => {
+          const item = i;
+          if (item.created_ts) {
+            interval = (currentDate - new Date(item.created_ts)) / (60 * 1000);
+            if (interval < 60) {
+              item.ago = interval.toFixed(0) + 'm';
+            }
+            interval /= 60;
+            if (interval < 24) {
+              item.ago = interval.toFixed(0) + 'h';
+            }
+            interval /= 24;
+            item.ago = interval.toFixed(0) + 'd';
+          }  
+        });
       res.render('items', {items, prices, ...iterationViewData()});
     });
     app.get('/discarded', (req, res) => {

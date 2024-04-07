@@ -24,7 +24,7 @@ export async function viewItem(item) {
     description: i.description,
     discount: i.user.bundle_discount?.fraction,
     photos: i.photos.map(p => p.url),
-    time: i.updated_at_ts,
+    created_at: i.created_at_ts,
   }));
   // return (response.items || []).filter(i => i.id === item.id).map(i => ({
   //  ...item,

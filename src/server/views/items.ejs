@@ -15,7 +15,7 @@
       <th class="sets">Prices</th>
     </thead>
     <tbody>
-      <% Object.keys(items).filter(item => !["", "discarded", "undetermined"].includes(item)).forEach(function(setId) { %>
+      <% Object.keys(items).forEach(function(setId) { %>
         <tr data-set-id="<%= setId %>">
           <td>
             <a href="https://www.vinted.pt/catalog?search_text=lego%20<%= setId %>&order=price_low_to_high"><%= setId %><a/>
@@ -32,10 +32,10 @@
             <ul>
             <% items[setId].filter((item, pos) => pos < 5).map(function (item, i) { %>
               <li data-item-id="<%= item.id %>">
-                <!-- <% if (i > 0) { %>
-                  ,
-                <% } %> -->
                 <a href="<%= item.url %>"><%= parseInt(item.price) %>€</a>
+                <% if (item.ago) { %>
+                  <span class="ago"><%= item.ago %></span>
+                <% } %>
                 <% if (item.status.startsWith("Novo")) { %>
                   <span class="is-new">N</span>
                 <% } %>
