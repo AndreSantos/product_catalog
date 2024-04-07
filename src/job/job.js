@@ -36,7 +36,7 @@ const BAD_STRINGS = [
 	/(minifig|minifigure|minifigura|Figurine)s?\s+(\w+\s+)?(Lego|Compatible)/i,
 	/^(minifig|minifigure|minifigura|Figurine|Figura)/i,
 	/Lego\s+(\w+\s+)?(minifig|minifigure|minifigura|Figurine)s?/i,
-	/(cas|col|cty|hol|hp|loc|mar|njo|pi|sh|sp|sw)\d{3,6}/i,
+	/(cas|col|cty|hol|hp|loc|lor|mar|njo|pi|sh|sp|sw)\d{3,6}/i,
 	// No Minifigs,
 	/(no|sans) (figurines|minifigures|personnage)/i,
 	// Baseplate
@@ -204,6 +204,8 @@ export async function job() {
 				}
 			}
 		}
+
+		// Infer
 		const cacheKey = item.infer.title || item.infer.description || item.infer.photo || 'undetermined';
 		if (item.infer.title) {
 			iteration.titleInfered++, iteration.addedItems++;
@@ -212,6 +214,10 @@ export async function job() {
 		} else if (item.infer.photo) {
 			iteration.photoInfered++, iteration.addedItems++;
 		}
+
+		// Created At (is only set in view call).
+		item.created_at = item.created_at ?? iteration.start.toString();
+
 		log(item);
 		if (unwantedSets[cacheKey]) {
 			iteration.unwantedItems++;
