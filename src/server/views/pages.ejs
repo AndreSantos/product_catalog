@@ -1,6 +1,6 @@
 <% [...Array(pages).keys()].forEach(p => { %>
     <% if (p - 1 === page) { %>
-        <%= page %>
+        <%= p + 1 %>
     <% } else {  %>
         <a href="<%= url + (p + 1) %>"><%= p + 1 %></a>
     <% } %>
