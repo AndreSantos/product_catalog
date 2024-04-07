@@ -118,6 +118,7 @@ export function initializeServer() {
             interval /= 24;
             item.ago = interval.toFixed(0) + 'd';
           }
+          return item;
         });
       });
       res.render('items', {items, prices, ...iterationViewData()});
