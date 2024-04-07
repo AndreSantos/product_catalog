@@ -40,7 +40,9 @@ export function sendMail(set, item, minPrice) {
         <li>Title: ${item.title}</li>
         <li>Description: ${item.description}</li>
       </ul>
-      <img width="200" src="https://img.bricklink.com/ItemImage/SN/0/${set}-1.png" />
+      <img width="400" src="https://img.bricklink.com/ItemImage/SN/0/${set}-1.png" />
+      <hr />
+      <img width="400" src="${item.photos[0]}" />
     `
   };
 
