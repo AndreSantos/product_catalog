@@ -10,38 +10,44 @@ const BAD_STRINGS = [
 	// Only Instructions
 	/solo (manuali|instrucciones|istruzioni|box)/i,
 	/^libretto istruzioni/i,
-	/^libretto (\w+\s+)?Lego/i,
+	/^libretto (\S+\s+)?Lego/i,
 	/^Lego istruzioni/i,
 	'notices Lego',
 	'carte Lego',
 	/Notice only/i,
-	/^Notices?\s+(\w+\s+)?Lego/i,
-	/^Lego\s+(\w+\s+)?Notice/i,
+	/handleiding enkel/i,
+	/^Notices?\s+(\S+\s+)?Lego/i,
+	/^Notices? de montage/i,
+	/Manua(l|is) (de )?Instruç/i,
+	/^Lego\s+(\S+\s+)?Notice/i,
 	/^(Lego\s+)?Manuales?(\s+Lego)?/i,
-	/^Lego\s+(\w+\s+)?(instructieboekje|boek)/i,
+	/^Lego\s+(\S+\s+)?(instructieboekje|boek)/i,
 	/^Livret instructions/i,
+	/^Libro lego/i,
 	/^Instrucciones(\s+y\s+pegatinas)?/i,
 	// Catalog, maganizes
 	/^(Catalog|Catálogo)s?\s+(-\s+)?Lego/i,
-	/^Lego\s+(\w+\s+)?magazine/i, 
+	/^Lego\s+(\S+\s+)?magazine/i, 
 	// Only Box
+	/Only Box/i,
 	/Bo(i|î)te(s)? vide/i,
 	/(Scatole vuote|Scatola vuota|Caixa vazia)/i,
 	// Wall Support
 	/^(Lego )?(Supporto|Stand)/i,
+	/Vitrina/i,
 	// Misc Lego
 	'Lego lotto da ',
 	// Only Minifigs
 	/lot\s*(de\s+\d+)\s*(mini)?figurines/i,
-	/(minifig|minifigure|minifigura|Figurine)s?\s+(\w+\s+)?(Lego|Compatible)/i,
+	/(minifig|minifigure|minifigura|Figurine)s?\s+(\S+\s+)?(Lego|Compatible)/i,
 	/^(minifig|minifigure|minifigura|Figurine|Figura)/i,
-	/Lego\s+(\w+\s+)?(minifig|minifigure|minifigura|Figurine)s?/i,
+	/Lego\s+(\S+\s+)?(minifig|minifigure|minifigura|Figurine)s?/i,
 	/(cas|col|cty|hol|hp|loc|lor|mar|njo|pi|sh|sp|sw)\d{3,6}/i,
 	// No Minifigs,
 	/(no|sans) (figurines|minifigures|personnage)/i,
 	// Baseplate
 	/^Lego\s+(\d+\s+)?(Basisplaat|Baseplate|wege?n?plate?n?|grondplaat|plaque|pièces?|pieces?)/i,
-	/^(Baseplate|grondplaat|plaque|pièces?|pieces?|Base)\s+(\w+\s+)?Lego/i,
+	/^(Baseplate|grondplaat|plaque|pièces?|pieces?|Base)\s+(\S+\s+)?Lego/i,
 	/Solo la struttura/i,
 	// Animals, Parts
 	/\d{4}(bpb|c|p|pb|px)\d{1,3}/i,
@@ -49,8 +55,8 @@ const BAD_STRINGS = [
 	/^Lot d'accessoires/i,
 	/^Lot de plate/i,
 	// Telecommande
-	/^T\w?l\w?commande/i,
-	// Telecommande
+	/^T\Sl\Scommande/i,
+	// Lights
 	/Light My Bricks/i,
 	// Polybag
 	'polybag',
@@ -60,15 +66,17 @@ const BAD_STRINGS = [
 	/(Portachiavi|sleutelhanger|keychain)/i,
 	/porte.?cl(e|é)/i,
 	// Clothing
+	/verkleedset/i,
 	"Veste de ski",
 	/Adidas (ZX|Ultraboost)/i,
 	/(Chaqueta|Toalla|pyjama)/i,
-	/Costume\s+(\w+\s+)?Lego/i,
+	/Costume\s+(\S+\s+)?Lego/i,
 	/De?é?guisement/i,
 	/(Tee-?|T-?)shirt/i,
 	/(nachtlamp|orologio)/i,
 	// Non-Lego
-	/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?\s+(\w+\s+)?lego/i,
+	/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?\s+(\S+\s+)?lego/i,
+	/lego\s+(\S+\s+)?(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?/i,
 	/Compatibile o simile/i,
 	/(Ensemble Playmobil|^Playmobil)/i,
 	/pas de (la marque|vrais) Lego/i,
@@ -77,7 +85,7 @@ const BAD_STRINGS = [
 	/Geen originele/i,
 	'Figurine Compatible',
 	'Briques de construction',
-	/(Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki)/i,
+	/(Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki|Urba?e?n artic)/i,
 	/M(e|é)ga bloc?ks/i,
 	// Legos I don't care about
 	'Brick Headz',
@@ -98,7 +106,7 @@ function log(str) {
 }
 
 function sanitizeValue(str, user_login) {
-	return str.replaceAll(`#${user_login}`, '').replace(/anné?e?e[^a-zA-Z0-9-]+\d{4}/i,'');
+	return str.replaceAll(`#${user_login}`, '').replace(/anné?e?e[^a-zA-Z0-9-]+\d{4}/i,'').replace(/\d{4}\s+piè?e?ces/i,'');
 }
 
 function shouldDiscard(str) {
