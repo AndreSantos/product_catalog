@@ -60,6 +60,7 @@ const BAD_STRINGS = [
 	/(Portachiavi|sleutelhanger|keychain)/i,
 	/porte.?cl(e|é)/i,
 	// Clothing
+	"Veste de ski",
 	/Adidas (ZX|Ultraboost)/i,
 	/(Chaqueta|Toalla|pyjama)/i,
 	/Costume\s+(\w+\s+)?Lego/i,
@@ -94,6 +95,10 @@ const BAD_STRINGS = [
 
 function log(str) {
 	console.log(new Date().toLocaleString(), str);
+}
+
+function sanitizeValue(str, user_login) {
+	return str.replaceAll(`#${user_login}`, '').replace(/anné?e?e[^a-zA-Z0-9-]+\d{4}/i,'');
 }
 
 function shouldDiscard(str) {
@@ -146,20 +151,16 @@ export async function job() {
 		log(`Processing item ${index}...`);
 		itemsRead[item.id] = iteration.start;
 		item.time = iteration.start;
-		if (unwantedUsers.includes(item.user_id)) {
+		if (unwantedUsers.includes(item.user_id) || unwantedUsers.includes(item.user_login)) {
 			iteration.unwantedUsers++;
 			continue;
 		}
-		if (shouldDiscard(item.title)) {
+		if (shouldDiscard(item.title) || shouldDiscardBrand(item.brand)) {
 			iteration.discardedItems++;
 			continue;
 		}
-		if (shouldDiscardBrand(item.brand)) {
-			iteration.discardedItems++;
-			continue;
-		}
-		const title = item.title.replaceAll(`#${item.user_login}`, '');
-		const titleSets = [...title.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]).filter(set => set > 2500);
+		const title = sanitizeValue(item.title, item.user_login);
+		const titleSets = [...title.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
 		item.infer = {
 			title: titleSets[0],
 		};
@@ -181,8 +182,8 @@ export async function job() {
 		}
 		if (viewItemReturn) {
 			item = viewItemReturn;
-			const description = item.description.replaceAll(`#${item.user_login}`, '');
-			const descriptionSets = [...description.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]).filter(set => set > 2500);
+			const description = sanitizeValue(item.description, item.user_login);
+			const descriptionSets = [...description.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
 
 			item.infer.description = descriptionSets[0];
 			if (descriptionSets.length > 1) {
