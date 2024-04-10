@@ -234,7 +234,7 @@ export async function job() {
 			itemsCache[cacheKey] = itemsCache[cacheKey] || [];
 			itemsCache[cacheKey] = [...itemsCache[cacheKey], item].sort((a, b) => a.price > b.price);
 			const maxPrice = prices[cacheKey];
-			if (maxPrice > 0 && item.price <= maxPrice) {
+			if (maxPrice > 0 && item.price <= maxPrice && !(item.price < 5 && maxPrice >= 25)) {
 				iteration.possibleGold++;
 				sendMail(cacheKey, item, maxPrice);
 			}
