@@ -10,7 +10,7 @@ const BAD_STRINGS = [
 	// Only Instructions
 	/solo (manuali|instrucciones|istruzioni|box)/i,
 	/^libretto istruzioni/i,
-	/^libretto (\S+\s+)?Lego/i,
+	/^(libretto|istruzioni) (\S+\s+)?Lego/i,
 	/^Lego istruzioni/i,
 	'notices Lego',
 	'carte Lego',
