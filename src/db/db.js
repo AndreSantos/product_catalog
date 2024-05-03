@@ -35,15 +35,12 @@ export function persistUnwantedSets(unwantedSets) {
 }
 
 export function readData() {
-    const itemsCache = JSON.parse(readFileSync('../../dump/items.txt', 'utf8'));
-    const itemsRead = JSON.parse(readFileSync('../../dump/items_read.txt', 'utf8'));
+    const itemsCache = readOrDefaultTo('../../dump/items.txt', {});
+    const itemsRead = readOrDefaultTo('../../dump/items_read.txt', {});
     const iterations = readIterations();
     const prices = JSON.parse(readFileSync('../../dump/prices.txt', 'utf8'));
     const unwantedSets = JSON.parse(readFileSync('../../dump/unwanted_sets.txt', 'utf8'));
-    let unwantedItems;
-    try {
-        unwantedItems = JSON.parse(readFileSync('../../dump/unwanted_items.txt', 'utf8'));
-    } catch (e) { unwantedItems = {};}
+    const unwantedItems = JSON.parse(readFileSync('../../dump/unwanted_items.txt', 'utf8'));
     const unwantedUsers = JSON.parse(readFileSync('../../dump/unwanted_users.txt', 'utf8'));
     return {itemsCache, itemsRead, iterations, prices, unwantedSets, unwantedItems, unwantedUsers};
 }
@@ -51,4 +48,14 @@ export function readData() {
 export function readIterations() {
     const iterations = JSON.parse(readFileSync('../../dump/iterations.txt', 'utf8'));
     return iterations;
+}
+
+function readOrDefaultTo(file, def) {
+    let contents = def;
+    try {
+        contents = JSON.parse(readFileSync(file, 'utf8'));
+    } catch (e) {
+        contents = def;
+    }
+    return contents;
 }
