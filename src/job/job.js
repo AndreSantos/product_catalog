@@ -34,7 +34,7 @@ const BAD_STRINGS = [
 	/(Scatole vuote|Scatola vuota|Caixa vazia)/i,
 	// Wall Support
 	/^(Lego )?(Supporto|Stand)/i,
-	/^Support\s+Lego)/i,
+	/^Support\s+Lego/i,
 	/Vitrina/i,
 	// Misc Lego
 	'Lego lotto da ',
