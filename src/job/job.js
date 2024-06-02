@@ -8,7 +8,7 @@ const BAD_STRINGS = [
 	// MOC
 	'MOC',
 	// Only Instructions
-	/solo (manuali|instrucciones|istruzioni|box)/i,
+	/solo (manuali|instrucciones|istruzioni)/i,
 	/^libretto istruzioni/i,
 	/^(libretto|istruzioni) (\S+\s+)?Lego/i,
 	/^Lego istruzioni/i,
@@ -29,11 +29,12 @@ const BAD_STRINGS = [
 	/^(Catalog|Catálogo)s?\s+(-\s+)?Lego/i,
 	/^Lego\s+(\S+\s+)?magazine/i, 
 	// Only Box
-	/Only Box/i,
+	/(Only|Solo) (Box|Scatola)/i,
 	/Bo(i|î)te(s)? vide/i,
 	/(Scatole vuote|Scatola vuota|Caixa vazia)/i,
 	// Wall Support
 	/^(Lego )?(Supporto|Stand)/i,
+	/^Support\s+Lego)/i,
 	/Vitrina/i,
 	// Misc Lego
 	'Lego lotto da ',
@@ -58,6 +59,8 @@ const BAD_STRINGS = [
 	/^T\Sl\Scommande/i,
 	// Lights
 	/Light My Bricks/i,
+	/^Led\s+/i,
+	/Kit\s+Led\s+pour/i,
 	// Polybag
 	'polybag',
 	// DVD
@@ -106,7 +109,7 @@ function log(str) {
 }
 
 function sanitizeValue(str, user_login) {
-	return str.replaceAll(`#${user_login}`, '').replace(/anné?e?e[^a-zA-Z0-9-]+\d{4}/i,'').replace(/\d{4}\s+piè?e?ces/i,'');
+	return str.replaceAll(`#${user_login}`, '').replace(/anné?e?e[^a-zA-Z0-9-]+\d{4}/i,'').replace(/\d{4,5}\s+piè?e?ces/i,'');
 }
 
 function shouldDiscard(str) {
