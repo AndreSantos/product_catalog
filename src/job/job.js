@@ -44,6 +44,7 @@ const BAD_STRINGS = [
 	/^(minifig|minifigure|minifigura|Figurine|Figura)/i,
 	/Lego\s+(\S+\s+)?(minifig|minifigure|minifigura|Figurine)s?/i,
 	/(cas|col|cty|hol|hp|loc|lor|mar|njo|pi|sh|sp|sw)\d{3,6}/i,
+	/^Vend personnage/i,
 	// No Minifigs,
 	/(no|sans) (figurines|minifigures|personnage)/i,
 	// Baseplate
