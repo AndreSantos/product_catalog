@@ -82,6 +82,7 @@ const BAD_STRINGS = [
 	/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?\s+(\S+\s+)?lego/i,
 	/lego\s+(\S+\s+)?(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?/i,
 	/Compatibile o simile/i,
+	/Lego compatible/i,
 	/(Ensemble Playmobil|^Playmobil)/i,
 	/pas de (la marque|vrais) Lego/i,
 	/pas de Lego/i,

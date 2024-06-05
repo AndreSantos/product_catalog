@@ -91,5 +91,5 @@ export async function lens(photoUrl) {
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
-    return [''];
+    return undefined;
 }
