@@ -130,7 +130,7 @@ function shouldDiscardBrand(brand) {
 function getInferredSets(item) {
 	return item.infer.title.length > 0 ?
 			item.infer.title :
-			(item.infer.description.length > 0 ?
+			((item.infer.description ?? []).length > 0 ?
 				item.infer.description :
 				item.infer.photo);
 }
