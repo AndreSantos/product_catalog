@@ -251,7 +251,8 @@ export async function job() {
 			if (item.photos && item.photos.length > 0) {
 				iteration.photoTest++;
 				try {
-					item.infer.photo = await lens(item.photos[0]); 
+					const photoInferredSet = await lens(item.photos[0]);
+					item.infer.photo = photoInferredSet ? [photoInferredSet] : []; 
 				} catch (e) {
 					iteration.photoFailure++;
 				}
