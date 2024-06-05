@@ -56,7 +56,7 @@ export function initializeServer() {
     });
     app.get('/prices', (req, res) => {
       const data = readData();
-      const page = Number(req.query.page ?? '0');
+      const page = Number(req.query.page ?? '1');
       const itemsCount = Object.keys(data.prices).length;
       const prices = createPage(data.prices, page);
       const paginationData = {
@@ -69,7 +69,7 @@ export function initializeServer() {
     });
     app.get('/unwanted_sets', (req, res) => {
       const data = readData();
-      const page = Number(req.query.page ?? '0');
+      const page = Number(req.query.page ?? '1');
       const itemsCount = Object.keys(data.unwantedSets).length;
       const unwantedSets = createPage(data.unwantedSets, page);
       const paginationData = {
