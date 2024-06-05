@@ -206,9 +206,11 @@ export async function job() {
 		item.time = iteration.start;
 		if (unwantedUsers.includes(item.user_id) || unwantedUsers.includes(item.user_login)) {
 			iteration.unwantedUsers++;
+			log(`Discarded due to unwanted user ${item.user_id} / ${item.user_login}.`);
 			continue;
 		}
 		if (shouldDiscard(item.title) || shouldDiscardBrand(item.brand)) {
+			log(`Discarded due to title (${item.title}) or brand (${item.brand}).`);
 			iteration.discardedItems++;
 			continue;
 		}
