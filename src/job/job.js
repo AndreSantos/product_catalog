@@ -73,7 +73,7 @@ const BAD_STRINGS = [
 	/verkleedset/i,
 	"Veste de ski",
 	/Adidas (ZX|Ultraboost)/i,
-	/(Chaqueta|Toalla|pyjama)/i,
+	/(Chaqueta|Toalla|pyjama|Camiseta)/i,
 	/Costume\s+(\S+\s+)?Lego/i,
 	/De?é?guisement/i,
 	/(Tee-?|T-?)shirt/i,
@@ -278,7 +278,7 @@ export async function job() {
 		
 		log(item);
 		if (areAllUnwantedItems) {
-			log(`Unwanted item ${areAllUnwantedItems}`);
+			log(`Unwanted set(s) ${inferredSets}`);
 			iteration.unwantedItems++;
 		} else {
 			const cacheKey = inferredSets.join(' + ');
