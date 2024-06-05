@@ -58,7 +58,7 @@ export function initializeServer() {
       const data = readData();
       const page = Number(req.query.page ?? '1');
       const itemsCount = Object.keys(data.prices).length;
-      const prices = createPage(data.prices, page);
+      const prices = createPage(data.prices, page - 1);
       const paginationData = {
         itemsCount,
         page,
@@ -71,7 +71,7 @@ export function initializeServer() {
       const data = readData();
       const page = Number(req.query.page ?? '1');
       const itemsCount = Object.keys(data.unwantedSets).length;
-      const unwantedSets = createPage(data.unwantedSets, page);
+      const unwantedSets = createPage(data.unwantedSets, page - 1);
       const paginationData = {
         itemsCount,
         page,
