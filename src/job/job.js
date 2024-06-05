@@ -130,7 +130,7 @@ function shouldDiscardBrand(brand) {
 function getInferredSets(item) {
 	const infer = item.infer.title.length > 0 ?
 			item.infer.title :
-			((item.infer.description ?? []).length > 0 ?
+			(item.infer.description.length > 0 ?
 				item.infer.description :
 				item.infer.photo);
 	return infer ?? [];
@@ -196,6 +196,7 @@ export async function job() {
 	iteration.totalItems = response.items.length;
 	for (let [index, item] of response.items.entries()) {
 		if (itemsRead[item.id]) {
+			log(`Skipping past item ${index}...`);
 			iteration.pastItems++;
 			continue;
 		}
@@ -214,7 +215,10 @@ export async function job() {
 		const titleSets = [...title.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
 		item.infer = {
 			title: titleSets,
+			description: [],
+			photo: [],
 		};
+		log(item);
 		const couldBeGoldFromTitle = isPossibleGold(item, prices);
 		let viewItemReturn;
 		log(`Inferred sets ${item.infer.title} and gold from title: ${couldBeGoldFromTitle}`);
