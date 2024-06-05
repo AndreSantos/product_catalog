@@ -127,13 +127,41 @@ function shouldDiscardBrand(brand) {
 	return !isLego;
 }
 
+function getInferredSets(item) {
+	return item.infer.title.length > 0 ?
+			item.infer.title :
+			(item.infer.description.length > 0 ?
+				item.infer.description :
+				item.infer.photo);
+}
+
+function getMaxPrice(inferredSets, pricesCache) {
+	let maxPrice = 0;
+	for (const key of inferredSets) {
+		const maxPriceForItem = pricesCache[key];
+		maxPrice += maxPriceForItem > 0 ? maxPriceForItem : 5;
+	}
+	return maxPrice;
+}
+
 function isPossibleGold(item, pricesCache) {
-	const cacheKey = item.infer.title || item.infer.description || item.infer.photo;
-	if (!cacheKey) {
+	const cacheKey = getInferredSets(item);
+	if (!cacheKey.length) {
 		return false;
 	}
-	const maxPrice = pricesCache[cacheKey];
-	return maxPrice > 0 && item.price <= maxPrice && !(item.price < 5 && maxPrice >= 25);
+	let maxPrice = 0;
+	let hasAtLeastOneItemWithPrice = false;
+	for (const key of cacheKey) {
+		const maxPriceForItem = pricesCache[key];
+		maxPrice += maxPriceForItem > 0 ? maxPriceForItem : 5;
+		
+		hasAtLeastOneItemWithPrice ||= (maxPriceForItem > 0);
+	}
+	console.log('isPossibleGold', cacheKey, maxPrice, hasAtLeastOneItemWithPrice);
+	if (!hasAtLeastOneItemWithPrice) {
+		return false;
+	}
+	return item.price <= maxPrice && !(item.price <= 5 && maxPrice >= 25);
 }
 
 export async function job() {
@@ -184,13 +212,13 @@ export async function job() {
 		const title = sanitizeValue(item.title, item.user_login);
 		const titleSets = [...title.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
 		item.infer = {
-			title: titleSets[0],
+			title: titleSets,
 		};
-		if (titleSets.length > 1) {
-			item.infer.titleExtra = titleSets;
-		}
+		const couldBeGoldFromTitle = isPossibleGold(item, prices);
 		let viewItemReturn;
-		if (!item.infer.title || isPossibleGold(item, prices)) {
+		log(`Inferred sets ${item.infer.title} and gold from title: ${couldBeGoldFromTitle}`);
+		if (!item.infer.title.length || couldBeGoldFromTitle) {
+			log(`Fetching description`);
 			iteration.descriptionTest++;
 			descriptionCache[item.user_id] = descriptionCache[item.user_id] || [];
 			if (descriptionCache[item.user_id].length === 0) {
@@ -207,17 +235,14 @@ export async function job() {
 			const description = sanitizeValue(item.description, item.user_login);
 			const descriptionSets = [...description.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
 
-			item.infer.description = descriptionSets[0];
-			if (descriptionSets.length > 1) {
-				item.infer.descriptionExtra = descriptionSets;
-			}
+			item.infer.description = descriptionSets;
 			
 			if (shouldDiscard(item.description)) {
 				iteration.discardedItems++;
 				continue;
 			}
 		}
-		if (!item.infer.title && !item.infer.description) {
+		if (!item.infer.title.length && !item.infer.description.length) {
 			if (item.photos && item.photos.length > 0) {
 				iteration.photoTest++;
 				try {
@@ -228,28 +253,32 @@ export async function job() {
 			}
 		}
 
-		// Infer
-		const cacheKey = item.infer.title || item.infer.description || item.infer.photo || 'undetermined';
-		if (item.infer.title) {
+		if (item.infer.title.length > 0) {
 			iteration.titleInfered++, iteration.addedItems++;
-		} else if (item.infer.description) {
+		} else if (item.infer.description.length > 0) {
 			iteration.descriptionInfered++, iteration.addedItems++;
-		} else if (item.infer.photo) {
+		} else if (item.infer.photo.length > 0) {
 			iteration.photoInfered++, iteration.addedItems++;
 		}
-
+		
 		// Created At (is only set in view call).
 		item.created_at = item.created_at ?? iteration.start.toString();
-
+		
+		const inferredSets = getInferredSets(item);
+		const areAllUnwantedItems = inferredSets.every(s => unwantedSets[s]);
+		
 		log(item);
-		if (unwantedSets[cacheKey]) {
+		if (areAllUnwantedItems) {
+			log(`Unwanted item ${areAllUnwantedItems}`);
 			iteration.unwantedItems++;
 		} else {
+			const cacheKey = inferredSets.join(' + ');
 			itemsCache[cacheKey] = itemsCache[cacheKey] || [];
 			itemsCache[cacheKey] = [...itemsCache[cacheKey], item].sort((a, b) => a.price > b.price);
 			if (isPossibleGold(item, prices)) {
 				iteration.possibleGold++;
-				sendMail(cacheKey, item, prices[cacheKey]);
+				const maxPrice = getMaxPrice(inferredSets, prices);
+				sendMail(cacheKey, item, maxPrice);
 			}
 		}
 		persistData(itemsCache, itemsRead);
