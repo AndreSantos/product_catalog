@@ -65,7 +65,7 @@ const BAD_STRINGS = [
 	// Polybag
 	'polybag',
 	// DVD
-	/(Dvd|videogame|Nintendo|Jeu switch|Jeu vid|Playstation|PS3|Xbox|wii)/i,
+	/(Dvd|videogame|Nintendo|Jeu switch|Jeu vid|Playstation|PS3|PS4|PS5|Xbox|wii)/i,
 	// Keys
 	/(Portachiavi|sleutelhanger|keychain)/i,
 	/porte.?cl(e|é)/i,
