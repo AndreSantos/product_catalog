@@ -32,7 +32,7 @@ const BAD_STRINGS = [
 	/^Poster\s+Lego/i,
 	// Only Box
 	/(Only|Solo) (Box|Scatola)/i,
-	/Bo(i|î)te(s)? vide/i,
+	/Bo(i|î)te(s)? (Lego )?vide/i,
 	/(Scatole vuote|Scatola vuota|Caixa vazia)/i,
 	// Wall Support
 	/^(Lego )?(Supporto|Stand)/i,
@@ -49,10 +49,10 @@ const BAD_STRINGS = [
 	/^Vend personnage/i,
 	// Specific parts
 	/^Couverture de cheval/i,
-	/^Lego (\S+ )?coques/i,
-	/^Coques/i,
+	/^Lego (\S+ )?(coques|voile|stickers|autocollants|train rails|rails)/i,
+	/^(Coques|Voile|Stickers|Autocollants|Train rails|Rails)/i,
 	// No Minifigs,
-	/(no|sans) (figurines|minifigures|personnage)/i,
+	/(no|sans|geen|manque les) (mini )?(figurines|minifigures|personnage|minifiguren)/i,
 	// Baseplate
 	/^Lego\s+(\d+\s+)?(Basisplaat|Baseplate|wege?n?plate?n?|grondplaat|plaque|pièces?|pieces?)/i,
 	/^(Baseplate|grondplaat|plaque|pièces?|pieces?|Base)\s+(\S+\s+)?Lego/i,
@@ -88,19 +88,21 @@ const BAD_STRINGS = [
 	/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?\s+(\S+\s+)?lego/i,
 	/lego\s+(\S+\s+)?(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?/i,
 	/Compatibile o simile/i,
+	/Compatible con/i,
 	/Lego compatible/i,
 	/compatibili (per treno )? Lego/i,
 	/(Ensemble Playmobil|^Playmobil)/i,
 	/pas de (la marque|vrais) Lego/i,
-	/pas de Lego/i,
+	/pas (de|un) Lego/i,
 	/WW2/i,
 	/pas compatible/i,
 	/lego no oficial/i,
 	/Geen originele/i,
+	/no es (de la marca )?Lego/i,
 	/parts are compatible/i,
 	'Figurine Compatible',
 	'Briques de construction',
-	/(Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki|Urba?e?n artic)/i,
+	/(Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki|Urba?e?n artic|Spea)/i,
 	/M(e|é)ga bloc?ks/i,
 	// Legos I don't care about
 	'Brick Headz',
@@ -121,7 +123,11 @@ function log(str) {
 }
 
 function sanitizeValue(str, user_login) {
-	return str.replaceAll(`#${user_login}`, '').replace(/anné?e?e[^a-zA-Z0-9-]+\d{4}/i,'').replace(/\d{4,5}\s+piè?e?ces/i,'');
+	return str
+		.replaceAll(`#${user_login}`, '')
+		.replace(/anné?e?e[^a-zA-Z0-9-]+\d{4}/i,'')
+		.replace(/\d{3,5}\s+piè?e?ces/i,'')
+		.replace(/\d{3,5}\s+pcs/i,'');
 }
 
 function shouldDiscard(str) {
