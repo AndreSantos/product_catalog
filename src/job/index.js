@@ -15,7 +15,7 @@ async function runJob() {
     } else if (iterationStats.pastItems < 5) {
 		waitingTimeInMins = 7;
 	} else if (iterationStats.pastItems < 10) {
-		waitingTimeInMins = 10;
+		waitingTimeInMins = 9;
 	} else if (iterationStats.pastItems < 20) {
 		waitingTimeInMins = 12;
 	} else if (iterationStats.pastItems < 30) {
