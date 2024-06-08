@@ -137,6 +137,10 @@ function shouldDiscardBrand(brand) {
 	return !isLego;
 }
 
+function sanitizeSets(sets) {
+	return [...new Set(sets)];
+}
+
 function getInferredSets(item) {
 	const infer = item.infer.title.length > 0 ?
 			item.infer.title :
@@ -226,7 +230,7 @@ export async function job() {
 		const title = sanitizeValue(item.title, item.user_login);
 		const titleSets = [...title.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
 		item.infer = {
-			title: titleSets,
+			title: sanitizeSets(titleSets),
 			description: [],
 			photo: [],
 		};
@@ -252,7 +256,7 @@ export async function job() {
 			const description = sanitizeValue(item.description, item.user_login);
 			const descriptionSets = [...description.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
 
-			item.infer.description = descriptionSets;
+			item.infer.description = sanitizeSets(descriptionSets);
 			
 			if (shouldDiscard(item.description)) {
 				iteration.discardedItems++;
