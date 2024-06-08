@@ -27,7 +27,9 @@ const BAD_STRINGS = [
 	/^Instrucciones(\s+y\s+pegatinas)?/i,
 	// Catalog, maganizes
 	/^(Catalog|Catálogo)s?\s+(-\s+)?Lego/i,
-	/^Lego\s+(\S+\s+)?magazine/i, 
+	/^Lego\s+(\S+\s+)?magazine/i,
+	/^Lego\s+(\S+\s+)?poster/i,
+	/^Poster\s+Lego/i,
 	// Only Box
 	/(Only|Solo) (Box|Scatola)/i,
 	/Bo(i|î)te(s)? vide/i,
@@ -45,6 +47,10 @@ const BAD_STRINGS = [
 	/Lego\s+(\S+\s+)?(minifig|minifigure|minifigura|Figurine)s?/i,
 	/(cas|col|cty|hol|hp|loc|lor|mar|njo|pi|sh|sp|sw)\d{3,6}/i,
 	/^Vend personnage/i,
+	// Specific parts
+	/^Couverture de cheval/i,
+	/^Lego (\S+ )?coques/i,
+	/^Coques/i,
 	// No Minifigs,
 	/(no|sans) (figurines|minifigures|personnage)/i,
 	// Baseplate
@@ -83,6 +89,7 @@ const BAD_STRINGS = [
 	/lego\s+(\S+\s+)?(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?/i,
 	/Compatibile o simile/i,
 	/Lego compatible/i,
+	/compatibili (per treno )? Lego/i,
 	/(Ensemble Playmobil|^Playmobil)/i,
 	/pas de (la marque|vrais) Lego/i,
 	/pas de Lego/i,
@@ -90,6 +97,7 @@ const BAD_STRINGS = [
 	/pas compatible/i,
 	/lego no oficial/i,
 	/Geen originele/i,
+	/parts are compatible/i,
 	'Figurine Compatible',
 	'Briques de construction',
 	/(Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki|Urba?e?n artic)/i,
