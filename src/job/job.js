@@ -24,6 +24,7 @@ const BAD_STRINGS = [
 	/^Lego\s+(\S+\s+)?(instructieboekje|boek)/i,
 	/^Livret instructions/i,
 	/^Libro lego/i,
+	/^Boekje lego/i,
 	/^Instrucciones(\s+y\s+pegatinas)?/i,
 	// Catalog, maganizes
 	/^(Catalog|Catálogo)s?\s+(-\s+)?Lego/i,
@@ -47,7 +48,10 @@ const BAD_STRINGS = [
 	/Lego\s+(\S+\s+)?(minifig|minifigure|minifigura|Figurine)s?/i,
 	/(cas|col|cty|hol|hp|loc|lor|mar|njo|pi|sh|sp|sw)\d{3,6}/i,
 	/^Vend personnage/i,
+	/^Personnage Simpson/i,
+	/^Iron Baron/i,
 	// Specific parts
+	/^Lego (\d+ )?drapeaux chevalier/i,
 	/^Couverture de cheval/i,
 	/^Lego (\S+ )?(coques|voile|stickers|autocollants|train rails|rails)/i,
 	/^(Coques|Voile|Stickers|Autocollants|Train rails|Rails)/i,
@@ -62,6 +66,7 @@ const BAD_STRINGS = [
 	/^(Accessoires|Accessorios) Lego/i,
 	/^Lot d'accessoires/i,
 	/^Lot de plate/i,
+	/^Lego \d+ roues/i,
 	// Telecommande
 	/^T\Sl\Scommande/i,
 	// Lights
@@ -94,6 +99,7 @@ const BAD_STRINGS = [
 	/(Ensemble Playmobil|^Playmobil)/i,
 	/pas de (la marque|vrais) Lego/i,
 	/pas (de|un) Lego/i,
+	/R(e|é)plique LEGO/i,
 	/WW2/i,
 	/pas compatible/i,
 	/lego no oficial/i,
