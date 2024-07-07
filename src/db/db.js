@@ -2,6 +2,14 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 export function persistData(itemsCache, itemsRead) {
     persistItemsCache(itemsCache);
+
+    const now = new Date();
+    for (const itemsReadKey of Object.keys(itemsRead)) {
+        const d = itemsRead[itemsReadKey];
+        if (typeof d === 'string' && now - new Date(d) > 1000 * 60 * 60 * 10) {
+            delete itemsRead[itemsReadKey];
+        }
+    }
 	writeFileSync('../../dump/items_read.txt', JSON.stringify(itemsRead));
 }
 
