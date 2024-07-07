@@ -14,7 +14,9 @@ export function persistData(itemsCache, itemsRead) {
 }
 
 export function persistIterations(iterations) {
-	writeFileSync('../../dump/iterations.txt', JSON.stringify(iterations));
+    const it = iterations.reverse();
+    it.length = 50;
+	writeFileSync('../../dump/iterations.txt', JSON.stringify(it.reverse()));
 }
 
 export function persistItemsCache(itemsCache) {
