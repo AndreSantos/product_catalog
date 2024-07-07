@@ -108,7 +108,7 @@ const BAD_STRINGS = [
 	/parts are compatible/i,
 	'Figurine Compatible',
 	'Briques de construction',
-	/(Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki|Urba?e?n artic|Spea)/i,
+	/(Brickarms|Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki|Urba?e?n artic|Spea)/i,
 	/M(e|é)ga bloc?ks/i,
 	// Legos I don't care about
 	'Brick Headz',
