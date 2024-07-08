@@ -25,6 +25,7 @@ const BAD_STRINGS = [
 	/^Livret instructions/i,
 	/^Libro lego/i,
 	/^Boekje lego/i,
+	/^Enkel de Boekje/i,
 	/^Instrucciones(\s+y\s+pegatinas)?/i,
 	// Catalog, maganizes
 	/^(Catalog|Catálogo)s?\s+(-\s+)?Lego/i,
@@ -67,6 +68,7 @@ const BAD_STRINGS = [
 	/^Lot d'accessoires/i,
 	/^Lot de plate/i,
 	/^Lego \d+ roues/i,
+	/^Lego accessoires/i,
 	// Telecommande
 	/^T\Sl\Scommande/i,
 	// Lights
@@ -92,9 +94,10 @@ const BAD_STRINGS = [
 	// Non-Lego
 	/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?\s+(\S+\s+)?lego/i,
 	/lego\s+(\S+\s+)?(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?/i,
+	/compatibili per treno/i,
 	/Compatibile o simile/i,
 	/Compatible con/i,
-	/Lego compatible/i,
+	/Lego-compatibili/i,
 	/compatibili (per treno )? Lego/i,
 	/(Ensemble Playmobil|^Playmobil)/i,
 	/pas de (la marque|vrais) Lego/i,
@@ -249,7 +252,6 @@ export async function job() {
 		log(item);
 		const couldBeGoldFromTitle = isPossibleGold(item, prices);
 		let viewItemReturn;
-		log(`Inferred sets ${item.infer.title} and gold from title: ${couldBeGoldFromTitle}`);
 		if (!item.infer.title.length || couldBeGoldFromTitle) {
 			log(`Fetching description`);
 			iteration.descriptionTest++;
