@@ -15,7 +15,6 @@ export function fetchCookie() {
     if (agent) {
       console.log(`[*] Using proxy ${process.env.VINTED_API_HTTPS_PROXY}`);
     }
-    // console.log('Fetching cookie...');
     fetch(`https://vinted.pt`, {
       signal: controller.signal,
       agent,
@@ -26,6 +25,7 @@ export function fetchCookie() {
       const setCookie = res.headers.get('set-cookie');
       controller.abort();
       const parsedSetCookie = cookie.parse(setCookie);
+      console.log("Fetch cookie", setCookie);
       console.log("Fetch cookie", parsedSetCookie);
       const accessTokenWeb = parsedSetCookie.find(token => token.startsWith('access_web_token'));
       console.log("Access Token Web", accessTokenWeb);
