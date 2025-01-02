@@ -6,6 +6,7 @@ export async function searchItems(query) {
   const controller = new AbortController();
   const cookie = await fetchCookie();
   const url = `https://www.vinted.pt/api/v2/catalog/items?search_text=${query.text}&order=newest_first&price_from=2&price_to=200`;
+  console.log('searchItems cookie', cookie);
   const vintedResponse = await fetch(url, {
     signal: controller.signal,
     headers: {
@@ -15,6 +16,7 @@ export async function searchItems(query) {
     }
   });
   const response = await vintedResponse.json();
+  console.log('searchItems response', response);
   return {
     time: (response.pagination || {}).time,
     items: (response.items || []).map(item => ({
