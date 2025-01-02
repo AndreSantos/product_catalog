@@ -21,7 +21,7 @@ export async function searchItems(query) {
     items: (response.items || []).map(item => ({
       id: item.id,
       title: item.title,
-      price: item.price,
+      price: item.price.amount,
       brand: item.brand_title,
       discount: item.discount,
       status: item.status,
