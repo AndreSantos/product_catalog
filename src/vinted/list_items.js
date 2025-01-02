@@ -15,6 +15,7 @@ export async function searchItems(query) {
     }
   });
   const response = await vintedResponse.json();
+  console.log("searchItems", response);
   return {
     time: (response.pagination || {}).time,
     items: (response.items || []).map(item => ({
