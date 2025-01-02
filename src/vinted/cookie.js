@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
 import UserAgent from 'user-agents';
-import cookie from 'cookie';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
 let vintedCookie;
@@ -22,19 +21,12 @@ export function fetchCookie() {
         'user-agent': new UserAgent().toString()
       }
     }).then((res) => {
-      const setCookie = res.headers.get('set-cookie');
       controller.abort();
-      const parsedSetCookie = cookie.parse(setCookie);
-      console.log("Fetch cookie", setCookie);
-      console.log("Fetch cookie", parsedSetCookie);
-      const accessTokenWeb = parsedSetCookie.find(token => token.startsWith('access_web_token'));
-      console.log("Access Token Web", accessTokenWeb);
-      if (c) {
-        vintedCookie = c;
-      }
-      resolve(vintedCookie);
-    }).catch(() => {
-      console.log('Fetching cookie failed.');
+      const setCookie = res.headers.get('set-cookie');
+      vintedCookie = setCookie.match(/access_token_web=([^;]*)/)[1];
+      resolve(vintedCookie); 
+    }).catch((err) => {
+      console.error('Fetching cookie failed:', err);
       controller.abort();
       reject();
     });
