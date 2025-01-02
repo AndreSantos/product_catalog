@@ -26,10 +26,7 @@ export function fetchCookie() {
       // Fix Vinted cookies bug.
       const sessionCookie = res.headers.get('set-cookie').replace('Lax,', 'Lax;');
       controller.abort();
-      console.log("Fetch cookie", sessionCookie);
-      console.log("Fetch cookie headers", res.headers);
-      const c = cookie.parse(sessionCookie)['_vinted_fr_session'];
-      console.log("Fetch cookie vinted_fr", c);
+      const c = cookie.parse(sessionCookie)['access_token_web'];
       if (c) {
         vintedCookie = c;
       }
