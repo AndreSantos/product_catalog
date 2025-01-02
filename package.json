@@ -24,7 +24,6 @@
   "homepage": "https://github.com/AndreSantos/product_catalog#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
-    "cookie": "^0.6.0",
     "ejs": "^3.1.9",
     "es-abstract": "^1.23.2",
     "express": "^4.18.2",
@@ -37,6 +36,7 @@
     "nodemailer": "^6.9.12",
     "puppeteer-core": "^21.11.0",
     "rand-user-agent": "^2.0.49",
+    "set-cookie-parser": "^2.7.1",
     "user-agents": "^1.1.105"
   }
 }
