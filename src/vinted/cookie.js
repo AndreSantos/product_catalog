@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import UserAgent from 'user-agents';
-import setCookieParser from 'set-cookie-parser';
+import cookie from 'cookie';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
 let vintedCookie;
@@ -23,17 +23,14 @@ export function fetchCookie() {
         'user-agent': new UserAgent().toString()
       }
     }).then((res) => {
-      // Fix Vinted cookies bug.
-      const cookies = setCookieParser.parse(res, {
-        map: true
-      });
-      const c = cookies['access_token_web'];
-      // const sessionCookie = res.headers.get('set-cookie'); //.replace('Lax,', 'Lax;');
+      const setCookie = res.headers.get('set-cookie');
       controller.abort();
-      //const c = cookie.parse(sessionCookie)['access_token_web'];
-      console.log("Fetch cookie", cookies, c, c.value);
+      const parsedSetCookie = cookie.parse(setCookie);
+      console.log("Fetch cookie", parsedSetCookie);
+      const accessTokenWeb = parsedSetCookie.find(token => token.startsWith('access_web_token'));
+      console.log("Access Token Web", accessTokenWeb);
       if (c) {
-        vintedCookie = c.value;
+        vintedCookie = c;
       }
       resolve(vintedCookie);
     }).catch(() => {
