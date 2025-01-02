@@ -27,6 +27,7 @@ export function fetchCookie() {
       const sessionCookie = res.headers.get('set-cookie').replace('Lax,', 'Lax;');
       controller.abort();
       const c = cookie.parse(sessionCookie)['access_token_web'];
+      console.log("Fetch cookie", res.headers, c);
       if (c) {
         vintedCookie = c;
       }
