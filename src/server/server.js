@@ -54,10 +54,10 @@ export function initializeServer() {
       startJob();
       res.send('Done');
     });
-    app.get('/bad_expressions', (req, res) => {
+    app.get('/bad_strings', (req, res) => {
       const data = readData();
       const items = data.badExpressions;
-      res.render('bad_expressions', {items});
+      res.render('bad_strings', {...iterationViewData(), items});
     });
     app.get('/prices', (req, res) => {
       const data = readData();
