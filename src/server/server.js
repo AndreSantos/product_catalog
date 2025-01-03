@@ -54,6 +54,11 @@ export function initializeServer() {
       startJob();
       res.send('Done');
     });
+    app.get('/bad_expressions', (req, res) => {
+      const data = readData();
+      const items = data.badExpressions;
+      res.render('bad_expressions', {items});
+    });
     app.get('/prices', (req, res) => {
       const data = readData();
       const page = Number(req.query.page ?? '1');

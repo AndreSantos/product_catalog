@@ -4,129 +4,6 @@ import {readData, persistData} from '../db/db.js';
 import {lens} from '../image/lens_puppeteer.js';
 import {sendMail} from './mail.js';
 
-const BAD_STRINGS = [
-	// MOC
-	'MOC',
-	// Only Instructions
-	/solo (manuali|instrucciones|istruzioni)/i,
-	/^libretto istruzioni/i,
-	/^(libretto|istruzioni) (\S+\s+)?Lego/i,
-	/^Lego istruzioni/i,
-	'notices Lego',
-	'carte Lego',
-	/Notice only/i,
-	/handleiding enkel/i,
-	/^Notices?\s+(\S+\s+)?Lego/i,
-	/^Notices? de montage/i,
-	/Manua(l|is) (de )?Instruç/i,
-	/^Lego\s+(\S+\s+)?Notice/i,
-	/^(Lego\s+)?Manuales?(\s+Lego)?/i,
-	/^Lego\s+(\S+\s+)?(instructieboekje|boek)/i,
-	/^Livret instructions/i,
-	/^Libro lego/i,
-	/^Boekje lego/i,
-	/^Enkel de Boekje/i,
-	/^Instrucciones(\s+y\s+pegatinas)?/i,
-	// Catalog, maganizes
-	/^(Catalog|Catálogo)s?\s+(-\s+)?Lego/i,
-	/^Lego\s+(\S+\s+)?magazine/i,
-	/^Lego\s+(\S+\s+)?poster/i,
-	/^Poster\s+Lego/i,
-	// Only Box
-	/(Only|Solo) (Box|Scatola)/i,
-	/Bo(i|î)te(s)? (Lego )?vide/i,
-	/(Scatole vuote|Scatola vuota|Caixa vazia)/i,
-	// Wall Support
-	/^(Lego )?(Supporto|Stand)/i,
-	/^Support\s+Lego/i,
-	/Vitrina/i,
-	// Misc Lego
-	'Lego lotto da ',
-	// Only Minifigs
-	/lot\s*(de\s+\d+)\s*(mini)?figurines/i,
-	/(minifig|minifigure|minifigura|Figurine)s?\s+(\S+\s+)?(Lego|Compatible)/i,
-	/^(minifig|minifigure|minifigura|Figurine|Figura)/i,
-	/Lego\s+(\S+\s+)?(minifig|minifigure|minifigura|Figurine)s?/i,
-	/(cas|col|cty|hol|hp|loc|lor|mar|njo|pi|sh|sp|sw)\d{3,6}/i,
-	/^Vend personnage/i,
-	/^Personnage Simpson/i,
-	/^Iron Baron/i,
-	// Specific parts
-	/^Lego (\d+ )?drapeaux chevalier/i,
-	/^Couverture de cheval/i,
-	/^Lego (\S+ )?(coques|voile|stickers|autocollants|train rails|rails)/i,
-	/^(Coques|Voile|Stickers|Autocollants|Train rails|Rails)/i,
-	// No Minifigs,
-	/(no|sans|geen|manque les) (mini )?(figurines|minifigures|personnage|minifiguren)/i,
-	// Baseplate
-	/^Lego\s+(\d+\s+)?(Basisplaat|Baseplate|wege?n?plate?n?|grondplaat|plaque|pièces?|pieces?)/i,
-	/^(Baseplate|grondplaat|plaque|pièces?|pieces?|Base)\s+(\S+\s+)?Lego/i,
-	/Solo la struttura/i,
-	// Animals, Parts
-	/\d{4}(bpb|c|p|pb|px)\d{1,3}/i,
-	/^(Accessoires|Accessorios) Lego/i,
-	/^Lot d'accessoires/i,
-	/^Lot de plate/i,
-	/^Lego \d+ roues/i,
-	/^Lego accessoires/i,
-	// Telecommande
-	/^T\Sl\Scommande/i,
-	// Lights
-	/Light My Bricks/i,
-	/^Led\s+/i,
-	/Kit\s+Led\s+pour/i,
-	// Polybag
-	'polybag',
-	// DVD
-	/(Dvd|videogame|Nintendo|Jeu switch|Jeu vid|Playstation|PS3|PS4|PS5|Xbox|wii)/i,
-	// Keys
-	/(Portachiavi|sleutelhanger|keychain)/i,
-	/porte.?cl(e|é)/i,
-	// Clothing
-	/verkleedset/i,
-	"Veste de ski",
-	/Adidas (ZX|Ultraboost)/i,
-	/(Chaqueta|Toalla|pyjama|Camiseta)/i,
-	/Costume\s+(\S+\s+)?Lego/i,
-	/De?é?guisement/i,
-	/(Tee-?|T-?)shirt/i,
-	/(nachtlamp|orologio)/i,
-	// Non-Lego
-	/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?\s+(\S+\s+)?lego/i,
-	/lego\s+(\S+\s+)?(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?/i,
-	/compatibili per treno/i,
-	/Compatibile o simile/i,
-	/Compatible con/i,
-	/Lego-compatibili/i,
-	/compatibili (per treno )? Lego/i,
-	/(Ensemble Playmobil|^Playmobil)/i,
-	/pas de (la marque|vrais) Lego/i,
-	/pas (de|un) Lego/i,
-	/R(e|é)plique LEGO/i,
-	/WW2/i,
-	/pas compatible/i,
-	/lego no oficial/i,
-	/Geen originele/i,
-	/no es (de la marca )?Lego/i,
-	/parts are compatible/i,
-	'Figurine Compatible',
-	'Briques de construction',
-	/(Brickarms|Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki|Urba?e?n artic|Spea)/i,
-	/M(e|é)ga bloc?ks/i,
-	// Legos I don't care about
-	'Brick Headz',
-	'BrickHeadz',
-	'Minecraft',
-	'Lego Bionicle',
-	'Lego Friends',
-	'Lego Primo',
-	'Lego Star Wars',
-	'Lego DOTS',
-	'nexo knights',
-	'Chima',
-	'Vidiyo'
-];
-
 function log(str) {
 	console.log(new Date().toLocaleString(), str);
 }
@@ -139,9 +16,9 @@ function sanitizeValue(str, user_login) {
 		.replace(/\d{3,5}\s+pcs/i,'');
 }
 
-function shouldDiscard(str) {
+function shouldDiscard(badExpressions, str) {
 	const s = str.toLowerCase();
-	return BAD_STRINGS.some(bad => bad instanceof RegExp ? !!s.match(bad) : s.includes(bad.toLowerCase()));
+	return badExpressions.some(bad => !!s.match(bad));
 }
 
 function shouldDiscardBrand(brand) {
@@ -201,6 +78,7 @@ export async function job() {
 	const unwantedSets = data.unwantedSets;
 	const prices = data.prices;
 	const unwantedUsers = data.unwantedUsers;
+	const badExpressions = data.badExpressions;
 
 	const iteration = {
 		start: new Date(),
@@ -237,7 +115,7 @@ export async function job() {
 			log(`Discarded due to unwanted user ${item.user_id} / ${item.user_login}.`);
 			continue;
 		}
-		if (shouldDiscard(item.title) || shouldDiscardBrand(item.brand)) {
+		if (shouldDiscard(badExpressions, item.title) || shouldDiscardBrand(item.brand)) {
 			log(`Discarded due to title (${item.title}) or brand (${item.brand}).`);
 			iteration.discardedItems++;
 			continue;
@@ -272,7 +150,7 @@ export async function job() {
 
 			item.infer.description = sanitizeSets(descriptionSets);
 			
-			if (shouldDiscard(item.description)) {
+			if (shouldDiscard(badExpressions, item.description)) {
 				iteration.discardedItems++;
 				continue;
 			}

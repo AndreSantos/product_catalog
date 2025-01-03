@@ -2,11 +2,25 @@ function notify(str) {
     document.querySelector("notification").textContent = str;
 }
 
+function updateBadExpressionTestResult(target) {
+    const test = target.value;
+    const expressionIdx = target.getAttribute('data-expression-idx');
+    const badExpressionInput = document.querySelector(`bad-expression-value[data-expression-idx="${expressionIdx}"]`);
+    const result = !!badExpressionInput.value.match(test);
+    target.classList.remove("fail");
+    target.classList.remove("pass");
+    target.classList.add(result ? "pass" : "fail");
+}
+
 document.addEventListener("change", async (event) => {
-    const target = event.target;
-    const set = target.getAttribute('data-set');
-    const newPrice = target.value;
-    await fetch(`/item/${set}/price/${newPrice ?? '_'}`);
+    if (event.target.classList.contains('bad-expression-test')) {
+        updateBadExpressionTestResult(event.target);
+    } else {
+        const target = event.target;
+        const set = target.getAttribute('data-set');
+        const newPrice = target.value;
+        await fetch(`/item/${set}/price/${newPrice ?? '_'}`);
+    }
 });
 
 async function startJob() {

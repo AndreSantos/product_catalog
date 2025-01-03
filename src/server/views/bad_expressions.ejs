@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('header.ejs') %>
+<body>
+  <%- include('head.ejs', {isJobRunning}) %>
+  <table class="items">
+    <thead>
+      <th>Expression</th>
+      <th>Test</th>
+    </thead>
+    <tbody>
+      <% Object.keys(items).forEach(function(item, idx) { %>
+        <tr>
+          <td>
+            <input class="bad-expression-value" data-expression-idx="<%= idx %>" value="<%= item %>" />
+          </td>
+          <td>
+            <input class="bad-expression-test" data-expression-idx="<%= idx %>" value="" />
+          </td>
+        </tr>
+      <% }); %>
+    </thead>
+  </table>
+</body>
+</html>
