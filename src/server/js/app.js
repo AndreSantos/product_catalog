@@ -5,7 +5,7 @@ function notify(str) {
 function updateBadExpressionTestResult(target) {
     const test = target.value;
     const expressionIdx = target.getAttribute('data-expression-idx');
-    const badExpressionInput = document.querySelector(`bad-expression-value[data-expression-idx="${expressionIdx}"]`);
+    const badExpressionInput = document.querySelector(`.bad-expression-value[data-expression-idx="${expressionIdx}"]`);
     const result = !!badExpressionInput.value.match(test);
     target.classList.remove("fail");
     target.classList.remove("pass");
