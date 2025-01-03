@@ -9,7 +9,7 @@
       <th>Test</th>
     </thead>
     <tbody>
-      <% Object.keys(items).forEach(function(item, idx) { %>
+      <% items.forEach(function(item, idx) { %>
         <tr>
           <td>
             <input class="bad-expression-value" data-expression-idx="<%= idx %>" value="<%= item %>" />
