@@ -102,12 +102,12 @@ export async function job() {
 	const response = await searchItems({text: 'lego'});
 	iteration.totalItems = response.items.length;
 	for (let [index, item] of response.items.entries()) {
+		log(`Processing item ${index}...`);
 		if (itemsRead[item.id]) {
-			log(`Skipping past item ${index}...`);
+			log(`Skipping past item.`);
 			iteration.pastItems++;
 			continue;
 		}
-		log(`Processing item ${index}...`);
 		itemsRead[item.id] = iteration.start;
 		item.time = iteration.start;
 		if (unwantedUsers.includes(item.user_id) || unwantedUsers.includes(item.user_login)) {
@@ -131,12 +131,15 @@ export async function job() {
 		const couldBeGoldFromTitle = isPossibleGold(item, prices);
 		let viewItemReturn;
 		if (!item.infer.title.length || couldBeGoldFromTitle) {
-			log(`Fetching description`);
+			log(`Obtaining description.`);
 			iteration.descriptionTest++;
 			descriptionCache[item.user_id] = descriptionCache[item.user_id] || [];
 			if (descriptionCache[item.user_id].length === 0) {
+				log(`Fetching description.`);
 				descriptionCache[item.user_id] = await viewItem(item);
 				iteration.vintedXhrs++;
+			} else {
+				log(`Reading description from cache. Is in cache: ${descriptionCache[item.user_id].some(i => i.id === item.id)}`);
 			}
 			viewItemReturn = descriptionCache[item.user_id].filter(i => i.id === item.id).map(i => ({
 				...item,
@@ -144,6 +147,7 @@ export async function job() {
 			}))[0];
 		}
 		if (viewItemReturn) {
+			log(`Fetched description or was in cache.`);
 			item = viewItemReturn;
 			const description = sanitizeValue(item.description, item.user_login);
 			const descriptionSets = [...description.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
@@ -151,11 +155,13 @@ export async function job() {
 			item.infer.description = sanitizeSets(descriptionSets);
 			
 			if (shouldDiscard(badExpressions, item.description)) {
+				log(`Discarded due to description (${item.description}).`);
 				iteration.discardedItems++;
 				continue;
 			}
 		}
 		if (!item.infer.title.length && !item.infer.description.length) {
+			log(`Falling back to inferring photo.`);
 			if (item.photos && item.photos.length > 0) {
 				iteration.photoTest++;
 				try {

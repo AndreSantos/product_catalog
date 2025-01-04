@@ -4,125 +4,125 @@ const path = '../../dump';
 
 const BAD_STRINGS = [
 	// MOC
-	/MOC/i,
-	// Only Instructions
-	/solo (manuali|instrucciones|istruzioni)/i,
-	/^libretto istruzioni/i,
-	/^(libretto|istruzioni) (\S+\s+)?Lego/i,
-	/^Lego istruzioni/i,
-	/notices Lego/i,
-	/carte Lego/i,
-	/Notice only/i,
-	/handleiding enkel/i,
-	/^Notices?\s+(\S+\s+)?Lego/i,
-	/^Notices? de montage/i,
-	/Manua(l|is) (de )?Instruç/i,
-	/^Lego\s+(\S+\s+)?Notice/i,
-	/^(Lego\s+)?Manuales?(\s+Lego)?/i,
-	/^Lego\s+(\S+\s+)?(instructieboekje|boek)/i,
-	/^Livret instructions/i,
-	/^Libro lego/i,
-	/^Boekje lego/i,
-	/^Enkel de Boekje/i,
-	/^Instrucciones(\s+y\s+pegatinas)?/i,
-	// Catalog, maganizes
-	/^(Catalog|Catálogo)s?\s+(-\s+)?Lego/i,
-	/^Lego\s+(\S+\s+)?magazine/i,
-	/^Lego\s+(\S+\s+)?poster/i,
-	/^Poster\s+Lego/i,
-	// Only Box
-	/(Only|Solo) (Box|Scatola)/i,
-	/Bo(i|î)te(s)? (Lego )?vide/i,
-	/(Scatole vuote|Scatola vuota|Caixa vazia)/i,
-	// Wall Support
-	/^(Lego )?(Supporto|Stand)/i,
-	/^Support\s+Lego/i,
-	/Vitrina/i,
-	// Misc Lego
-	/Lego lotto da /i,
-	// Only Minifigs
-	/lot\s*(de\s+\d+)\s*(mini)?figurines/i,
-	/(minifig|minifigure|minifigura|Figurine)s?\s+(\S+\s+)?(Lego|Compatible)/i,
-	/^(minifig|minifigure|minifigura|Figurine|Figura)/i,
-	/Lego\s+(\S+\s+)?(minifig|minifigure|minifigura|Figurine)s?/i,
-	/(cas|col|cty|hol|hp|loc|lor|mar|njo|pi|sh|sp|sw)\d{3,6}/i,
-	/^Vend personnage/i,
-	/^Personnage Simpson/i,
-	/^Iron Baron/i,
-	// Specific parts
-	/^Lego (\d+ )?drapeaux chevalier/i,
-	/^Couverture de cheval/i,
-	/^Lego (\S+ )?(coques|voile|stickers|autocollants|train rails|rails)/i,
-	/^(Coques|Voile|Stickers|Autocollants|Train rails|Rails)/i,
-	// No Minifigs,
-	/(no|sans|geen|manque les) (mini )?(figurines|minifigures|personnage|minifiguren)/i,
-	// Baseplate
-	/^Lego\s+(\d+\s+)?(Basisplaat|Baseplate|wege?n?plate?n?|grondplaat|plaque|pièces?|pieces?)/i,
-	/^(Baseplate|grondplaat|plaque|pièces?|pieces?|Base)\s+(\S+\s+)?Lego/i,
-	/Solo la struttura/i,
-	// Animals, Parts
-	/\d{4}(bpb|c|p|pb|px)\d{1,3}/i,
-	/^(Accessoires|Accessorios) Lego/i,
-	/^Lot d'accessoires/i,
-	/^Lot de plate/i,
-	/^Lego \d+ roues/i,
-	/^Lego accessoires/i,
+    "MOC",
+    // Only Instructions
+    "solo (manuali|instrucciones|istruzioni)",
+    "^libretto istruzioni",
+    "^(libretto|istruzioni) (\S+\s+)?Lego",
+    "^Lego istruzioni",
+    "notices Lego",
+    "carte Lego",
+    "Notice only",
+    "handleiding enkel",
+    "^Notices?\s+(\S+\s+)?Lego",
+    "^Notices? de montage",
+    "Manua(l|is) (de )?Instruç",
+    "^Lego\s+(\S+\s+)?Notice",
+    "^(Lego\s+)?Manuales?(\s+Lego)?",
+    "^Lego\s+(\S+\s+)?(instructieboekje|boek)",
+    "^Livret instructions",
+    "^Libro lego",
+    "^Boekje lego",
+    "^Enkel de Boekje",
+    "^Instrucciones(\s+y\s+pegatinas)?",
+    // Catalog, maganizes
+    "^(Catalog|Catálogo)s?\s+(-\s+)?Lego",
+    "^Lego\s+(\S+\s+)?magazine",
+    "^Lego\s+(\S+\s+)?poster",
+    "^Poster\s+Lego",
+    // Only Box
+    "(Only|Solo) (Box|Scatola)",
+    "Bo(i|î)te(s)? (Lego )?vide",
+    "(Scatole vuote|Scatola vuota|Caixa vazia)",
+    // Wall Support
+    "^(Lego )?(Supporto|Stand)",
+    "^Support\s+Lego",
+    "Vitrina",
+    // Misc Lego
+    "Lego lotto da ",
+    // Only Minifigs
+    "lot\s*(de\s+\d+)\s*(mini)?figurines",
+    "(minifig|minifigure|minifigura|Figurine)s?\s+(\S+\s+)?(Lego|Compatible)",
+    "^(minifig|minifigure|minifigura|Figurine|Figura)",
+    "Lego\s+(\S+\s+)?(minifig|minifigure|minifigura|Figurine)s?",
+    "(cas|col|cty|hol|hp|loc|lor|mar|njo|pi|sh|sp|sw)\d{3,6}",
+    "^Vend personnage",
+    "^Personnage Simpson",
+    "^Iron Baron",
+    // Specific parts
+    "^Lego (\d+ )?drapeaux chevalier",
+    "^Couverture de cheval",
+    "^Lego (\S+ )?(coques|voile|stickers|autocollants|train rails|rails)",
+    "^(Coques|Voile|Stickers|Autocollants|Train rails|Rails)",
+    // No Minifigs,
+    "(no|sans|geen|manque les) (mini )?(figurines|minifigures|personnage|minifiguren)",
+    // Baseplate
+    "^Lego\s+(\d+\s+)?(Basisplaat|Baseplate|wege?n?plate?n?|grondplaat|plaque|pièces?|pieces?)",
+    "^(Baseplate|grondplaat|plaque|pièces?|pieces?|Base)\s+(\S+\s+)?Lego",
+    "Solo la struttura",
+    // Animals, Parts
+    "\d{4}(bpb|c|p|pb|px)\d{1,3}",
+    "^(Accessoires|Accessorios) Lego",
+    "^Lot d'accessoires",
+    "^Lot de plate",
+	"^Lego \d+ roues",
+	"^Lego accessoires",
 	// Telecommande
-	/^T\Sl\Scommande/i,
+	"^T\Sl\Scommande",
 	// Lights
-	/Light My Bricks/i,
-	/^Led\s+/i,
-	/Kit\s+Led\s+pour/i,
+	"Light My Bricks",
+	"^Led\s+",
+	"Kit\s+Led\s+pour",
 	// Polybag
-	/polybag'/i,
+	"polybag",
 	// DVD
-	/(Dvd|videogame|Nintendo|Jeu switch|Jeu vid|Playstation|PS3|PS4|PS5|Xbox|wii)/i,
+	"(Dvd|videogame|Nintendo|Jeu switch|Jeu vid|Playstation|PS3|PS4|PS5|Xbox|wii)",
 	// Keys
-	/(Portachiavi|sleutelhanger|keychain)/i,
-	/porte.?cl(e|é)/i,
+    "(Portachiavi|sleutelhanger|keychain)",
+    "porte.?cl(e|é)",
 	// Clothing
-	/verkleedset/i,
-	/Veste de ski/i,
-	/Adidas (ZX|Ultraboost)/i,
-	/(Chaqueta|Toalla|pyjama|Camiseta)/i,
-	/Costume\s+(\S+\s+)?Lego/i,
-	/De?é?guisement/i,
-	/(Tee-?|T-?)shirt/i,
-	/(nachtlamp|orologio)/i,
+	"verkleedset",
+	"Veste de ski",
+	"Adidas (ZX|Ultraboost)",
+	"(Chaqueta|Toalla|pyjama|Camiseta)",
+	"Costume\s+(\S+\s+)?Lego",
+	"De?é?guisement",
+    "(Tee-?|T-?)shirt",
+    "(nachtlamp|orologio)",
 	// Non-Lego
-	/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?\s+(\S+\s+)?lego/i,
-	/lego\s+(\S+\s+)?(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?/i,
-	/compatibili per treno/i,
-	/Compatibile o simile/i,
-	/Compatible con/i,
-	/Lego-compatibili/i,
-	/compatibili (per treno )? Lego/i,
-	/(Ensemble Playmobil|^Playmobil)/i,
-	/pas de (la marque|vrais) Lego/i,
-	/pas (de|un) Lego/i,
-	/R(e|é)plique LEGO/i,
-	/WW2/i,
-	/pas compatible/i,
-	/lego no oficial/i,
-	/Geen originele/i,
-	/no es (de la marca )?Lego/i,
-	/parts are compatible/i,
-	/Figurine Compatible/i,
-	/Briques de construction/i,
-	/(Brickarms|Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki|Urba?e?n artic|Spea)/i,
-	/M(e|é)ga bloc?ks/i,
+	"(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?\s+(\S+\s+)?lego",
+	"lego\s+(\S+\s+)?(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?",
+	"compatibili per treno",
+	"Compatibile o simile",
+	"Compatible con",
+	"Lego-compatibili",
+	"compatibili (per treno )? Lego",
+	"(Ensemble Playmobil|^Playmobil)",
+	"pas de (la marque|vrais) Lego",
+	"pas (de|un) Lego",
+	"R(e|é)plique LEGO",
+	"WW2",
+	"pas compatible",
+	"lego no oficial",
+	"Geen originele",
+	"no es (de la marca )?Lego",
+	"parts are compatible",
+	"Figurine Compatible",
+	"Briques de construction",
+	"(Brickarms|Montini|Lepin|mini lego|lego girls|abrick|Mould king|guerra|Jie Star|Blocki|Urba?e?n artic|Spea)",
+	"M(e|é)ga bloc?ks",
 	// Legos I don't care about
-	/Brick Headz/i,
-	/BrickHeadz/i,
-	/Minecraft/i,
-	/Lego Bionicle/i,
-	/Lego Friends/i,
-	/Lego Primo/i,
-	/Lego Star Wars/i,
-	/Lego DOTS/i,
-	/nexo knights/i,
-	/Chima/i,
-	/Vidiyo/i
+	"Brick Headz",
+	"BrickHeadz",
+	"Minecraft",
+	"Lego Bionicle",
+	"Lego Friends",
+	"Lego Primo",
+	"Lego Star Wars",
+	"Lego DOTS",
+	"nexo knights",
+	"Chima",
+	"Vidiyo"
 ];
 
 export function persistData(itemsCache, itemsRead) {
@@ -170,13 +170,15 @@ export function persistUnwantedSets(unwantedSets) {
 }
 
 export function persistBadExpressions(badExpressions) {
-    writeFileSync(path + '/bad_expressions.txt', JSON.stringify(badExpressions));
+    const badExpressionsStrings = badExpressions.map(expression => expression.source);
+    writeFileSync(path + '/bad_expressions.txt', JSON.stringify(badExpressionsStrings));
 }
 
 export function readData() {
     const itemsCache = readOrDefaultTo(path + '/items.txt', {});
     const itemsRead = readOrDefaultTo(path + '/items_read.txt', {});
-    const badExpressions = readOrDefaultTo(path + '/bad_expressions.txt', BAD_STRINGS);
+    const badExpressionsStrings = readOrDefaultTo(path + '/bad_expressions.txt', BAD_STRINGS);
+    const badExpressions = badExpressionsStrings.map(str => new RegExp(str, 'i'));
     const iterations = readIterations();
     const prices = JSON.parse(readFileSync(path + '/prices.txt', 'utf8'));
     const unwantedSets = JSON.parse(readFileSync(path + '/unwanted_sets.txt', 'utf8'));
