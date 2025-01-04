@@ -13,7 +13,7 @@ export async function viewItem(item) {
   const vintedResponse = await fetch(url, {
     signal: controller.signal,
     headers: {
-        cookie: 'access_web_token=' + cookie,
+        cookie: '_vinted_fr_session=' + cookie,
         'user-agent': new UserAgent().toString(),
         accept: 'application/json, text/plain, */*'
     }
