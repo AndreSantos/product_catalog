@@ -6,21 +6,28 @@ function updateBadExpressionTestResult(target) {
     const test = target.value;
     const expressionIdx = target.getAttribute('data-expression-idx');
     const badExpressionInput = document.querySelector(`.bad-expression-value[data-expression-idx="${expressionIdx}"]`);
-    const result = !!badExpressionInput.value.match(test);
+    const badExpression = new RegExp(badExpressionInput.value, 'i');
+    const result = badExpression.test(test);
     target.classList.remove("fail");
     target.classList.remove("pass");
     target.classList.add(result ? "pass" : "fail");
 }
 
-document.addEventListener("change", async (event) => {
+document.addEventListener("keydown", async (event) => {
     if (event.target.classList.contains('bad-expression-test')) {
         updateBadExpressionTestResult(event.target);
-    } else {
-        const target = event.target;
-        const set = target.getAttribute('data-set');
-        const newPrice = target.value;
-        await fetch(`/item/${set}/price/${newPrice ?? '_'}`);
+        return;
     }
+});
+
+document.addEventListener("change", async (event) => {
+    if (event.target.classList.contains('bad-expression-test')) {
+        return;
+    }
+    const target = event.target;
+    const set = target.getAttribute('data-set');
+    const newPrice = target.value;
+    await fetch(`/item/${set}/price/${newPrice ?? '_'}`);
 });
 
 async function startJob() {

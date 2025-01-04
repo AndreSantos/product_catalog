@@ -56,7 +56,8 @@ export function initializeServer() {
     });
     app.get('/bad_strings', (req, res) => {
       const data = readData();
-      const items = data.badExpressions;
+      const items = data.badExpressions.map(expression => expression.source);
+
       res.render('bad_strings', {...iterationViewData(), items});
     });
     app.get('/prices', (req, res) => {
@@ -85,7 +86,7 @@ export function initializeServer() {
       }
       res.render('unwanted_sets', {unwantedSets, ...iterationViewData(), paginationData});
     });
-    app.get('/items/:theme?', (req, res) => {
+    app.get('/items', (req, res) => {
       const data = readData();
       const prices = data.prices;
       const items = {};
@@ -97,17 +98,7 @@ export function initializeServer() {
         if (req.query.onlyNoPrice && prices[setStr]) {
           return false;
         }
-        const set = parseInt(setStr);
-        switch (req.params.theme) {
-          // City
-          case '60':
-            return (set > 60000 && set < 70000) || (set > 7000 && set < 8000) || (set > 4000 && set < 4700);
-          // Technic
-          case '42':
-            return (set > 42000 && set < 43000) || (set > 8000 && set < 9000);
-          default:
-            return true;
-        }
+        return true;
       }).forEach(key => {
         items[key] = data.itemsCache[key].map(i => {
           const item = i;
