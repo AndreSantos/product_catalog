@@ -19,7 +19,7 @@ export async function viewItem(item) {
     }
   });
   const response = await vintedResponse.json();
-  console.log("viewItem response", cookie, url, response);
+  console.log("viewItem response", url, response);
   return (response.items || []).map(i => ({
     id: i.id,
     description: i.description,
