@@ -139,7 +139,7 @@ export async function job() {
 				descriptionCache[item.user_id] = await viewItem(item);
 				iteration.vintedXhrs++;
 			} else {
-				log(`Reading description from cache. Is in cache: ${descriptionCache[item.user_id].some(i => i.id === item.id)}`);
+				log(`Reading description from cache.`);
 			}
 			viewItemReturn = descriptionCache[item.user_id].filter(i => i.id === item.id).map(i => ({
 				...item,
@@ -159,6 +159,8 @@ export async function job() {
 				iteration.discardedItems++;
 				continue;
 			}
+		} else {
+			log(`Description not present.`);
 		}
 		if (!item.infer.title.length && !item.infer.description.length) {
 			log(`Falling back to inferring photo.`);
