@@ -1,7 +1,7 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import {readData, persistPrices, persistUnwantedItems, persistUnwantedSets} from '../db/db.js';
+import {readData, persistBadExpressions, persistPrices, persistUnwantedItems, persistUnwantedSets} from '../db/db.js';
 
 const PAGE_SIZE = 500;
 
@@ -56,9 +56,23 @@ export function initializeServer() {
     });
     app.get('/bad_strings', (req, res) => {
       const data = readData();
-      const items = data.badExpressions.map(expression => expression.source);
+      const items = data.badExpressions.map(expression => expression.source).concat(['']);
 
       res.render('bad_strings', {...iterationViewData(), items});
+    });
+    app.get('/bad_strings/:index', (req, res) => {
+      const data = readData();
+      const badStrings = data.badExpressions.map(expression => expression.source);
+      const idx = req.params.index;
+      const newBadString = req.query.value;
+      if (idx < badStrings.length) {
+        badStrings[idx] = newBadString;
+      } else {
+        badStrings.push(newBadString);
+      }
+      persistBadExpressions(badStrings);
+      
+      res.send(`Done.`);
     });
     app.get('/prices', (req, res) => {
       const data = readData();

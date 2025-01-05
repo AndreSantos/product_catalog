@@ -5,12 +5,16 @@
   <%- include('head.ejs', {isJobRunning}) %>
   <table class="items">
     <thead>
+      <th>Index</th>
       <th>Expression</th>
       <th>Test</th>
     </thead>
     <tbody>
       <% items.forEach(function(item, idx) { %>
         <tr>
+          <td>
+            <%= idx %> - 
+          </td>
           <td>
             <input class="bad-expression-value" data-expression-idx="<%= idx %>" value="<%= item %>" />
           </td>

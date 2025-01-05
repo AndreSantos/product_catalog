@@ -2,26 +2,36 @@ function notify(str) {
     document.querySelector("notification").textContent = str;
 }
 
-function updateBadExpressionTestResult(target) {
-    const test = target.value;
+
+async function updateBadExpressionValue(target) {
+    if (!confirm("Update value?")) {
+        return;
+    }
     const expressionIdx = target.getAttribute('data-expression-idx');
-    const badExpressionInput = document.querySelector(`.bad-expression-value[data-expression-idx="${expressionIdx}"]`);
-    const badExpression = new RegExp(badExpressionInput.value, 'i');
+    await fetch(`/bad_strings/${expressionIdx}?value=${target.value}`);
+}
+
+function updateBadExpressionTestResult(target) {
+    const expressionIdx = target.getAttribute('data-expression-idx');
+    const badExpression = new RegExp(target.value, 'i');
     const result = badExpression.test(test);
     target.classList.remove("fail");
     target.classList.remove("pass");
     target.classList.add(result ? "pass" : "fail");
 }
 
-document.addEventListener("keydown", async (event) => {
+document.addEventListener("input", async (event) => {
     if (event.target.classList.contains('bad-expression-test')) {
         updateBadExpressionTestResult(event.target);
-        return;
     }
 });
 
 document.addEventListener("change", async (event) => {
     if (event.target.classList.contains('bad-expression-test')) {
+        return;
+    }
+    if (event.target.classList.contains('bad-expression-value')) {
+        updateBadExpressionValue(event.target);
         return;
     }
     const target = event.target;
