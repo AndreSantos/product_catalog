@@ -14,7 +14,7 @@ async function updateBadExpressionValue(target) {
 function updateBadExpressionTestResult(target) {
     const test = target.value;
     const expressionIdx = target.getAttribute('data-expression-idx');
-    const badExpressionInput = document.querySelector(`bad-expression-value[data-expression-idx="${expressionIdx}"]`);
+    const badExpressionInput = document.querySelector(`.bad-expression-value[data-expression-idx="${expressionIdx}"]`);
     const badExpression = new RegExp(badExpressionInput.value, 'i');
     const result = badExpression.test(test);
     target.classList.remove("fail");
