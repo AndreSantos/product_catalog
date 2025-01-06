@@ -3,7 +3,7 @@
 <%- include('header.ejs') %>
 <body>
   <%- include('head.ejs', {isJobRunning}) %>
-  <table class="items">
+  <table>
     <thead>
       <th>Index</th>
       <th>Expression</th>
@@ -13,7 +13,7 @@
       <% items.forEach(function(item, idx) { %>
         <tr>
           <td>
-            <%= idx %> - 
+            <%= idx %>
           </td>
           <td>
             <input class="bad-expression-value" data-expression-idx="<%= idx %>" value="<%= item %>" />
