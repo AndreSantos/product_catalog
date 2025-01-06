@@ -169,8 +169,7 @@ export function persistUnwantedSets(unwantedSets) {
     writeFileSync(path + '/unwanted_sets.txt', JSON.stringify(unwantedSets));
 }
 
-export function persistBadExpressions(badExpressions) {
-    const badExpressionsStrings = badExpressions.map(expression => expression.source);
+export function persistBadExpressions(badExpressionsStrings) {
     writeFileSync(path + '/bad_expressions.txt', JSON.stringify(badExpressionsStrings));
 }
 
