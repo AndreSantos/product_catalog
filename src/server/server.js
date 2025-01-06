@@ -62,6 +62,7 @@ export function initializeServer() {
     });
     app.get('/bad_strings/:index', (req, res) => {
       const data = readData();
+      console.log("Current bad expressions:", data.badExpressions);
       const badStrings = data.badExpressions.map(expression => expression.source);
       const idx = req.params.index;
       const newBadString = req.query.value;
