@@ -79,7 +79,9 @@ export function initializeServer() {
       const data = readData();
 
       const oldBadStrings = data.badExpressions;
-      const badStrings = oldBadStrings.filter((s, idx) => idx != req.params.index);
+      const badStrings = oldBadStrings
+                          .filter((s, idx) => idx != req.params.index)
+                          .map(expression => expression.source);
       persistBadExpressions(badStrings);
       
       res.send(`Done.`);
