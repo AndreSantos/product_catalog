@@ -74,6 +74,16 @@ export function initializeServer() {
       
       res.send(`Done.`);
     });
+    
+    app.get('/bad_strings/:index/unwanted', (req, res) => {
+      const data = readData();
+
+      const oldBadStrings = data.unwantedSets;
+      const badStrings = oldBadStrings.filter((s, idx) => idx != req.params.index);
+      persistBadExpressions(badStrings);
+      
+      res.send(`Done.`);
+    });
     app.get('/prices', (req, res) => {
       const data = readData();
       const page = Number(req.query.page ?? '1');

@@ -11,9 +11,10 @@
     </thead>
     <tbody>
       <% items.forEach(function(item, idx) { %>
-        <tr>
+        <tr data-expression-idx="<%= idx %>">
           <td>
             <%= idx %>
+            <button class="item-delete-button" onclick="unwantedBadString(<%= idx %>)">X</button>
           </td>
           <td>
             <input class="bad-expression-value" data-expression-idx="<%= idx %>" value="<%= item %>" />

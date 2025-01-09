@@ -55,7 +55,11 @@ async function deleteItem(setId, itemId) {
 async function unwantedSet(setId) {
     await fetch(`/set/${setId}/unwanted`);
     document.querySelector(`tr[data-set-id="${setId}"]`).remove();
-    // location.reload();
+}
+
+async function unwantedBadString(idx) {
+    await fetch(`/bad_strings/${idx}/unwanted`);
+    document.querySelector(`tr[data-expression-idx="${idx}"]`).remove();
 }
 
 function deleteDiscarded(id) {
