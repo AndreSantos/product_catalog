@@ -22,7 +22,11 @@ function sanitizeValue(str, user_login) {
 
 function shouldDiscard(badExpressions, str) {
 	const s = str.toLowerCase();
-	return badExpressions.some(bad => !!s.match(bad));
+	const badExpression = badExpressions.find(bad => !!s.match(bad));
+	if (badExpression) {
+		log(`"${str}" was excluded by ${badExpression}`);
+	}
+	return !!badExpression;
 }
 
 function shouldDiscardBrand(brand) {
