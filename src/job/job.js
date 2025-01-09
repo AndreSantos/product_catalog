@@ -10,10 +10,12 @@ function log(str) {
 
 function sanitizeValue(str, user_login) {
 	return str
-		.replaceAll(`#${user_login}`, '')
-		.replace(/anné?e?e[^a-zA-Z0-9-]+\d{4}/i,'')
-		.replace(/\d{3,5}\s+piè?e?ces/i,'')
-		.replace(/\d{3,5}\s+pcs/i,'');
+		.replaceAll(`${user_login}`, '')
+		.replaceAll(/("|'|´|`|-|\.|,|;|!|\?)/i,' ')
+		.replaceAll(/\s+/i,' ')
+		.replaceAll(/(é|è)/i,'e')
+		.replaceAll(/anne?e[^a-zA-Z0-9-]+\d{4}/i,'')
+		.replaceAll(/\d{3,5}\s+pi?e?ce?s/i,'');
 }
 
 function shouldDiscard(badExpressions, str) {
@@ -121,6 +123,7 @@ export async function job() {
 			continue;
 		}
 		const title = sanitizeValue(item.title, item.user_login);
+		log(`Title: ${item.title} / Post-sanitization: ${title}`);
 		const titleSets = [...title.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
 		item.infer = {
 			title: sanitizeSets(titleSets),
