@@ -16,6 +16,7 @@ function sanitizeValue(str, user_login) {
 		.replaceAll(/(á|à)/ig, 'a')
 		.replaceAll(/(é|è)/ig, 'e')
 		.replaceAll(/î/ig, 'i')
+		.replaceAll(/(ú)/ig, 'u')
 		.replaceAll(/anne?e[^a-zA-Z0-9-]+\d{4}/ig, '')
 		.replaceAll(/\d{3,5}\s+pi?e?ce?s/ig, '');
 }

@@ -78,7 +78,7 @@ export function initializeServer() {
     app.get('/bad_strings/:index/unwanted', (req, res) => {
       const data = readData();
 
-      const oldBadStrings = data.unwantedSets;
+      const oldBadStrings = data.badExpressions;
       const badStrings = oldBadStrings.filter((s, idx) => idx != req.params.index);
       persistBadExpressions(badStrings);
       
