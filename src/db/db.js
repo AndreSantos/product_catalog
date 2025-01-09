@@ -12,11 +12,11 @@ const BAD_STRINGS = [
     "/Notice only/",
     "/handleiding enkel/",
     "/Manua(l|is) (de )?Instruç/",
-    "/^Lego (\S+ )?(istruzioni|notice|instructieboekje|boek)/",
+    "/^Lego (\\S+ )?(istruzioni|notice|instructieboekje|boek)/",
     "/^Enkel de Boekje/",
     "/^pegatinas/",
     // Catalog, maganizes
-    "/^Lego (\S+ )?(poster|magazine)/",
+    "/^Lego (\\S+ )?(poster|magazine)/",
     "/^Poster Lego/",
     // Only Box
     "/Boite(s)? (Lego )?vide/",
@@ -28,31 +28,31 @@ const BAD_STRINGS = [
     // Misc Lego
     "/Lego lotto da /",
     // Only Minifigs
-    "/lot\s*(de \d+)\s*(mini)?figurines/",
-    "/(minifig|minifigure|minifigura|Figurine)s? (\S+ )?(Lego|Compatible)/",
+    "/lot\\s*(de \\d+)\\s*(mini)?figurines/",
+    "/(minifig|minifigure|minifigura|Figurine)s? (\\S+ )?(Lego|Compatible)/",
     "/^(minifig|minifigure|minifigura|Figurine|Figura)/",
-    "/Lego (\S+ )?(minifig|minifigure|minifigura|Figurine)s?/",
-    "/(cas|col|cty|hol|hp|loc|lor|mar|njo|pi|sh|sp|sw)\d{3,6}/",
+    "/Lego (\\S+ )?(minifig|minifigure|minifigura|Figurine)s?/",
+    "/(cas|col|cty|hol|hp|loc|lor|mar|njo|pi|sh|sp|sw)\\d{3,6}/",
     "/^Vend personnage/",
     "/^Personnage Simpson/",
     "/^Iron Baron/",
     // Specific parts
-    "/^Lego (\d+ )?drapeaux chevalier/",
+    "/^Lego (\\d+ )?drapeaux chevalier/",
     "/^Couverture de cheval/",
-    "/^Lego (\S+ )?(coques|voile|stickers|autocollants|train rails|rails)/",
+    "/^Lego (\\S+ )?(coques|voile|stickers|autocollants|train rails|rails)/",
     "/^(Coques|Voile|Stickers|Autocollants|Train rails|Rails)/",
     // No Minifigs,
     "/(no|sans|geen|manque les) (mini )?(figurines|minifigures|personnage|minifiguren)/",
     // Baseplate
-    "/^Lego (\d+ )?(Basisplaat|Baseplate|wege?n?plate?n?|grondplaat|plaque|pièces?|pieces?)/",
-    "/^(Baseplate|grondplaat|plaque|pieces?|Base) (\S+ )?Lego/",
+    "/^Lego (\\d+ )?(Basisplaat|Baseplate|wege?n?plate?n?|grondplaat|plaque|pièces?|pieces?)/",
+    "/^(Baseplate|grondplaat|plaque|pieces?|Base) (\\S+ )?Lego/",
     "/Solo la struttura/",
     // Animals, Parts
-    "/\d{4}(bpb|c|p|pb|px)\d{1,3}/",
+    "/\\d{4}(bpb|c|p|pb|px)\\d{1,3}/",
     "/^(Accessoires|Accessorios) Lego/",
     "/^Lot d'accessoires/",
     "/^Lot de plate/",
-	"/^Lego \d+ roues/",
+	"/^Lego \\d+ roues/",
 	"/^Lego accessoires/",
 	// Telecommande
 	"/^Telecommande/",
@@ -72,13 +72,13 @@ const BAD_STRINGS = [
 	"/Veste de ski/",
 	"/Adidas (ZX|Ultraboost)/",
 	"/(Chaqueta|Toalla|pyjama|Camiseta)/",
-	"/Costume (\S+ )?Lego/",
+	"/Costume (\\S+ )?Lego/",
 	"/Deguisement/",
     "/(Tee-?|T-?)shirt/",
     "/(nachtlamp|orologio)/",
 	// Non-Lego
-	"/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?\s+(\S+\s+)?lego/",
-	"/lego (\S+ )?(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?/",
+	"/(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s? (\\S+ )?lego/",
+	"/lego (\\S+ )?(Genre|Tipo|Type|Style|Compatible|Compatível|compatibili|Compatibile|Replica|non originale)s?/",
 	"/compatibili per treno/",
 	"/Compatibile o simile/",
 	"/Compatible con/",
@@ -100,7 +100,7 @@ const BAD_STRINGS = [
 	"/Mega bloc?ks/",
 	// Legos I don't care about
 	"/Lego (Primo|Star Wars|knights)/",
-	"/(Brick\s?Headz|Minecraft|Vidiyo|DOTS|Friends|Bionicle|Chima)/"
+	"/(Brick\\s?Headz|Minecraft|Vidiyo|DOTS|Friends|Bionicle|Chima)/"
 ];
 
 export function persistData(itemsCache, itemsRead) {
@@ -155,6 +155,7 @@ export function readData() {
     const itemsCache = readOrDefaultTo(path + '/items.txt', {});
     const itemsRead = readOrDefaultTo(path + '/items_read.txt', {});
     const badExpressionsStrings = readOrDefaultTo(path + '/bad_expressions.txt', BAD_STRINGS);
+    
     const badExpressions = badExpressionsStrings.map(str => new RegExp(str, 'i'));
     const iterations = readIterations();
     const prices = JSON.parse(readFileSync(path + '/prices.txt', 'utf8'));
