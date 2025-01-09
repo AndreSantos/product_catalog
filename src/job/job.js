@@ -11,11 +11,13 @@ function log(str) {
 function sanitizeValue(str, user_login) {
 	return str
 		.replaceAll(`${user_login}`, '')
-		.replaceAll(/("|'|´|`|-|\.|,|;|!|\?)/i,' ')
-		.replaceAll(/\s+/i,' ')
-		.replaceAll(/(é|è)/i,'e')
-		.replaceAll(/anne?e[^a-zA-Z0-9-]+\d{4}/i,'')
-		.replaceAll(/\d{3,5}\s+pi?e?ce?s/i,'');
+		.replaceAll(/("|'|´|`|-|\.|,|;|!|\?)/i, ' ')
+		.replaceAll(/\s+/i, ' ')
+		.replaceAll(/(á|à)/i, 'a')
+		.replaceAll(/(é|è)/i, 'e')
+		.replaceAll(/î/i, 'i')
+		.replaceAll(/anne?e[^a-zA-Z0-9-]+\d{4}/i, '')
+		.replaceAll(/\d{3,5}\s+pi?e?ce?s/i, '');
 }
 
 function shouldDiscard(badExpressions, str) {

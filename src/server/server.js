@@ -56,13 +56,13 @@ export function initializeServer() {
     });
     app.get('/bad_strings', (req, res) => {
       const data = readData();
-      const items = data.badExpressions.map(expression => expression.source).concat(['']);
+      const items = data.badExpressions.map(expression => expression.toString().slice(0, -1)).concat(['']);
 
       res.render('bad_strings', {...iterationViewData(), items});
     });
     app.get('/bad_strings/:index', (req, res) => {
       const data = readData();
-      const badStrings = data.badExpressions.map(expression => expression.source);
+      const badStrings = data.badExpressions.map(expression => expression.toString().slice(0, -1))
       const idx = req.params.index;
       const newBadString = req.query.value;
       if (idx < badStrings.length) {
