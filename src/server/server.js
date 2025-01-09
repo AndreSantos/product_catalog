@@ -56,6 +56,7 @@ export function initializeServer() {
     });
     app.get('/bad_strings', (req, res) => {
       const data = readData();
+      console.log(data.badExpressions[0]);
       const items = data.badExpressions.map(expression => expression.toString().slice(0, -1)).concat(['']);
 
       res.render('bad_strings', {...iterationViewData(), items});
