@@ -24,11 +24,7 @@ function sanitizeValue(str, user_login) {
 
 function shouldDiscard(badExpressions, str) {
 	const s = str.toLowerCase();
-	const badExpression = badExpressions.find(bad => !!s.match(bad));
-	if (badExpression) {
-		log(`"${str}" was excluded by ${badExpression}`);
-	}
-	return !!badExpression;
+	return badExpressions.find(bad => !!s.match(bad));
 }
 
 function shouldDiscardBrand(brand) {
@@ -126,13 +122,18 @@ export async function job() {
 			log(`Discarded due to unwanted user ${item.user_id} / ${item.user_login}.`);
 			continue;
 		}
-		if (shouldDiscard(badExpressions, item.title) || shouldDiscardBrand(item.brand)) {
-			log(`Discarded due to title (${item.title}) or brand (${item.brand}).`);
+		const title = sanitizeValue(item.title, item.user_login);
+		if (shouldDiscard(badExpressions, title)) {
+			log(`Discarded due to title (${item.title}) by expression: ${shouldDiscard(badExpressions, title)}.`);
 			iteration.discardedItems++;
 			continue;
 		}
-		const title = sanitizeValue(item.title, item.user_login);
-		log(`Title: ${item.title} / Post-sanitization: ${title}`);
+			
+		if (shouldDiscardBrand(item.brand)) {
+			log(`Discarded due to brand (${item.brand}).`);
+			iteration.discardedItems++;
+			continue;
+		}
 		const titleSets = [...title.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
 		item.infer = {
 			title: sanitizeSets(titleSets),
