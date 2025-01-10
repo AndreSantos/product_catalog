@@ -12,14 +12,15 @@ function sanitizeValue(str, user_login) {
 	return str
 		.replaceAll(`${user_login}`, '')
 		.replaceAll(/("|'|´|`|-|\.|,|;|!|\?)/ig, ' ')
-		.replaceAll(/\s+/ig, ' ')
+		.replaceAll(/Disney|Western|City|Technic|System|Speed Champions/ig, '')
 		.replaceAll(/(á|à|ã)/ig, 'a')
 		.replaceAll(/ç/ig, 'c')
 		.replaceAll(/(é|è)/ig, 'e')
 		.replaceAll(/î/ig, 'i')
 		.replaceAll(/(ú)/ig, 'u')
 		.replaceAll(/anne?e[^a-zA-Z0-9-]+\d{4}/ig, '')
-		.replaceAll(/\d{3,5}\s+pi?e?ce?s/ig, '');
+		.replaceAll(/\d{3,5}\s+pi?e?ce?s/ig, '')
+		.replaceAll(/\s+/ig, ' ');
 }
 
 function shouldDiscard(badExpressions, str) {
