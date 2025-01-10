@@ -13,7 +13,8 @@ function sanitizeValue(str, user_login) {
 		.replaceAll(`${user_login}`, '')
 		.replaceAll(/("|'|´|`|-|\.|,|;|!|\?)/ig, ' ')
 		.replaceAll(/\s+/ig, ' ')
-		.replaceAll(/(á|à)/ig, 'a')
+		.replaceAll(/(á|à|ã)/ig, 'a')
+		.replaceAll(/ç/ig, 'c')
 		.replaceAll(/(é|è)/ig, 'e')
 		.replaceAll(/î/ig, 'i')
 		.replaceAll(/(ú)/ig, 'u')
@@ -34,7 +35,7 @@ function shouldDiscardBrand(brand) {
 	if (!brand || brand.trim().length === 0) {
 		return false;
 	}
-	const isLego = !!brand.match(/lego/i);
+	const isLego = [/lego/i, /technic/i, /city/i].some(exp => !!brand.match(exp));
 	return !isLego;
 }
 
@@ -117,6 +118,7 @@ export async function job() {
 			iteration.pastItems++;
 			continue;
 		}
+		log(item);
 		itemsRead[item.id] = iteration.start;
 		item.time = iteration.start;
 		if (unwantedUsers.includes(item.user_id) || unwantedUsers.includes(item.user_login)) {
@@ -137,7 +139,6 @@ export async function job() {
 			description: [],
 			photo: [],
 		};
-		log(item);
 		const couldBeGoldFromTitle = isPossibleGold(item, prices);
 		let viewItemReturn;
 		if (!item.infer.title.length || couldBeGoldFromTitle) {
