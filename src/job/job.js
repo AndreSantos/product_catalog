@@ -174,7 +174,7 @@ export async function job() {
 			}))[0];
 		}
 		if (viewItemReturn) {
-			log(`Fetched description or was in cache.`);
+			log(`Fetched description or was in cache: ${item.description}`);
 			item = viewItemReturn;
 			const description = sanitizeValue(item.description, item.user_login);
 			const descriptionSets = [...description.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
