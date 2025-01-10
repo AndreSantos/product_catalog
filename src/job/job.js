@@ -61,7 +61,7 @@ function getMaxPrice(inferredSets, pricesCache) {
 	return maxPrice;
 }
 
-function isPossibleGold(item, pricesCache) {
+function isPossibleGold(item, pricesCache, shouldLog) {
 	const cacheKey = getInferredSets(item);
 	if (!cacheKey.length) {
 		return false;
@@ -74,9 +74,15 @@ function isPossibleGold(item, pricesCache) {
 		
 		hasAtLeastOneItemWithPrice ||= (maxPriceForItem > 0);
 	}
-	// console.log('isPossibleGold', cacheKey, maxPrice, hasAtLeastOneItemWithPrice);
 	if (!hasAtLeastOneItemWithPrice) {
+		if (shouldLog) {
+			log('Not interested in sets.');
+		}
 		return false;
+	}
+	
+	if (shouldLog) {
+		log(`Item price (max): ${item.price} (${maxPrice})`);
 	}
 	return item.price <= maxPrice && !(item.price <= 5 && maxPrice >= 25);
 }
@@ -144,9 +150,10 @@ export async function job() {
 			description: [],
 			photo: [],
 		};
-		const couldBeGoldFromTitle = isPossibleGold(item, prices);
+		const couldBeGoldFromTitle = isPossibleGold(item, prices, false);
+		const needDescription = !item.infer.title.length || couldBeGoldFromTitle;
 		let viewItemReturn;
-		if (!item.infer.title.length || couldBeGoldFromTitle) {
+		if (needDescription) {
 			if (couldBeGoldFromTitle) {
 				log(`Could be gold from title, need to check description`);
 			}
@@ -179,7 +186,9 @@ export async function job() {
 				continue;
 			}
 		} else {
-			log(`Description not present.`);
+			if (needDescription) {
+				log(`Description not present.`);
+			}
 		}
 		if (!item.infer.title.length && !item.infer.description.length) {
 			log(`Falling back to inferring photo.`);
@@ -219,7 +228,8 @@ export async function job() {
 			const cacheKey = inferredSets.join(' + ');
 			itemsCache[cacheKey] = itemsCache[cacheKey] || [];
 			itemsCache[cacheKey] = [...itemsCache[cacheKey], item].sort((a, b) => a.price > b.price);
-			if (isPossibleGold(item, prices)) {
+			log(`Inferred sets: ${cacheKey}`);
+			if (isPossibleGold(item, prices, true)) {
 				iteration.possibleGold++;
 				const maxPrice = getMaxPrice(inferredSets, prices);
 				sendMail(cacheKey, item, maxPrice);
