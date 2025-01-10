@@ -78,16 +78,22 @@ export async function lens(photoUrl) {
                     freq[set[1]] = (freq[set[1]] ?? 0) + 1;
                 }
             });
-            // console.log(freq);
+            console.log("Photo frequencies: ", freq);
             let max = 1, maxv, total = 0;
+
             Object.keys(freq).forEach(r => {
                 total += freq[r];
                 if (freq[r] > max) {
                     max = freq[r] , maxv = r;
                 }
             });
-            // console.log(max, maxv);
-            return max * 2 > total ? maxv : undefined;
+            const result = max * 2 > total;
+            if (result) {
+                console.log("Photo inferred:", maxv);
+            } else {
+                console.log("Didn't photo infer any sets.");
+            }
+            return result ? maxv : undefined;
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
