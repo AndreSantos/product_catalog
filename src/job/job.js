@@ -26,7 +26,7 @@ function sanitizeValue(str, user_login) {
 function shouldDiscard(badExpressions, str) {
 	const extraSanitizationStep = str
 		.toLowerCase()
-		.replaceAll(/\d+/, '')
+		.replaceAll(/\d+/ig, '')
 		.replaceAll(/\s+/ig, ' ');
 	return badExpressions.find(bad => !!extraSanitizationStep.match(bad));
 }
