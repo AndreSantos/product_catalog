@@ -24,8 +24,11 @@ function sanitizeValue(str, user_login) {
 }
 
 function shouldDiscard(badExpressions, str) {
-	const s = str.toLowerCase();
-	return badExpressions.find(bad => !!s.match(bad));
+	const extraSanitizationStep = str
+		.toLowerCase()
+		.replaceAll(/\d+/, '')
+		.replaceAll(/\s+/ig, ' ');
+	return badExpressions.find(bad => !!extraSanitizationStep.match(bad));
 }
 
 function shouldDiscardBrand(brand) {
