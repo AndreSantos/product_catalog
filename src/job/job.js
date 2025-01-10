@@ -156,8 +156,9 @@ export async function job() {
 		if (needDescription) {
 			if (couldBeGoldFromTitle) {
 				log(`Could be gold from title, need to check description`);
+			} else {
+				log(`Didn't infer from title, obtaining description.`);
 			}
-			log(`Obtaining description.`);
 			iteration.descriptionTest++;
 			descriptionCache[item.user_id] = descriptionCache[item.user_id] || [];
 			if (descriptionCache[item.user_id].length === 0) {
