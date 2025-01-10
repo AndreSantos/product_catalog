@@ -70,7 +70,7 @@ function isPossibleGold(item, pricesCache) {
 		
 		hasAtLeastOneItemWithPrice ||= (maxPriceForItem > 0);
 	}
-	console.log('isPossibleGold', cacheKey, maxPrice, hasAtLeastOneItemWithPrice);
+	// console.log('isPossibleGold', cacheKey, maxPrice, hasAtLeastOneItemWithPrice);
 	if (!hasAtLeastOneItemWithPrice) {
 		return false;
 	}
@@ -143,6 +143,9 @@ export async function job() {
 		const couldBeGoldFromTitle = isPossibleGold(item, prices);
 		let viewItemReturn;
 		if (!item.infer.title.length || couldBeGoldFromTitle) {
+			if (couldBeGoldFromTitle) {
+				log(`Could be gold from title, need to check description`);
+			}
 			log(`Obtaining description.`);
 			iteration.descriptionTest++;
 			descriptionCache[item.user_id] = descriptionCache[item.user_id] || [];
@@ -166,8 +169,8 @@ export async function job() {
 
 			item.infer.description = sanitizeSets(descriptionSets);
 			
-			if (shouldDiscard(badExpressions, item.description)) {
-				log(`Discarded due to description (${item.description}).`);
+			if (shouldDiscard(badExpressions, description)) {
+				log(`Discarded due to description (${description}) by expression: ${shouldDiscard(badExpressions, description)}.`);
 				iteration.discardedItems++;
 				continue;
 			}
@@ -201,9 +204,12 @@ export async function job() {
 		const inferredSets = getInferredSets(item);
 		const areAllUnwantedItems = inferredSets.every(s => unwantedSets[s]);
 		
-		log(item);
 		if (areAllUnwantedItems) {
-			log(`Unwanted set(s) ${inferredSets}`);
+			if (inferredSets.length) {
+				log(`Unwanted set(s) ${inferredSets}.`);
+			} else {
+				log(`Didn't infer set.`);
+			}
 			iteration.unwantedItems++;
 		} else {
 			const cacheKey = inferredSets.join(' + ');
