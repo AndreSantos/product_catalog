@@ -17,6 +17,10 @@ process.on('SIGINT', cleanup);
 process.on('SIGTERM', cleanup);
 process.on('SIGQUIT', cleanup);
 
+function log(str) {
+	console.log(new Date().toLocaleString(), str);
+}
+
 async function getOrInitializeBrowser() {
     if (!browser) {
         browser = await puppeteer.launch({
@@ -27,11 +31,11 @@ async function getOrInitializeBrowser() {
         page = await browser.newPage();
         await page.setRequestInterception(true);
         page.on('request', request => {
-            console.log(request.resourceType());
-            if (request.resourceType() === 'image') {
-            request.abort();
+            log(`Photo inferrence: ${request.resourceType()}`);
+            if (['image', 'font'].includes(request.resourceType())) {
+                request.abort();
             } else {
-            request.continue();
+                request.continue();
             }
         });
         page.setDefaultNavigationTimeout(60000);
@@ -44,13 +48,10 @@ async function getOrInitializeBrowser() {
         page.screenshot({path: '/tmp/initial.png', fullPage: true});
         let element = await page.waitForSelector('button[aria-label="Accept all"]');
         await element.click();
+        log('Photo inferrence: accepted Lens GDPR.');
         await new Promise(resolve => setTimeout(resolve, 2000));
     }
     return page;
-}
-
-function log(str) {
-	console.log(new Date().toLocaleString(), str);
 }
 
 export async function lens(photoUrl) {
@@ -64,6 +65,7 @@ export async function lens(photoUrl) {
     log(requestURL);
     try {
         await page.goto(requestURL);
+        await page.waitForNavigation({ waitUntil: 'networkidle2' });
     } catch (e) {
         // Log error
         console.error(e);
@@ -74,6 +76,7 @@ export async function lens(photoUrl) {
         page = await getOrInitializeBrowser();
         
         await page.goto(requestURL);
+        await page.waitForNavigation({ waitUntil: 'networkidle2' });
     }
     
     await new Promise(resolve => setTimeout(resolve, 5000));
@@ -91,7 +94,7 @@ export async function lens(photoUrl) {
                     freq[set[1]] = (freq[set[1]] ?? 0) + 1;
                 }
             });
-            log("Photo frequencies: ", freq);
+            log("Photo inferrence: frequencies ", freq);
             let max = 1, maxv, total = 0;
 
             Object.keys(freq).forEach(r => {
