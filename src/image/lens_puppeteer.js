@@ -30,6 +30,9 @@ async function getOrInitializeBrowser() {
         const requestURL = 'https://lens.google.com';
         await page.goto(requestURL);
 
+        // await page.waitForNavigation({ waitUntil: 'networkidle2' });
+
+        page.screenshot('initial.png');
         let element = await page.waitForSelector('button[aria-label="Accept all"]');
         await element.click();
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -65,6 +68,7 @@ export async function lens(photoUrl) {
     }
     
     await new Promise(resolve => setTimeout(resolve, 5000));
+    page.screenshot('photo 5 sec.png');
     
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
     for (let i = 0; i < 15; i++) {
@@ -78,7 +82,7 @@ export async function lens(photoUrl) {
                     freq[set[1]] = (freq[set[1]] ?? 0) + 1;
                 }
             });
-            console.log("Photo frequencies: ", freq);
+            log("Photo frequencies: ", freq);
             let max = 1, maxv, total = 0;
 
             Object.keys(freq).forEach(r => {
@@ -89,13 +93,15 @@ export async function lens(photoUrl) {
             });
             const result = max * 2 > total;
             if (result) {
-                console.log("Photo inferred:", maxv);
+                log("Photo inferred:", maxv);
             } else {
-                console.log("Didn't photo infer any sets.");
+                log("Didn't photo infer any sets.");
             }
             return result ? maxv : undefined;
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
+    page.screenshot('photo after 15 sec.png');
+    
     return undefined;
 }
