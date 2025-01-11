@@ -32,7 +32,7 @@ async function getOrInitializeBrowser() {
 
         // await page.waitForNavigation({ waitUntil: 'networkidle2' });
 
-        page.screenshot('initial.png');
+        page.screenshot('/tmp/initial.png');
         let element = await page.waitForSelector('button[aria-label="Accept all"]');
         await element.click();
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -68,7 +68,7 @@ export async function lens(photoUrl) {
     }
     
     await new Promise(resolve => setTimeout(resolve, 5000));
-    page.screenshot('photo 5 sec.png');
+    page.screenshot('/tmp/photo5s.png');
     
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
     for (let i = 0; i < 15; i++) {
@@ -101,7 +101,7 @@ export async function lens(photoUrl) {
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
-    page.screenshot('photo after 15 sec.png');
+    page.screenshot('/tmp/photo15s.png');
     
     return undefined;
 }
