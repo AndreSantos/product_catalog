@@ -25,14 +25,23 @@ async function getOrInitializeBrowser() {
             headless: true
         });
         page = await browser.newPage();
+        await page.setRequestInterception(true);
+        page.on('request', request => {
+            console.log(request.resourceType());
+            if (request.resourceType() === 'image') {
+            request.abort();
+            } else {
+            request.continue();
+            }
+        });
         page.setDefaultNavigationTimeout(60000);
 
         const requestURL = 'https://lens.google.com';
         await page.goto(requestURL);
 
-        // await page.waitForNavigation({ waitUntil: 'networkidle2' });
+        await page.waitForNavigation({ waitUntil: 'networkidle2' });
 
-        page.screenshot('/tmp/initial.png');
+        page.screenshot({path: '/tmp/initial.png', fullPage: true});
         let element = await page.waitForSelector('button[aria-label="Accept all"]');
         await element.click();
         await new Promise(resolve => setTimeout(resolve, 2000));
