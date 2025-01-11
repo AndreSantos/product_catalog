@@ -32,7 +32,7 @@ async function getOrInitializeBrowser() {
         await page.setRequestInterception(true);
         page.on('request', request => {
             log(`Photo inferrence: ${request.resourceType()}`);
-            if (['image', 'font'].includes(request.resourceType())) {
+            if (['image', 'font', 'other'].includes(request.resourceType())) {
                 request.abort();
             } else {
                 request.continue();
@@ -41,11 +41,11 @@ async function getOrInitializeBrowser() {
         page.setDefaultNavigationTimeout(60000);
 
         const requestURL = 'https://lens.google.com';
+        log('Photo inferrence: initial GDPR started.');
         await page.goto(requestURL);
 
-        await page.waitForNavigation({ waitUntil: 'networkidle2' });
+        // await page.waitForNavigation({ waitUntil: 'networkidle2' });
 
-        page.screenshot({path: '/tmp/initial.png', fullPage: true});
         let element = await page.waitForSelector('button[aria-label="Accept all"]');
         await element.click();
         log('Photo inferrence: accepted Lens GDPR.');
@@ -78,9 +78,10 @@ export async function lens(photoUrl) {
         await page.goto(requestURL);
         await page.waitForNavigation({ waitUntil: 'networkidle2' });
     }
-    
+    log('Photo inferrence: page finished loading.');
+    page.screenshot({path: '/tmp/photo5s.png'});
+
     await new Promise(resolve => setTimeout(resolve, 5000));
-    page.screenshot('/tmp/photo5s.png');
     
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
     for (let i = 0; i < 15; i++) {
@@ -113,7 +114,7 @@ export async function lens(photoUrl) {
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
-    page.screenshot('/tmp/photo15s.png');
+    // page.screenshot('/tmp/photo15s.png');
     
     return undefined;
 }
