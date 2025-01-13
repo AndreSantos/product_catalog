@@ -46,7 +46,7 @@ async function getOrInitializeBrowser() {
         let element = await page.waitForSelector('button[aria-label="Accept all"]');
         await element.click();
         log('Photo inferrence: accepted Lens GDPR.');
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 1000));
     }
     return page;
 }
@@ -56,13 +56,24 @@ export async function lens(photoUrl) {
     // const browser = ['chrome', 'safari', 'firefox'];
     // const agent = randUserAgent(platform[parseInt(Math.random() * 2)], browser[parseInt(Math.random() * 3)]);
     // const photoUrl = 'https://images1.vinted.net/t/02_000d4_ScrKgriPArjuD7x8XgehAcBg/f800/1707603544.jpeg?s=c59c1beb316ef167ebafee08efb8ae9c280bc103';
-    const encodedURL = encodeURIComponent(photoUrl);
-    const requestURL = `https://lens.google.com/uploadbyurl?re=df&url=${encodedURL}&hl=en&re=df&st=${+ new Date()}&ep=gisbubu`;
+    
+    //const encodedURL = encodeURIComponent(photoUrl);
+    //const requestURL = `https://lens.google.com/uploadbyurl?re=df&url=${encodedURL}&hl=en&re=df&st=${+ new Date()}&ep=gisbubu`;
     let page = await getOrInitializeBrowser();
-    log(requestURL);
+    // log(requestURL);
+    
+    page.screenshot({path: '/tmp/photo-beginning.png'});
+    // const searchBox = awaitSearchBox(page);
+    await page.locator('::-p-aria(Paste image link)').wait().fill(photoUrl);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    page.screenshot({path: '/tmp/photo-between.png'});
+    await page.locator('::-p-aria(Search)').wait().click();
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    page.screenshot({path: '/tmp/photo-after.png'});
+    
     try {
-        await page.goto(requestURL);
-       // await page.waitForNavigation({ waitUntil: 'networkidle2' });
+        // await page.goto(requestURL);
+        // await page.waitForNavigation({ waitUntil: 'networkidle2' });
     } catch (e) {
         // Log error
         console.error(e);
@@ -75,11 +86,11 @@ export async function lens(photoUrl) {
         await page.goto(requestURL);
         //await page.waitForNavigation({ waitUntil: 'networkidle2' });
     }
-    log('Photo inferrence: page finished loading.');
-    page.screenshot({path: '/tmp/photo-finished-loading.png'});
+    //log('Photo inferrence: page finished loading.');
+    //page.screenshot({path: '/tmp/photo-finished-loading.png'});
 
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    page.screenshot({path: '/tmp/photo-after-5s.png'});
+    //await new Promise(resolve => setTimeout(resolve, 5000));
+    //page.screenshot({path: '/tmp/photo-after-5s.png'});
     
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
     for (let i = 0; i < 15; i++) {
@@ -115,4 +126,15 @@ export async function lens(photoUrl) {
     // page.screenshot('/tmp/photo15s.png');
     
     return undefined;
+}
+
+async function awaitSearchBox(page) {
+    return await page.locator('input[placeholder="Paste image link"]').wait().fill();
+    
+    const input = await page.$('input[placeholder="Paste image link"]');
+    if (input) {
+        return input;
+    }
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return awaitSearchBox(page);
 }
