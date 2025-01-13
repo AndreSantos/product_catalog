@@ -63,8 +63,9 @@ export async function lens(photoUrl) {
     // log(requestURL);
     
     page.screenshot({path: '/tmp/photo-beginning.png'});
-    // const searchBox = awaitSearchBox(page);
-    await page.locator('::-p-aria(Paste image link)').wait().fill(photoUrl);
+    await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
+    await page.locator('input').filter(input => input.placeholder.startsWith('Colar link da imagem')).fill(photoUrl);
+    // await page.locator('::-p-aria(Paste image link)').wait().fill(photoUrl);
     await new Promise(resolve => setTimeout(resolve, 1000));
     page.screenshot({path: '/tmp/photo-between.png'});
     await page.locator('::-p-aria(Search)').wait().click();
