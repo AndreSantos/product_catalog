@@ -31,7 +31,7 @@ async function getOrInitializeBrowser() {
         page = await browser.newPage();
         await page.setRequestInterception(true);
         page.on('request', request => {
-            log(`Photo inferrence: ${request.resourceType()}`);
+            // log(`Photo inferrence: ${request.resourceType()}`);
             if (['image', 'font', 'other'].includes(request.resourceType())) {
                 request.abort();
             } else {
@@ -44,12 +44,10 @@ async function getOrInitializeBrowser() {
         log('Photo inferrence: initial GDPR started.');
         await page.goto(requestURL);
 
-        // await page.waitForNavigation({ waitUntil: 'networkidle2' });
-
         let element = await page.waitForSelector('button[aria-label="Accept all"]');
         await element.click();
         log('Photo inferrence: accepted Lens GDPR.');
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 500));
     }
     return page;
 }
@@ -65,7 +63,7 @@ export async function lens(photoUrl) {
     log(requestURL);
     try {
         await page.goto(requestURL);
-        await page.waitForNavigation({ waitUntil: 'networkidle2' });
+       // await page.waitForNavigation({ waitUntil: 'networkidle2' });
     } catch (e) {
         // Log error
         console.error(e);
@@ -76,15 +74,17 @@ export async function lens(photoUrl) {
         page = await getOrInitializeBrowser();
         
         await page.goto(requestURL);
-        await page.waitForNavigation({ waitUntil: 'networkidle2' });
+        //await page.waitForNavigation({ waitUntil: 'networkidle2' });
     }
     log('Photo inferrence: page finished loading.');
-    page.screenshot({path: '/tmp/photo5s.png'});
+    page.screenshot({path: '/tmp/photo-finished-loading.png'});
 
     await new Promise(resolve => setTimeout(resolve, 5000));
+    page.screenshot({path: '/tmp/photo-after-5s.png'});
     
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
     for (let i = 0; i < 15; i++) {
+        page.screenshot({path: '/tmp/photo-' + i + '.png'});
         const results = await page.evaluate('Array.from(document.querySelectorAll(\'a[aria-label*="Lego"]\')).map(el => el.textContent)');
         if (results.length > 0) {
             //console.log(results);
