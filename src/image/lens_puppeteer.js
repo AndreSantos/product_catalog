@@ -43,8 +43,9 @@ async function getOrInitializeBrowser() {
         log('Photo inferrence: initial GDPR started.');
         await page.goto(requestURL);
 
-        await page.locator('button').filter(button => ['Accept all', 'Aceitar tudo'].includes(button.innerHTML)).wait();
-        await page.locator('button').filter(button => ['Accept all', 'Aceitar tudo'].includes(button.innerHTML)).click();
+        await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0].click()");
+        // await page.locator('button').filter(button => ['Accept all', 'Aceitar tudo'].includes(button.textContent)).wait();
+        // await page.locator('button').filter(button => ['Accept all', 'Aceitar tudo'].includes(button.textContent)).click();
 
         log('Photo inferrence: accepted Lens GDPR.');
         await new Promise(resolve => setTimeout(resolve, 1000));
