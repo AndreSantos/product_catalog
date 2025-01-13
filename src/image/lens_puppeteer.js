@@ -43,6 +43,9 @@ async function getOrInitializeBrowser() {
         log('Photo inferrence: initial GDPR started.');
         await page.goto(requestURL);
 
+        page.screenshot({path: '/tmp/photo-before-gdpr.png'});
+        const elements = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')");
+        log(elements);
         await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0].click()");
         // await page.locator('button').filter(button => ['Accept all', 'Aceitar tudo'].includes(button.textContent)).wait();
         // await page.locator('button').filter(button => ['Accept all', 'Aceitar tudo'].includes(button.textContent)).click();
