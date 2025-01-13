@@ -70,7 +70,10 @@ export async function lens(photoUrl) {
     page.screenshot({path: '/tmp/photo-beginning.png'});
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
-    await page.locator('button').filter(input => input.innerHTML === 'Pesquisa').click();
+    
+    page.screenshot({path: '/tmp/photo-between.png'});
+    await page.evaluate("Array.from(document.querySelectorAll('div[role=\"button\"]')).filter(el => el.textContent === 'Pesquisa')[0].click()");
+    // await page.locator('button').filter(button => button.innerHTML === 'Pesquisa').click();
     await new Promise(resolve => setTimeout(resolve, 1000));
     page.screenshot({path: '/tmp/photo-after.png'});
     
