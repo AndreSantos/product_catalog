@@ -43,8 +43,9 @@ async function getOrInitializeBrowser() {
         log('Photo inferrence: initial GDPR started.');
         await page.goto(requestURL);
 
-        let element = await page.waitForSelector('button[aria-label="Accept all"]');
-        await element.click();
+        await page.locator('button').filter(button => ['Accept all', 'Aceitar tudo'].includes(button.innerHTML)).wait();
+        await page.locator('button').filter(button => ['Accept all', 'Aceitar tudo'].includes(button.innerHTML)).click();
+
         log('Photo inferrence: accepted Lens GDPR.');
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
@@ -64,11 +65,8 @@ export async function lens(photoUrl) {
     
     page.screenshot({path: '/tmp/photo-beginning.png'});
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
-    await page.locator('input').filter(input => input.placeholder.startsWith('Colar link da imagem')).fill(photoUrl);
-    // await page.locator('::-p-aria(Paste image link)').wait().fill(photoUrl);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    page.screenshot({path: '/tmp/photo-between.png'});
-    await page.locator('::-p-aria(Search)').wait().click();
+    await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
+    await page.locator('button').filter(input => input.innerHTML === 'Pesquisa').click();
     await new Promise(resolve => setTimeout(resolve, 1000));
     page.screenshot({path: '/tmp/photo-after.png'});
     
