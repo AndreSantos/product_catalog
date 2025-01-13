@@ -31,7 +31,6 @@ async function getOrInitializeBrowser() {
         page = await browser.newPage();
         await page.setRequestInterception(true);
         page.on('request', request => {
-            // log(`Photo inferrence: ${request.resourceType()}`);
             if (['image', 'font', 'other'].includes(request.resourceType())) {
                 request.abort();
             } else {
@@ -87,7 +86,6 @@ export async function lens(photoUrl) {
         page.screenshot({path: '/tmp/photo-' + i + '.png'});
         const results = await page.evaluate('Array.from(document.querySelectorAll(\'a[aria-label*="Lego"]\')).map(el => el.textContent)');
         if (results.length > 0) {
-            //console.log(results);
             const freq = {};
             results.forEach(r => {
                 const set = [...r.matchAll(PHOTO_REGEX)][0];
