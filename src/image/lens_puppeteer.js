@@ -75,6 +75,7 @@ export async function lens(photoUrl) {
         await new Promise(resolve => setTimeout(resolve, 500));
         page.screenshot({path: `/tmp/photo-${idx}-1.png`});
         await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisa por imagem\"]').click()");
+        log('Photo inferrence: reset done.');
     }
     
     page.screenshot({path: `/tmp/photo-${idx}-2.png`});
@@ -87,7 +88,8 @@ export async function lens(photoUrl) {
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     page.screenshot({path: `/tmp/photo-${idx}-3.png`});
-    await page.evaluate("Array.from(document.querySelectorAll('h2')).filter(el => el.textContent === 'Pesquisas relacionadas')[0].scrollIntoView()");
+    await page.evaluate("document.querySelector('div[selected]').scrollIntoView()");
+    // await page.evaluate("Array.from(document.querySelectorAll('h2')).filter(el => el.textContent === 'Pesquisas relacionadas')[0].scrollIntoView()");
     log('Photo inferrence: scroll down.');
     await new Promise(resolve => setTimeout(resolve, 500));
     page.screenshot({path: `/tmp/photo-${idx}-4.png`});
