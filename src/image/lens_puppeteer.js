@@ -47,14 +47,14 @@ async function getOrInitializeBrowser() {
         const elements = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')");
         log(elements);
         await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0].click()");
-        // await page.locator('button').filter(button => ['Accept all', 'Aceitar tudo'].includes(button.textContent)).wait();
-        // await page.locator('button').filter(button => ['Accept all', 'Aceitar tudo'].includes(button.textContent)).click();
 
         log('Photo inferrence: accepted Lens GDPR.');
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
     return page;
 }
+
+let idx = 0;
 
 export async function lens(photoUrl) {
     // const platform = ['mobile', 'desktop'];
@@ -65,38 +65,33 @@ export async function lens(photoUrl) {
     //const encodedURL = encodeURIComponent(photoUrl);
     //const requestURL = `https://lens.google.com/uploadbyurl?re=df&url=${encodedURL}&hl=en&re=df&st=${+ new Date()}&ep=gisbubu`;
     let page = await getOrInitializeBrowser();
-    // log(requestURL);
     
-    page.screenshot({path: '/tmp/photo-beginning.png'});
+    log('Photo inferrence: started.');
+    page.screenshot({path: `/tmp/photo-${idx}-0.png`});
+    const imgExpanded = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')");
+    if (imgExpanded) {
+        log('Photo inferrence: was searching another image, reset the state.');
+        await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]').click()");
+        await new Promise(resolve => setTimeout(resolve, 500));
+        page.screenshot({path: `/tmp/photo-${idx}-1.png`});
+        await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisa por imagem\"]').click()");
+    }
+    
+    page.screenshot({path: `/tmp/photo-${idx}-2.png`});
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
+    log('Photo inferrence: pasted photo URL.');
     
     await page.evaluate("Array.from(document.querySelectorAll('div[role=\"button\"]')).filter(el => el.textContent === 'Pesquisa')[0].click()");
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    page.screenshot({path: '/tmp/photo-after.png'});
-    await page.evaluate("Array.from(document.querySelectorAll('h2')).filter(el => el.textContent === 'Pesquisas relacionadas')[0].scrollIntoView()");
-    page.screenshot({path: '/tmp/photo-after-search.png'});
-    
-    try {
-        // await page.goto(requestURL);
-        // await page.waitForNavigation({ waitUntil: 'networkidle2' });
-    } catch (e) {
-        // Log error
-        console.error(e);
-        
-        // Close browser and reinitialize.
-        await browser.close();
-        browser = undefined;
-        page = await getOrInitializeBrowser();
-        
-        await page.goto(requestURL);
-        //await page.waitForNavigation({ waitUntil: 'networkidle2' });
-    }
-    //log('Photo inferrence: page finished loading.');
-    //page.screenshot({path: '/tmp/photo-finished-loading.png'});
+    log('Photo inferrence: clicked on search.');
 
-    //await new Promise(resolve => setTimeout(resolve, 5000));
-    //page.screenshot({path: '/tmp/photo-after-5s.png'});
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    page.screenshot({path: `/tmp/photo-${idx}-3.png`});
+    await page.evaluate("Array.from(document.querySelectorAll('h2')).filter(el => el.textContent === 'Pesquisas relacionadas')[0].scrollIntoView()");
+    log('Photo inferrence: scroll down.');
+    await new Promise(resolve => setTimeout(resolve, 500));
+    page.screenshot({path: `/tmp/photo-${idx}-4.png`});
+    log('Photo inferrence: looking up values...');
     
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
     for (let i = 0; i < 15; i++) {
@@ -129,6 +124,7 @@ export async function lens(photoUrl) {
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
+    log('Photo inferrence: no values after 15s.');
     // page.screenshot('/tmp/photo15s.png');
     
     return undefined;
