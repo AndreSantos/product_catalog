@@ -44,8 +44,6 @@ async function getOrInitializeBrowser() {
         await page.goto(requestURL);
 
         page.screenshot({path: '/tmp/photo-before-gdpr.png'});
-        const elements = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')");
-        log(elements);
         await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0].click()");
 
         log('Photo inferrence: accepted Lens GDPR.');
@@ -67,18 +65,24 @@ export async function lens(photoUrl) {
     let page = await getOrInitializeBrowser();
     
     log('Photo inferrence: started.');
-    page.screenshot({path: `/tmp/photo-${idx}-0.png`});
+    //  page.screenshot({path: `/tmp/photo-${idx}-0.png`});
     const imgExpanded = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')");
     if (imgExpanded) {
         log('Photo inferrence: was searching another image, reset the state.');
         await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]').click()");
         await new Promise(resolve => setTimeout(resolve, 500));
-        page.screenshot({path: `/tmp/photo-${idx}-1.png`});
-        await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisa por imagem\"]').click()");
+        //  page.screenshot({path: `/tmp/photo-${idx}-1.png`});
+        await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]').click()");
         log('Photo inferrence: reset done.');
-    }
+    } else {
+        const searchBoxHidden = await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]')");
+        if (searchBoxHidden) {
+            log('Photo inferrence: opening search box.');
+            await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]').click()");
+        }
     
-    page.screenshot({path: `/tmp/photo-${idx}-2.png`});
+    }
+    // page.screenshot({path: `/tmp/photo-${idx}-2.png`});
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
     log('Photo inferrence: pasted photo URL.');
@@ -87,12 +91,12 @@ export async function lens(photoUrl) {
     log('Photo inferrence: clicked on search.');
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-    page.screenshot({path: `/tmp/photo-${idx}-3.png`});
+    // page.screenshot({path: `/tmp/photo-${idx}-3.png`});
     await page.evaluate("document.querySelector('div[selected]').scrollIntoView()");
     // await page.evaluate("Array.from(document.querySelectorAll('h2')).filter(el => el.textContent === 'Pesquisas relacionadas')[0].scrollIntoView()");
     log('Photo inferrence: scroll down.');
     await new Promise(resolve => setTimeout(resolve, 500));
-    page.screenshot({path: `/tmp/photo-${idx}-4.png`});
+    // page.screenshot({path: `/tmp/photo-${idx}-4.png`});
     log('Photo inferrence: looking up values...');
     
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
