@@ -44,6 +44,7 @@ export function initializeServer() {
 
     const port = 8080;
     const app = express();
+    app.use('/logs', express.static('/logs'));
     app.set('view engine', 'ejs');
     app.set('views', path.join(__dirname, '/views'));
     

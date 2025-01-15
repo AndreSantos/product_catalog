@@ -43,7 +43,7 @@ async function getOrInitializeBrowser() {
         log('Photo inferrence: initial GDPR started.');
         await page.goto(requestURL);
 
-        page.screenshot({path: '/tmp/photo-before-gdpr.png'});
+        // page.screenshot({path: '/tmp/photo-before-gdpr.png'});
         await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0].click()");
 
         log('Photo inferrence: accepted Lens GDPR.');
@@ -82,7 +82,8 @@ export async function lens(photoUrl) {
         }
     
     }
-    // page.screenshot({path: `/tmp/photo-${idx}-2.png`});
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
     log('Photo inferrence: pasted photo URL.');
@@ -97,14 +98,13 @@ export async function lens(photoUrl) {
         await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]').click()");
     }
     await new Promise(resolve => setTimeout(resolve, 500));
-    /page.screenshot({path: `/tmp/photo-${idx++}.png`});
+    // page.screenshot({path: `/tmp/photo-${idx++}.png`});
     log('Photo inferrence: looking up values...');
     
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
-    for (let i = 0; i < 15; i++) {
-        page.screenshot({path: '/tmp/photo-' + i + '.png'});
-        const results = await page.evaluate('Array.from(document.querySelectorAll(\'a[aria-label*="Lego"]\')).map(el => el.textContent)');
-        if (results.length > 0) {
+    for (let i = 0; i < 5; i++) {
+        const results = await page.evaluate("Array.from(document.querySelectorAll('div[role=\"heading\"][aria-level=\"3\"]')).map(el => el.textContent)");
+        if (results.length >= 4) {
             const freq = {};
             results.forEach(r => {
                 const set = [...r.matchAll(PHOTO_REGEX)][0];
@@ -123,27 +123,15 @@ export async function lens(photoUrl) {
             });
             const result = max * 2 > total;
             if (result) {
-                log("Photo inferred:", maxv);
+                log("Photo inferrence:", maxv);
             } else {
-                log("Didn't photo infer any sets.");
+                log("Photo inferrence: didn't photo infer any sets.");
             }
             return result ? maxv : undefined;
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
-    log('Photo inferrence: no values after 15s.');
-    // page.screenshot('/tmp/photo15s.png');
+    log('Photo inferrence: no values after 5s.');
     
     return undefined;
-}
-
-async function awaitSearchBox(page) {
-    return await page.locator('input[placeholder="Paste image link"]').wait().fill();
-    
-    const input = await page.$('input[placeholder="Paste image link"]');
-    if (input) {
-        return input;
-    }
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return awaitSearchBox(page);
 }
