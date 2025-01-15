@@ -66,8 +66,8 @@ export async function lens(photoUrl) {
     
     log('Photo inferrence: started.');
     //  page.screenshot({path: `/tmp/photo-${idx}-0.png`});
-    const imgExpanded = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')");
-    if (imgExpanded) {
+    let imgPreview = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')");
+    if (imgPreview) {
         log('Photo inferrence: was searching another image, reset the state.');
         await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]').click()");
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -91,12 +91,13 @@ export async function lens(photoUrl) {
     log('Photo inferrence: clicked on search.');
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-    // page.screenshot({path: `/tmp/photo-${idx}-3.png`});
-    await page.evaluate("document.querySelector('div[selected]').scrollIntoView()");
-    // await page.evaluate("Array.from(document.querySelectorAll('h2')).filter(el => el.textContent === 'Pesquisas relacionadas')[0].scrollIntoView()");
-    log('Photo inferrence: scroll down.');
+    imgPreview = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')");
+    if (imgPreview) {
+        log('Photo inferrence: hide image preview.');
+        await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]').click()");
+    }
     await new Promise(resolve => setTimeout(resolve, 500));
-    // page.screenshot({path: `/tmp/photo-${idx}-4.png`});
+    /page.screenshot({path: `/tmp/photo-${idx++}.png`});
     log('Photo inferrence: looking up values...');
     
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
