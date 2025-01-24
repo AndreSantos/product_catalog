@@ -28,6 +28,16 @@ async function getOrInitializeBrowser() {
             executablePath: '/usr/bin/chromium-browser',
             headless: true
         });
+
+        const pages = await browser.pages();
+        log(`Photo inferrence: closing ${pages.length} tabs.`);
+        for (const page of pages) {
+            if (!await page.isClosed()) {
+                await page.close();
+            }
+        }
+        log(`Photo inferrence: it now has ${await browser.pages()} tabs opened.`);
+
         page = await browser.newPage();
         await page.setRequestInterception(true);
         page.on('request', request => {
