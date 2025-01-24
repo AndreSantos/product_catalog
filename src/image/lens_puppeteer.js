@@ -40,7 +40,6 @@ async function getOrInitializeBrowser() {
                 await page.close();
             }
         }
-        log(`Photo inferrence: it now has ${await browser.pages().length} tabs opened.`);
 
         page = await browser.newPage();
         await page.setRequestInterception(true);
@@ -58,7 +57,7 @@ async function getOrInitializeBrowser() {
     return page;
 }
 
-let idx = 1;
+let idx = 0;
 
 export async function lens(photoUrl) {
     // const platform = ['mobile', 'desktop'];
@@ -70,12 +69,8 @@ export async function lens(photoUrl) {
     //const requestURL = `https://lens.google.com/uploadbyurl?re=df&url=${encodedURL}&hl=en&re=df&st=${+ new Date()}&ep=gisbubu`;
     let page = await getOrInitializeBrowser();
     
-    if (idx++ % 20 === 0) {
-        page.screenshot({path: `./logs/photo-${idx++}.png`});
-        if (idx >= 400) {
-            idx = 1;
-        }
-    }
+    page.screenshot({path: `./logs/photo-${idx++}.jpg`});
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     const gdprButton = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0]");
     if (gdprButton) {
