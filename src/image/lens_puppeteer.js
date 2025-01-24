@@ -39,20 +39,12 @@ async function getOrInitializeBrowser() {
         });
         page.setDefaultNavigationTimeout(60000);
 
-        const requestURL = 'https://lens.google.com';
-        log('Photo inferrence: initial GDPR started.');
-        await page.goto(requestURL);
-
-        // page.screenshot({path: '/tmp/photo-before-gdpr.png'});
-        await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0].click()");
-
-        log('Photo inferrence: accepted Lens GDPR.');
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await page.goto('https://lens.google.com');
     }
     return page;
 }
 
-let idx = 0;
+let idx = 1;
 
 export async function lens(photoUrl) {
     // const platform = ['mobile', 'desktop'];
@@ -64,14 +56,24 @@ export async function lens(photoUrl) {
     //const requestURL = `https://lens.google.com/uploadbyurl?re=df&url=${encodedURL}&hl=en&re=df&st=${+ new Date()}&ep=gisbubu`;
     let page = await getOrInitializeBrowser();
     
+    if (idx++ % 100 === 0) {
+        page.screenshot({path: `./logs/photo-${idx++}.png`});
+    }
+
+    const gdprButton = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0]");
+    if (gdprButton) {
+        log('Photo inferrence: accepted Lens GDPR.');
+        await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0].click()");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    
     log('Photo inferrence: started.');
-    //  page.screenshot({path: `/tmp/photo-${idx}-0.png`});
     let imgPreview = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')");
     if (imgPreview) {
         log('Photo inferrence: was searching another image, reset the state.');
         await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]').click()");
         await new Promise(resolve => setTimeout(resolve, 500));
-        //  page.screenshot({path: `/tmp/photo-${idx}-1.png`});
+        
         await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]').click()");
         log('Photo inferrence: reset done.');
     } else {
@@ -98,7 +100,6 @@ export async function lens(photoUrl) {
         await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]').click()");
     }
     await new Promise(resolve => setTimeout(resolve, 500));
-    // page.screenshot({path: `/tmp/photo-${idx++}.png`});
     log('Photo inferrence: looking up values...');
     
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;

@@ -1,6 +1,7 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import {execSync} from 'child_process';
 import {readData, persistBadExpressions, persistPrices, persistUnwantedItems, persistUnwantedSets} from '../db/db.js';
 
 const PAGE_SIZE = 500;
@@ -54,6 +55,11 @@ export function initializeServer() {
     app.get('/run_job_now', (req, res) => {
       startJob();
       res.send('Done');
+    });
+    app.get('/screenshots', (req, res) => {
+      const stdout = execSync("ls logs");
+      const filenames = stdout.toString().split('.png').map(s => s.trim());
+      res.render('screenshots', {...iterationViewData(), items: filenames});
     });
     app.get('/bad_strings', (req, res) => {
       const data = readData();
