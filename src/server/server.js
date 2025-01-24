@@ -45,7 +45,7 @@ export function initializeServer() {
 
     const port = 8080;
     const app = express();
-    app.use('/logs', express.static('/logs'));
+    app.use('/logs', express.static(path.join(__dirname, '../../logs')));
     app.set('view engine', 'ejs');
     app.set('views', path.join(__dirname, '/views'));
     
@@ -58,7 +58,7 @@ export function initializeServer() {
     });
     app.get('/screenshots', (req, res) => {
       const stdout = execSync("ls logs");
-      const filenames = stdout.toString().split('.png').map(s => s.trim());
+      const filenames = stdout.toString().split('.png').map(s => s.trim()).filter(s => s != '.');
       res.render('screenshots', {...iterationViewData(), items: filenames});
     });
     app.get('/bad_strings', (req, res) => {

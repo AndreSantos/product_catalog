@@ -5,6 +5,7 @@
     <%- include('head.ejs', {isJobRunning}) %>
     <% items.forEach(function(item) { %>
         <img src="/logs/<%= item %>.png" />
+        <hr />
     <% }); %>
 </body>
 </html>
