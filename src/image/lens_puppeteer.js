@@ -2,6 +2,7 @@ import randUserAgent from "rand-user-agent";
 import cheerio from "cheerio";
 import fetch from 'node-fetch';
 import puppeteer from 'puppeteer-core';
+import {execSync} from 'child_process';
 
 let browser;
 let page;
@@ -23,6 +24,9 @@ function log(str) {
 
 async function getOrInitializeBrowser() {
     if (!browser) {
+        // Delete all screenshots
+        execSync("rm -rf logs/*.jpg");
+
         browser = await puppeteer.launch({
             // args: ['--no-sandbox', '--disable-setuid-sandbox'],
             executablePath: '/usr/bin/chromium-browser',
@@ -36,7 +40,7 @@ async function getOrInitializeBrowser() {
                 await page.close();
             }
         }
-        log(`Photo inferrence: it now has ${await browser.pages()} tabs opened.`);
+        log(`Photo inferrence: it now has ${await browser.pages().length} tabs opened.`);
 
         page = await browser.newPage();
         await page.setRequestInterception(true);
