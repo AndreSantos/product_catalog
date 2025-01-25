@@ -4,7 +4,7 @@
 <body>
   <%- include('head.ejs', {isJobRunning}) %>
   <ul>
-    <li>Number of users: <%= Object.keys(users).length %></li>
+    <li>Number of users: <%= usersArray.length %></li>
   </ul>
   <table class="users">
     <thead>
@@ -12,15 +12,15 @@
       <th>Sets</th>
     </thead>
     <tbody>
-      <% Object.keys(users).forEach(function(userId) { %>
-        <tr data-user-login="<%= userId %>">
+      <% usersArray.forEach(function(user) { %>
+        <tr data-user-login="<%= user.id %>">
           <td>
-            <a href="https://www.vinted.pt/member/<%= userId %>"><%= userLogins[userId] %><a/>
-            <button class="user-delete-button" onclick="unwantedUser(<%= userLogin %>)">X</button>
+            <a href="https://www.vinted.pt/member/<%= user.id %>"><%= userLogins[user.id] %><a/>
+            <button class="user-delete-button" onclick="unwantedUser(<%= userLogins[user.id] %>)">X</button>
           </td>
           <td class="sets">
             <ul>
-            <% users[userId].forEach(function (item) { %>
+            <% user.items.forEach(function (item) { %>
               <li>
                 <a href="<%= item.url %>"><%= parseInt(item.price) %>€</a> 
               </li>

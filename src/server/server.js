@@ -72,9 +72,13 @@ export function initializeServer() {
           users[item.user_id].push(item);
         });
       });
-      users.sort((a,b) => b.length - a.length);
+      const usersArray = [];
+      Object.keys(users).forEach(userId => {
+        usersArray.push({id: userId, items: users[userId]});
+      });
+      usersArray.sort((a,b) => b.items.length - a.items.length);
 
-      res.render('users', {...iterationViewData(), users, userLogins});
+      res.render('users', {...iterationViewData(), usersArray, userLogins});
     });
     app.get('/bad_strings', (req, res) => {
       const data = readData();
