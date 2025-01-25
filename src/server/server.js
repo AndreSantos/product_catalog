@@ -57,9 +57,24 @@ export function initializeServer() {
       res.send('Done');
     });
     app.get('/screenshots', (req, res) => {
-      const stdout = execSync("ls logs");
+      const stdout = execSync("ls -t logs");
       const filenames = stdout.toString().split('.jpg').map(s => s.trim()).filter(s => s.length > 1);
       res.render('screenshots', {...iterationViewData(), items: filenames});
+    });
+    app.get('/users', (req, res) => {
+      const data = readData();
+      const users = {};
+      const userLogins = {};
+      Object.values(data.itemsCache).forEach(items => {
+        items.forEach(item => {
+          userLogins[item.user_id] = item.user_login;
+          users[item.user_id] = (users[item.user_login] || []);
+          users[item.user_id].push(item);
+        });
+      });
+      users.sort((a,b) => b.length - a.length);
+
+      res.render('users', {...iterationViewData(), users, userLogins});
     });
     app.get('/bad_strings', (req, res) => {
       const data = readData();

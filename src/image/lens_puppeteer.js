@@ -69,8 +69,8 @@ export async function lens(photoUrl) {
     //const requestURL = `https://lens.google.com/uploadbyurl?re=df&url=${encodedURL}&hl=en&re=df&st=${+ new Date()}&ep=gisbubu`;
     let page = await getOrInitializeBrowser();
     
-    page.screenshot({path: `./logs/photo-${idx}.jpg`});
     idx = (idx + 1) % 20;
+    page.screenshot({path: `./logs/photo-${idx}-start.jpg`});
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const gdprButton = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0]");
@@ -141,11 +141,14 @@ export async function lens(photoUrl) {
             } else {
                 log("Photo inferrence: didn't photo infer any sets.");
             }
+            
+            page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
             return result ? maxv : undefined;
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
     log('Photo inferrence: no values after 5s.');
     
+    page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
     return undefined;
 }
