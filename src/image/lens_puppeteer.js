@@ -69,7 +69,8 @@ export async function lens(photoUrl) {
     //const requestURL = `https://lens.google.com/uploadbyurl?re=df&url=${encodedURL}&hl=en&re=df&st=${+ new Date()}&ep=gisbubu`;
     let page = await getOrInitializeBrowser();
     
-    page.screenshot({path: `./logs/photo-${idx++}.jpg`});
+    page.screenshot({path: `./logs/photo-${idx}.jpg`});
+    idx = (idx + 1) % 20;
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const gdprButton = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0]");

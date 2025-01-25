@@ -58,7 +58,7 @@ export function initializeServer() {
     });
     app.get('/screenshots', (req, res) => {
       const stdout = execSync("ls logs");
-      const filenames = stdout.toString().split('.jpg').map(s => s.trim()).filter(s => s != '.');
+      const filenames = stdout.toString().split('.jpg').map(s => s.trim()).filter(s => s.length > 1);
       res.render('screenshots', {...iterationViewData(), items: filenames});
     });
     app.get('/bad_strings', (req, res) => {
