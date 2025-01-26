@@ -68,7 +68,7 @@ export function initializeServer() {
       Object.values(data.itemsCache).forEach(items => {
         items.forEach(item => {
           userLogins[item.user_id] = item.user_login;
-          users[item.user_id] = (users[item.user_login] || []);
+          users[item.user_id] = (users[item.user_id] || []);
           users[item.user_id].push(item);
         });
       });
