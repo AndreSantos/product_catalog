@@ -2,7 +2,7 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import {execSync} from 'child_process';
-import {readData, persistBadExpressions, persistPrices, persistUnwantedItems, persistUnwantedSets} from '../db/db.js';
+import {readData, persistBadExpressions, persistPrices, persistUnwantedItems, persistUnwantedSets, persistUnwantedUsers} from '../db/db.js';
 
 const PAGE_SIZE = 500;
 
@@ -67,9 +67,11 @@ export function initializeServer() {
       const userLogins = {};
       Object.values(data.itemsCache).forEach(items => {
         items.forEach(item => {
-          userLogins[item.user_id] = item.user_login;
-          users[item.user_id] = (users[item.user_id] || []);
-          users[item.user_id].push(item);
+          if (!data.unwantedUsers.includes(item.user_login)) {
+            userLogins[item.user_id] = item.user_login;
+            users[item.user_id] = (users[item.user_id] || []);
+            users[item.user_id].push(item);
+          }
         });
       });
       const usersArray = [];
@@ -81,6 +83,15 @@ export function initializeServer() {
       usersArray.sort((a,b) => b.items.length - a.items.length);
 
       res.render('users', {...iterationViewData(), usersArray, userLogins});
+    });
+    app.get('/users/:login/unwanted', (req, res) => {
+      const data = readData();
+
+      const unwantedUsers = data.unwantedUsers;
+      unwantedUsers.push(req.params.login);
+      persistUnwantedUsers(unwantedUsers);
+      
+      res.send(`Done.`);
     });
     app.get('/bad_strings', (req, res) => {
       const data = readData();

@@ -147,6 +147,10 @@ export function persistUnwantedSets(unwantedSets) {
     writeFileSync(path + '/unwanted_sets.txt', JSON.stringify(unwantedSets));
 }
 
+export function persistUnwantedUsers(unwantedUsers) {
+    writeFileSync(path + '/unwanted_users.txt', JSON.stringify(unwantedUsers));
+}
+
 export function persistBadExpressions(badExpressionsStrings) {
     writeFileSync(path + '/bad_expressions.txt', JSON.stringify(badExpressionsStrings));
 }

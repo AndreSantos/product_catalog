@@ -57,6 +57,11 @@ async function unwantedSet(setId) {
     document.querySelector(`tr[data-set-id="${setId}"]`).remove();
 }
 
+async function unwantedUser(userLogin) {
+    await fetch(`/users/${userLogin}/unwanted`);
+    document.querySelector(`tr[data-user-login="${userLogin}"]`).remove();
+}
+
 async function unwantedBadString(idx) {
     await fetch(`/bad_strings/${idx}/unwanted`);
     document.querySelector(`tr[data-expression-idx="${idx}"]`).remove();

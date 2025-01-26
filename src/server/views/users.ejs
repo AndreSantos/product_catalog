@@ -13,10 +13,10 @@
     </thead>
     <tbody>
       <% usersArray.forEach(function(user) { %>
-        <tr data-user-login="<%= user.id %>">
+        <tr data-user-login="<%= userLogins[user.id] %>">
           <td>
             <a href="https://www.vinted.pt/member/<%= user.id %>"><%= userLogins[user.id] %> (<%= user.items.length %>)<a/>
-            <button class="user-delete-button" onclick="unwantedUser(<%= userLogins[user.id] %>)">X</button>
+            <button class="user-delete-button" onclick="unwantedUser('<%= userLogins[user.id] %>')">X</button>
           </td>
           <td class="sets">
             <ul>
