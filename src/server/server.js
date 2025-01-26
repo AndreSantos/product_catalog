@@ -74,7 +74,9 @@ export function initializeServer() {
       });
       const usersArray = [];
       Object.keys(users).forEach(userId => {
-        usersArray.push({id: userId, items: users[userId]});
+        if (users[userId].length > 1) {
+          usersArray.push({id: userId, items: users[userId]});
+        }
       });
       usersArray.sort((a,b) => b.items.length - a.items.length);
 
