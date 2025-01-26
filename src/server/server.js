@@ -65,10 +65,12 @@ export function initializeServer() {
       const data = readData();
       const users = {};
       const userLogins = {};
-      Object.values(data.itemsCache).forEach(item => {
-        userLogins[item.user_id] = item.user_login;
-        users[item.user_id] = (users[item.user_login] || []);
-        users[item.user_id].push(item);
+      Object.values(data.itemsCache).forEach(items => {
+        items.forEach(item => {
+          userLogins[item.user_id] = item.user_login;
+          users[item.user_id] = (users[item.user_login] || []);
+          users[item.user_id].push(item);
+        });
       });
       const usersArray = [];
       Object.keys(users).forEach(userId => {
