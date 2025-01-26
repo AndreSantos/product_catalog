@@ -11,13 +11,14 @@ function log(str) {
 function sanitizeValue(str, user_login) {
 	return str
 		.replaceAll(`${user_login}`, '')
-		.replaceAll(/("|'|´|`|-|\.|,|;|!|\?)/ig, ' ')
+		.replaceAll(/("|'|´|`|-|\.|,|;|:|!|\?)/ig, ' ')
 		.replaceAll(/Star Wars|Vintage|Disney|Western|City|Technic|System|Speed Champions/ig, '')
 		.replaceAll(/(á|à|ã)/ig, 'a')
 		.replaceAll(/ç/ig, 'c')
-		.replaceAll(/(é|è)/ig, 'e')
+		.replaceAll(/(é|è|ê)/ig, 'e')
 		.replaceAll(/î/ig, 'i')
 		.replaceAll(/(ú)/ig, 'u')
+		.replaceAll(/\d+ ?X/ig, ' ')
 		.replaceAll(/anne?e[^a-zA-Z0-9-]+\d{4}/ig, '')
 		.replaceAll(/\d{3,5}\s+pi?e?ce?s/ig, '')
 		.replaceAll(/\s+/ig, ' ');
