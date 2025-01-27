@@ -92,7 +92,7 @@ export async function lens(photoUrl) {
     }
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    await page.evaluate(`document.querySelector('input[placeholder="Colar link da imagem"]')?.value = "${photoUrl}"`);
+    await page.evaluate(`document.querySelector('input[placeholder="Colar link da imagem"]').value = "${photoUrl}"`);
     log('Photo inferrence: pasted photo URL.');
     
     // await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
