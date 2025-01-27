@@ -87,33 +87,23 @@ export async function lens(photoUrl) {
         await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]').click()");
         log('Photo inferrence: reset done.');
     } else {
-        const searchBoxHidden = await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]')");
+        log('Photo inferrence: opening search box (if closed).');
         await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]')?.click()");
-        if (searchBoxHidden) {
-            log('Photo inferrence: opening search box.');
-            await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]').click()");
-        }
-        else {
-            log('Photo inferrence: Error: could not open search box!');
-            const snapshot = await page.accessibility.snapshot();
-            console.log(snapshot);
-        }
     }
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
-    await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
+    await page.evaluate(`document.querySelector('input[placeholder="Colar link da imagem"]')?.value = "${photoUrl}"`);
     log('Photo inferrence: pasted photo URL.');
+    
+    // await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
+    // await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
     
     await page.evaluate("Array.from(document.querySelectorAll('div[role=\"button\"]')).filter(el => el.textContent === 'Pesquisa')[0].click()");
     log('Photo inferrence: clicked on search.');
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-    imgPreview = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')");
-    if (imgPreview) {
-        log('Photo inferrence: hide image preview.');
-        await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]').click()");
-    }
+    log('Photo inferrence: hide image preview if opened.');
+    imgPreview = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')?.click()");
     await new Promise(resolve => setTimeout(resolve, 500));
     log('Photo inferrence: looking up values...');
     
