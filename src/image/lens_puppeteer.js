@@ -88,6 +88,7 @@ export async function lens(photoUrl) {
         log('Photo inferrence: reset done.');
     } else {
         const searchBoxHidden = await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]')");
+        await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]')?.click()");
         if (searchBoxHidden) {
             log('Photo inferrence: opening search box.');
             await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]').click()");
