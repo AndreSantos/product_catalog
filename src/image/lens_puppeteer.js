@@ -83,17 +83,15 @@ export async function lens(photoUrl) {
         log('Photo inferrence: was searching another image, reset the state.');
         await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]').click()");
         await new Promise(resolve => setTimeout(resolve, 500));
-        
-        await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]').click()");
         log('Photo inferrence: reset done.');
-    } else {
-        log('Photo inferrence: opening search box (if closed).');
-        await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]')?.click()");
-    }
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    }        
+    log('Photo inferrence: opening search box (if closed).');
+    await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]')?.click()");
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
     await page.evaluate(`document.querySelector('input[placeholder="Colar link da imagem"]').value = "${photoUrl}"`);
     log('Photo inferrence: pasted photo URL.');
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     // await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
     // await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
