@@ -8,7 +8,7 @@ async function updateBadExpressionValue(target) {
         return;
     }
     const expressionIdx = target.getAttribute('data-expression-idx');
-    await fetch(`/bad_strings/${expressionIdx}?value=${target.value}`);
+    await fetch(`/bad_strings/${expressionIdx}?value=${target.value}`.replaceAll('+', '%2B'));
 }
 
 function updateBadExpressionTestResult(target) {
