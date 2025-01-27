@@ -99,7 +99,7 @@ export async function lens(photoUrl) {
     await page.evaluate("Array.from(document.querySelectorAll('div[role=\"button\"]')).filter(el => el.textContent === 'Pesquisa')[0].click()");
     log('Photo inferrence: clicked on search.');
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 4000));
     log('Photo inferrence: hide image preview if opened.');
     imgPreview = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')?.click()");
     await new Promise(resolve => setTimeout(resolve, 500));
