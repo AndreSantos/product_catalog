@@ -200,6 +200,7 @@ export async function job() {
 					const photoInferredSet = await lens(item.photos[0]);
 					item.infer.photo = photoInferredSet ? [photoInferredSet] : []; 
 				} catch (e) {
+					console.log(e);
 					iteration.photoFailure++;
 				}
 			}

@@ -73,12 +73,9 @@ export async function lens(photoUrl) {
     page.screenshot({path: `./logs/photo-${idx}-start.jpg`});
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    const gdprButton = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0]");
-    if (gdprButton) {
-        log('Photo inferrence: accepted Lens GDPR.');
-        await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0].click()");
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
+    log('Photo inferrence: accepted Lens GDPR.');
+    await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0]?.click()");
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     log('Photo inferrence: started.');
     let imgPreview = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')");
@@ -95,7 +92,11 @@ export async function lens(photoUrl) {
             log('Photo inferrence: opening search box.');
             await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]').click()");
         }
-    
+        else {
+            log('Photo inferrence: Error: could not open search box!');
+            const snapshot = await page.accessibility.snapshot();
+            console.log(snapshot);
+        }
     }
     await new Promise(resolve => setTimeout(resolve, 1000));
     
