@@ -5,7 +5,7 @@ import { fetchCookie } from './cookie.js';
 export async function searchItems(query) {
   const controller = new AbortController();
   const cookie = await fetchCookie();
-  const url = `https://www.vinted.pt/api/v2/catalog/items?search_text=${query.text}&order=newest_first&price_from=2&price_to=200`;
+  const url = `https://www.vinted.pt/api/v2/catalog/items?search_text=${query.text}&catalog[]=1499&order=newest_first&price_from=2&price_to=200`;
   const vintedResponse = await fetch(url, {
     signal: controller.signal,
     headers: {
