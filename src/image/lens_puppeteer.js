@@ -74,8 +74,8 @@ export async function lens(photoUrl) {
     let page = await getOrInitializeBrowser();
     
     idx = (idx + 1) % 20;
-    page.screenshot({path: `./logs/photo-${idx}-start.jpg`});
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await page.screenshot({path: `./logs/photo-${idx}-start.jpg`});
+    waitMs(500);
 
     const bodyHandle = await page.$('body');
 
@@ -99,26 +99,28 @@ export async function lens(photoUrl) {
         log('Photo inferrence: reset done.');
     }        
     log('Photo inferrence: opening search box (if closed).');
-    await page.evaluate(body =>
-        body.querySelector('div[role="button"][aria-label*="Pesquisar por imagem"]')?.click(),
-    bodyHandle);
-    waitMs(1000);
+    
+    const searchForImage = page.locator('div[role="button"][aria-label*="Pesquisar por imagem"]');
+    await searchForImage.wait();
+    await searchForImage.click();
+    waitMs(100);
     log('Photo inferrence: pasting photo URL.');
 
-    await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
-    await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
+    const pasteImageLink = page.locator('input').filter(input => input.placeholder === 'Colar link da imagem');
+    await pasteImageLink.wait();
+    await pasteImageLink.fill(photoUrl);
     log('Photo inferrence: pasted photo URL.');
+    waitMs(100);
     
-    // await page.evaluate((body, url) => {
-    //     const promise = new Promise
-    //     body.querySelector('input[placeholder="Colar link da imagem"]').value = url,
-    // bodyHandle, photoUrl);
-    waitMs(1000);
-    
-    await page.evaluate("Array.from(document.querySelectorAll('div[role=\"button\"]')).filter(el => el.textContent === 'Pesquisa')[0].click()");
+    const searchButton = page.locator('div[role="button"]').filter(el => el.textContent === 'Pesquisa');
+    await searchButton.wait();
+    await searchButton.fill(photoUrl);
     log('Photo inferrence: clicked on search.');
+    waitMs(3000);
 
-    await new Promise(resolve => setTimeout(resolve, 4000));
+    await page.screenshot({path: `./logs/photo-${idx}-middle.jpg`});
+    waitMs(1000);
+
     log('Photo inferrence: hide image preview if opened.');
     imgPreview = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')?.click()");
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -151,7 +153,7 @@ export async function lens(photoUrl) {
                 log("Photo inferrence: didn't photo infer any sets.");
             }
             
-            page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
+            await page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
             return result ? maxv : undefined;
         } else {
             log("Results:", results);
