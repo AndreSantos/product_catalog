@@ -107,12 +107,12 @@ export async function lens(photoUrl) {
 
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
     await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
+    log('Photo inferrence: pasted photo URL.');
     
     // await page.evaluate((body, url) => {
     //     const promise = new Promise
     //     body.querySelector('input[placeholder="Colar link da imagem"]').value = url,
     // bodyHandle, photoUrl);
-    log('Photo inferrence: pasted photo URL.');
     waitMs(1000);
     
     await page.evaluate("Array.from(document.querySelectorAll('div[role=\"button\"]')).filter(el => el.textContent === 'Pesquisa')[0].click()");
