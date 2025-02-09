@@ -78,19 +78,22 @@ export async function lens(photoUrl) {
     await page.screenshot({path: `./logs/photo-${idx}-start.jpg`});
     waitMs(100);
 
-    log('Photo inferrence: accepting Lens GDPR...');
+    log('Photo inferrence: checking GDPR...');
     try {
         await page.locator('div[role="dialog"][aria-label*="Antes de continuar para a Pesquisa Google"]').setTimeout(1000).wait();
-        log('Photo inferrence: accepting GDPR.');
+        log('Photo inferrence: accepting GDPR...');
+        const buttonText = await page.locator('button').map(el => el.innerText).wait();
+        log(buttonText);
         await page.locator('button')
             .filter(el => el.innerText.trim() === 'Aceitar tudo')
             .click();
+        log('Photo inferrence: accepted GDPR.');
+        
         waitMs(1000);
     } catch(e) {
         log('Photo inferrence: GDPR dialog was not opened.');
     }
     
-    log('Photo inferrence: started.');
     try {
         await page.locator('button[aria-label*="Reduzir menu pendente"]')
             .setTimeout(500)
@@ -118,8 +121,13 @@ export async function lens(photoUrl) {
     waitMs(1000);
 
     log('Photo inferrence: hide image preview if opened.');
-    imgPreview = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')?.click()");
-    await new Promise(resolve => setTimeout(resolve, 500));
+    try {
+        await page.locator('button[aria-label*="Reduzir menu pendente"]')
+            .setTimeout(1000)
+            .click();
+        log('Photo inferrence: hid image preview.');
+    } catch(e) {}
+    waitMs(1000);
     log('Photo inferrence: looking up values...');
 
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
