@@ -80,11 +80,11 @@ export async function lens(photoUrl) {
 
     log('Photo inferrence: accepting Lens GDPR...');
     try {
+        await page.locator('div[role="dialog"][aria-label*="Antes de continuar para a Pesquisa Google"]').setTimeout(1000).wait();
+        log('Photo inferrence: accepting GDPR.');
         await page.locator('button')
             .filter(el => el.innerText.trim() === 'Aceitar tudo')
-            .setTimeout(1000)
             .click();
-        log('Photo inferrence: accepted GDPR.');
         waitMs(1000);
     } catch(e) {
         log('Photo inferrence: GDPR dialog was not opened.');
