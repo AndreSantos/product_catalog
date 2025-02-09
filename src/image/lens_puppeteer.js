@@ -82,7 +82,8 @@ export async function lens(photoUrl) {
     try {
         await page.locator('div[role="dialog"][aria-label*="Antes de continuar para a Pesquisa Google"]').setTimeout(1000).wait();
         log('Photo inferrence: accepting GDPR...');
-        const buttonText = await page.locator('button').map(el => el.innerText).wait();
+        const buttonText = await page.locator('button').map(el => el.textContent).wait();
+        log(buttonText.length);
         log(buttonText);
         await page.locator('button')
             .filter(el => el.innerText.trim() === 'Aceitar tudo')
