@@ -95,19 +95,25 @@ export async function lens(photoUrl) {
         await page.evaluate(body =>
             body.querySelector('button[aria-label*="Reduzir menu pendente"]').click(),
         bodyHandle);
-        waitMs(500);
+        waitMs(1000);
         log('Photo inferrence: reset done.');
     }        
     log('Photo inferrence: opening search box (if closed).');
-    await page.evaluate("document.querySelector('div[role=\"button\"][aria-label*=\"Pesquisar por imagem\"]')?.click()");
-    waitMs(3000);
+    await page.evaluate(body =>
+        body.querySelector('div[role="button"][aria-label*="Pesquisar por imagem"]')?.click(),
+    bodyHandle);
+    waitMs(1000);
+    log('Photo inferrence: pasting photo URL.');
+
+    await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
+    await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
     
-    await page.evaluate(`document.querySelector('input[placeholder="Colar link da imagem"]').value = "${photoUrl}"`);
+    // await page.evaluate((body, url) => {
+    //     const promise = new Promise
+    //     body.querySelector('input[placeholder="Colar link da imagem"]').value = url,
+    // bodyHandle, photoUrl);
     log('Photo inferrence: pasted photo URL.');
     waitMs(1000);
-    
-    // await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').wait();
-    // await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
     
     await page.evaluate("Array.from(document.querySelectorAll('div[role=\"button\"]')).filter(el => el.textContent === 'Pesquisa')[0].click()");
     log('Photo inferrence: clicked on search.');
@@ -147,6 +153,8 @@ export async function lens(photoUrl) {
             
             page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
             return result ? maxv : undefined;
+        } else {
+            log("Results:", results);
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
