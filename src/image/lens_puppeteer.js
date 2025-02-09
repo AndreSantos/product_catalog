@@ -75,44 +75,41 @@ export async function lens(photoUrl) {
     
     idx = (idx + 1) % 20;
     await page.screenshot({path: `./logs/photo-${idx}-start.jpg`});
-    waitMs(500);
+    waitMs(100);
 
-    const bodyHandle = await page.$('body');
-
-    log('Photo inferrence: accepted Lens GDPR.');
-    await page.evaluate(body =>
-        Array.from(body.querySelectorAll('button'))
-                    .filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0]?.click()
-    , bodyHandle);
-    waitMs(1000);
+    log('Photo inferrence: accepting Lens GDPR...');
+    try {
+        await page.locator('button')
+            .filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')
+            .setTimeout(100)
+            .click();
+        log('Photo inferrence: accepted GDPR.');
+        waitMs(1000);
+    } catch(e) {
+        log('Photo inferrence: GDPR dialog was not opened.');
+    }
     
     log('Photo inferrence: started.');
-    let imgPreview = await page.evaluate(body =>
-        body.querySelector('button[aria-label*="Reduzir menu pendente"]'),
-    bodyHandle);
-    if (imgPreview) {
+    try {
+        await page.locator('button[aria-label*="Reduzir menu pendente"]')
+            .setTimeout(500)
+            .click();
         log('Photo inferrence: was searching another image, reset the state.');
-        await page.evaluate(body =>
-            body.querySelector('button[aria-label*="Reduzir menu pendente"]').click(),
-        bodyHandle);
         waitMs(1000);
-        log('Photo inferrence: reset done.');
-    }        
-    log('Photo inferrence: opening search box (if closed).');
+    } catch(e) {
+        log('Photo inferrence: state was already cleaned up.');
+    }
     
-    const searchForImage = page.locator('div[role="button"][aria-label*="Pesquisar por imagem"]');
-    await searchForImage.wait();
-    await searchForImage.click();
+    log('Photo inferrence: opening search box (if closed).');
+    await page.locator('div[role="button"][aria-label*="Pesquisar por imagem"]').click();
     waitMs(100);
-    log('Photo inferrence: pasting photo URL.');
 
-    const pasteImageLink = page.locator('input').filter(input => input.placeholder === 'Colar link da imagem');
-    await pasteImageLink.wait();
-    await pasteImageLink.fill(photoUrl);
+    log('Photo inferrence: pasting photo URL.');
+    await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
     log('Photo inferrence: pasted photo URL.');
     waitMs(100);
     
-    await page.locator('div[role="button"]').filter(el => el.textContent.trim() === 'Pesquisa').fill(photoUrl);
+    await page.locator('div[role="button"]').filter(el => el.textContent.trim() === 'Pesquisa').click();
     log('Photo inferrence: clicked on search.');
     waitMs(3000);
 
