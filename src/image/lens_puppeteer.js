@@ -53,6 +53,7 @@ async function getOrInitializeBrowser() {
         page.setDefaultNavigationTimeout(60000);
 
         await page.goto('https://lens.google.com');
+        waitMs(5000);
     }
     return page;
 }
@@ -80,7 +81,7 @@ export async function lens(photoUrl) {
     log('Photo inferrence: accepting Lens GDPR...');
     try {
         await page.locator('button')
-            .filter(el => el.innerText === 'Aceitar tudo')
+            .filter(el => el.innerText.trim() === 'Aceitar tudo')
             .setTimeout(100)
             .click();
         log('Photo inferrence: accepted GDPR.');
@@ -109,7 +110,7 @@ export async function lens(photoUrl) {
     log('Photo inferrence: pasted photo URL.');
     waitMs(100);
     
-    await page.locator('div[role="button"]').filter(el => el.textContent.trim() === 'Pesquisa').click();
+    await page.locator('div[role="button"]').filter(el => el.innerText.trim() === 'Pesquisa').click();
     log('Photo inferrence: clicked on search.');
     waitMs(3000);
 
