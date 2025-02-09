@@ -80,7 +80,7 @@ export async function lens(photoUrl) {
     log('Photo inferrence: accepting Lens GDPR...');
     try {
         await page.locator('button')
-            .filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')
+            .filter(el => el.innerText === 'Aceitar tudo')
             .setTimeout(100)
             .click();
         log('Photo inferrence: accepted GDPR.');
