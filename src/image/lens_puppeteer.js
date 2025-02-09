@@ -112,9 +112,7 @@ export async function lens(photoUrl) {
     log('Photo inferrence: pasted photo URL.');
     waitMs(100);
     
-    const searchButton = page.locator('div[role="button"]').filter(el => el.textContent === 'Pesquisa');
-    await searchButton.wait();
-    await searchButton.fill(photoUrl);
+    await page.locator('div[role="button"]').filter(el => el.textContent.trim() === 'Pesquisa').fill(photoUrl);
     log('Photo inferrence: clicked on search.');
     waitMs(3000);
 
@@ -125,7 +123,7 @@ export async function lens(photoUrl) {
     imgPreview = await page.evaluate("document.querySelector('button[aria-label*=\"Reduzir menu pendente\"]')?.click()");
     await new Promise(resolve => setTimeout(resolve, 500));
     log('Photo inferrence: looking up values...');
-    
+
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
     for (let i = 0; i < 5; i++) {
         const results = await page.evaluate("Array.from(document.querySelectorAll('div[role=\"heading\"][aria-level=\"3\"]')).map(el => el.textContent)");
