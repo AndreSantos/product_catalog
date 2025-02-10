@@ -79,23 +79,13 @@ export async function lens(photoUrl) {
     waitMs(100);
 
     log('Photo inferrence: checking GDPR...');
-    try {
-        await page.locator('div[role="dialog"][aria-label*="Antes de continuar para a Pesquisa Google"]').setTimeout(1000).wait();
-        log('Photo inferrence: accepting GDPR...');
-        const snapshot = await page.accessibility.snapshot();
-        console.log(snapshot);
-        const buttonText = await page.locator('button').map(el => el.textContent).setTimeout(1000).wait();
-        log(buttonText.length);
-        log(buttonText);
-        await page.locator('button')
-            .filter(el => el.innerText.trim() === 'Aceitar tudo')
-            .click();
-        log('Photo inferrence: accepted GDPR.');
-        
+    const gdprButton = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0]");
+    if (gdprButton) {
+        log('Photo inferrence: accepted Lens GDPR.');
+        gdprButton.click();
         waitMs(1000);
-    } catch(e) {
-        log('Photo inferrence: GDPR dialog was not opened.');
     }
+    await page.screenshot({path: `./logs/photo-${idx}-gdpr.jpg`});
     
     try {
         await page.locator('button[aria-label*="Reduzir menu pendente"]')
