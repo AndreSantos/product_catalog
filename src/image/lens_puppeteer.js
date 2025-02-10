@@ -81,8 +81,8 @@ export async function lens(photoUrl) {
     log('Photo inferrence: checking GDPR...');
     const gdprButton = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0]");
     if (gdprButton) {
+        await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0].click()");
         log('Photo inferrence: accepted Lens GDPR.');
-        gdprButton.click();
         waitMs(1000);
     }
     await page.screenshot({path: `./logs/photo-${idx}-gdpr.jpg`});
