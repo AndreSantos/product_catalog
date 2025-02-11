@@ -132,6 +132,7 @@ export async function lens(photoUrl) {
         const results = await page.evaluate("Array.from(document.querySelectorAll('div[role=\"heading\"][aria-level=\"3\"]')).map(el => el.textContent)");
         log(`Photo inferrence: frequencies attempt ${i}: `, results?.length);
         log(results);
+        log(results.toString());
         if (results.length >= 4) {
             const freq = {};
             results.forEach(r => {
