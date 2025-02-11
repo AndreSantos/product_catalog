@@ -117,9 +117,10 @@ export async function lens(photoUrl) {
     log('Photo inferrence: hide image preview if opened.');
     try {
         await page.locator('button[aria-label*="Reduzir menu pendente"]')
-            .setTimeout(10000)
+            .setTimeout(15000)
             .click();
         log('Photo inferrence: hid image preview.');
+        // Await same button not visible (using .clientHeight).
     } catch(e) {
         log('Photo inferrence: image preview not opened.');
     }
@@ -130,9 +131,10 @@ export async function lens(photoUrl) {
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
     for (let i = 0; i < 5; i++) {
         const results = await page.evaluate("Array.from(document.querySelectorAll('div[role=\"heading\"][aria-level=\"3\"]')).map(el => el.textContent)");
-        log(`Photo inferrence: frequencies attempt ${i}: `, results?.length);
-        log(results);
-        log(results.toString());
+        const resultsToLog = [...results];
+        resultsToLog.length = Math.min(resultsToLog.length, 10);
+        log(`Photo inferrence: frequencies attempt ${i}: `);
+        log(resultsToLog);
         if (results.length >= 4) {
             const freq = {};
             results.forEach(r => {
