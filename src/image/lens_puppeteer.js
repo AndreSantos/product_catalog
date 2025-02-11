@@ -114,22 +114,23 @@ export async function lens(photoUrl) {
     log('Photo inferrence: clicked on search.');
     waitMs(3000);
 
-    await page.screenshot({path: `./logs/photo-${idx}-middle.jpg`});
-    waitMs(1000);
-
     log('Photo inferrence: hide image preview if opened.');
     try {
         await page.locator('button[aria-label*="Reduzir menu pendente"]')
-            .setTimeout(1000)
+            .setTimeout(10000)
             .click();
         log('Photo inferrence: hid image preview.');
-    } catch(e) {}
-    waitMs(1000);
+    } catch(e) {
+        log('Photo inferrence: image preview not opened.');
+    }
+    waitMs(100);
     log('Photo inferrence: looking up values...');
+    await page.screenshot({path: `./logs/photo-${idx}-middle.jpg`});
 
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
     for (let i = 0; i < 5; i++) {
         const results = await page.evaluate("Array.from(document.querySelectorAll('div[role=\"heading\"][aria-level=\"3\"]')).map(el => el.textContent)");
+        log(`Photo inferrence: frequencies attempt ${i}: `, results);
         if (results.length >= 4) {
             const freq = {};
             results.forEach(r => {
