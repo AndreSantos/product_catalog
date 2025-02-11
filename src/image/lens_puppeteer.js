@@ -123,14 +123,15 @@ export async function lens(photoUrl) {
     } catch(e) {
         log('Photo inferrence: image preview not opened.');
     }
-    waitMs(100);
+    waitMs(1000);
     log('Photo inferrence: looking up values...');
     await page.screenshot({path: `./logs/photo-${idx}-middle.jpg`});
 
     const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
     for (let i = 0; i < 5; i++) {
         const results = await page.evaluate("Array.from(document.querySelectorAll('div[role=\"heading\"][aria-level=\"3\"]')).map(el => el.textContent)");
-        log(`Photo inferrence: frequencies attempt ${i}: `, results);
+        log(`Photo inferrence: frequencies attempt ${i}: `, results?.length);
+        log(results);
         if (results.length >= 4) {
             const freq = {};
             results.forEach(r => {
