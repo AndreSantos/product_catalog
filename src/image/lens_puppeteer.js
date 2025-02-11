@@ -85,7 +85,6 @@ export async function lens(photoUrl) {
         log('Photo inferrence: accepted Lens GDPR.');
         waitMs(1000);
     }
-    await page.screenshot({path: `./logs/photo-${idx}-gdpr.jpg`});
     
     try {
         await page.locator('button[aria-label*="Reduzir menu pendente"]')
@@ -106,7 +105,12 @@ export async function lens(photoUrl) {
     log('Photo inferrence: pasted photo URL.');
     waitMs(100);
     
-    await page.locator('div[role="button"]').filter(el => el.innerText.trim() === 'Pesquisa').click();
+    await page.waitForFunction(() => {
+        return Array.from(document.querySelectorAll('div[role="button"]')).filter(el => el.textContent === 'Pesquisa').length > 0;
+    });
+    await page.evaluate(() => {
+        Array.from(document.querySelectorAll('div[role="button"]')).filter(el => el.textContent === 'Pesquisa')[0].click();
+    });
     log('Photo inferrence: clicked on search.');
     waitMs(3000);
 
