@@ -22,7 +22,10 @@
             <ul>
             <% user.items.forEach(function (item) { %>
               <li>
-                <a href="<%= item.url %>"><%= parseInt(item.price) %>€</a> 
+                <a href="<%= item.url %>"><%= parseInt(item.price) %>€</a>
+                <% if (item.isRepost) { %>
+                  <b>R</b>
+                <% } %>
               </li>
             <% }); %>
           </ul>

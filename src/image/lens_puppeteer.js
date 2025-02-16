@@ -143,7 +143,6 @@ export async function lens(photoUrl) {
                     freq[set[1]] = (freq[set[1]] ?? 0) + 1;
                 }
             });
-            log("Photo inferrence: frequencies ", freq);
             let max = 1, maxv, total = 0;
 
             Object.keys(freq).forEach(r => {
@@ -154,15 +153,13 @@ export async function lens(photoUrl) {
             });
             const result = max * 2 > total;
             if (result) {
-                log("Photo inferrence:", maxv);
+                log(`Photo inferrence: ${maxv}`);
             } else {
                 log("Photo inferrence: didn't photo infer any sets.");
             }
             
             await page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
             return result ? maxv : undefined;
-        } else {
-            log("Results:", results);
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
     }

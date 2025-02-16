@@ -62,14 +62,13 @@ function getMaxPrice(inferredSets, pricesCache) {
 	return maxPrice;
 }
 
-function isPossibleGold(item, pricesCache, shouldLog) {
-	const cacheKey = getInferredSets(item);
-	if (!cacheKey.length) {
+function isPossibleGold(inferredSets, price, pricesCache, shouldLog) {
+	if (!inferredSets.length) {
 		return false;
 	}
 	let maxPrice = 0;
 	let hasAtLeastOneItemWithPrice = false;
-	for (const key of cacheKey) {
+	for (const key of inferredSets) {
 		const maxPriceForItem = pricesCache[key];
 		maxPrice += maxPriceForItem > 0 ? maxPriceForItem : 5;
 		
@@ -83,9 +82,22 @@ function isPossibleGold(item, pricesCache, shouldLog) {
 	}
 	
 	if (shouldLog) {
-		log(`Item price (max): ${item.price} (${maxPrice})`);
+		log(`Item price (max): ${price} (${maxPrice})`);
 	}
-	return item.price <= maxPrice && !(item.price <= 5 && maxPrice >= 25);
+	return price <= maxPrice && !(price <= 5 && maxPrice >= 25);
+}
+
+function checkIfRepost(item, itemsCache) {
+	for (let items of Object.values(itemsCache)) {
+		const maybeRepost = items.some(it => 
+			it.user_id === item.user_id &&
+			it.photos.length > 0 &&
+			it.photos[0] === item.photos[0]);
+		if (maybeRepost) {
+			return maybeRepost;
+		}
+	}
+	return false;
 }
 
 export async function job() {
@@ -113,6 +125,7 @@ export async function job() {
 		photoTest: 0,
 		possibleGold: 0,
 		photoFailure: 0,
+		repost: 0,
 	};
 	const descriptionCache = {};
 	log('Starting new iteration.');
@@ -128,6 +141,23 @@ export async function job() {
 		log(item);
 		itemsRead[item.id] = iteration.start;
 		item.time = iteration.start;
+
+		const repost = checkIfRepost(item, itemsCache);
+		if (repost) {
+			log(`Is a repost.`);
+			iteration.repost++;
+			item.isRepost = true;
+			const inferredSets = getInferredSets(repost);
+			const cacheKey = inferredSets.join(' + ');
+			itemsCache[cacheKey] = itemsCache[cacheKey] || [];
+			itemsCache[cacheKey] = [...itemsCache[cacheKey], item].sort((a, b) => a.price > b.price);
+			if (isPossibleGold(inferredSets, item.price, prices, true)) {
+				iteration.possibleGold++;
+				const maxPrice = getMaxPrice(inferredSets, prices);
+				sendMail(cacheKey, item, maxPrice);
+			}
+			continue;
+		}
 		if (unwantedUsers.includes(item.user_id) || unwantedUsers.includes(item.user_login)) {
 			iteration.unwantedUsers++;
 			log(`Discarded due to unwanted user ${item.user_id} / ${item.user_login}.`);
@@ -151,7 +181,7 @@ export async function job() {
 			description: [],
 			photo: [],
 		};
-		const couldBeGoldFromTitle = isPossibleGold(item, prices, false);
+		const couldBeGoldFromTitle = isPossibleGold(getInferredSets(item), item.price, prices, false);
 		const needDescription = !item.infer.title.length || couldBeGoldFromTitle;
 		let viewItemReturn;
 		if (needDescription) {
@@ -232,7 +262,7 @@ export async function job() {
 			itemsCache[cacheKey] = itemsCache[cacheKey] || [];
 			itemsCache[cacheKey] = [...itemsCache[cacheKey], item].sort((a, b) => a.price > b.price);
 			log(`Inferred sets: ${cacheKey}`);
-			if (isPossibleGold(item, prices, true)) {
+			if (isPossibleGold(inferredSets, item.price, prices, true)) {
 				iteration.possibleGold++;
 				const maxPrice = getMaxPrice(inferredSets, prices);
 				sendMail(cacheKey, item, maxPrice);

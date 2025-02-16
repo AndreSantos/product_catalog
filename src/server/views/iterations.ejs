@@ -17,6 +17,7 @@
       <th>Old</th>
       <th>-Sets</th>
       <th>-Users</th>
+      <th>-Repost</th>
     </thead>
     <tbody>
       <% iterations.reverse().forEach(function (iteration) { %>
@@ -33,6 +34,7 @@
           <td><%= iteration.pastItems %></td>
           <td><%= iteration.unwantedItems %></td>
           <td><%= iteration.unwantedUsers %></td>
+          <td><%= iteration.repost %></td>
         </tr>
       <% }); %>
     </thead>
