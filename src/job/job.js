@@ -26,8 +26,7 @@ export function sanitizeValue(str, user_login) {
 
 export function extraSanitizationBeforeDiscardStep(str) {
 	return str.toLowerCase()
-		.replaceAll(/\d+/ig, '')
-		.replaceAll(/\s+/ig, ' ');
+		.replaceAll(/ \d+ /ig, ''); // Remove numbers like set IDs, but keep bricklinkg IDs like pi146
 }
 
 function shouldDiscard(badExpressions, str) {
