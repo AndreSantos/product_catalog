@@ -18,8 +18,8 @@ function sanitizeValue(str, user_login) {
 		.replaceAll(/(é|è|ê)/ig, 'e')
 		.replaceAll(/î/ig, 'i')
 		.replaceAll(/(ú)/ig, 'u')
-		.replaceAll(/\d+ ?X/ig, ' ')
-		.replaceAll(/anne?e[^a-zA-Z0-9-]+\d{4}/ig, '')
+		.replaceAll(/\d{1,3} ?X/ig, ' ')			// ex: 10x
+		.replaceAll(/(19|20)\d{2}( |$)/ig, ' ')		// ex: 1998
 		.replaceAll(/\d{3,5}\s+pi?e?ce?s/ig, '')
 		.replaceAll(/\s+/ig, ' ');
 }
