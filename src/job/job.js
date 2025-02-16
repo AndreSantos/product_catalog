@@ -8,7 +8,7 @@ function log(str) {
 	console.log(new Date().toLocaleString(), str);
 }
 
-function sanitizeValue(str, user_login) {
+export function sanitizeValue(str, user_login) {
 	return str
 		.replaceAll(`${user_login}`, '')
 		.replaceAll(/("|'|´|`|-|\.|,|;|:|!|\?)/ig, ' ')
@@ -18,7 +18,7 @@ function sanitizeValue(str, user_login) {
 		.replaceAll(/(é|è|ê)/ig, 'e')
 		.replaceAll(/î/ig, 'i')
 		.replaceAll(/(ú)/ig, 'u')
-		.replaceAll(/\d{1,3} ?X/ig, ' ')			// ex: 10x
+		.replaceAll(/\d{1,3} ?x/ig, ' ')			// ex: 10x or 10 x
 		.replaceAll(/(19|20)\d{2}( |$)/ig, ' ')		// ex: 1998
 		.replaceAll(/\d{3,5}\s+pi?e?ce?s/ig, '')
 		.replaceAll(/\s+/ig, ' ');
