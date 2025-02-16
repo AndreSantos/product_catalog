@@ -128,7 +128,7 @@ export async function lens(photoUrl) {
     log('Photo inferrence: looking up values...');
     await page.screenshot({path: `./logs/photo-${idx}-middle.jpg`});
 
-    const PHOTO_REGEX = /\D*(\d{4,7})(?:$|\D*)/g;
+    const PHOTO_REGEX = /Lego\D*(\d{4,7})(?:$|\D*)/ig;
     for (let i = 0; i < 5; i++) {
         const results = await page.evaluate("Array.from(document.querySelectorAll('div[role=\"heading\"][aria-level=\"3\"]')).map(el => el.textContent)");
         const resultsToLog = [...results];
