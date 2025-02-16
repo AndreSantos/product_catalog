@@ -1,4 +1,4 @@
-import {readData} from '../../db/db.js';
+import {readData} from '../db/db.js';
 
 const STRINGS_TO_TEST = [
     'pi146'
@@ -17,7 +17,7 @@ export async function testPersistedBadExpressions() {
             .map(str => !!str.match(badExpression))
             .map(res => res ? '!' : '.')
             .join(' ');
-        console.log(`${badExpression.substr(0, 50)}: ${tests}`);
+        console.log(`${badExpression.source.substr(0, 50)}: ${tests}`);
     }
 }
 
