@@ -1,12 +1,13 @@
 import {readData} from '../db/db.js';
-import {sanitizeValue} from '../job/job.js';
+import {sanitizeValue, extraSanitizationBeforeDiscardStep} from '../job/job.js';
 
 const STRINGS_TO_TEST = [
     'pi146'
 ];
 
 function sanitizeStrings() {
-    return STRINGS_TO_TEST.map(str => sanitizeValue(str, 'user_login'));
+    return STRINGS_TO_TEST.map(str => sanitizeValue(str, 'user_login'))
+        .map(str => extraSanitizationBeforeDiscardStep(str));
 }
 
 function testPersistedBadExpressions() {

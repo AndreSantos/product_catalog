@@ -24,11 +24,14 @@ export function sanitizeValue(str, user_login) {
 		.replaceAll(/\s+/ig, ' ');
 }
 
-function shouldDiscard(badExpressions, str) {
-	const extraSanitizationStep = str
-		.toLowerCase()
+export function extraSanitizationBeforeDiscardStep(str) {
+	return str.toLowerCase()
 		.replaceAll(/\d+/ig, '')
 		.replaceAll(/\s+/ig, ' ');
+}
+
+function shouldDiscard(badExpressions, str) {
+	const extraSanitizationStep = extraSanitizationBeforeDiscardStep(str);
 	return badExpressions.find(bad => !!extraSanitizationStep.match(bad));
 }
 
