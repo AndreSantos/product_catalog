@@ -174,6 +174,12 @@ export async function lens(photoUrl) {
     return undefined;
 }
 
+export async function takeErrorScreenshot() {
+    const page = await getOrInitializeBrowser();
+    const previousIdx = (idx > 0 ? idx : 20) - 1;
+    page.screenshot({path: `./logs/photo-${previousIdx}-end.jpg`});
+}
+
 function searchByImageIconButtonQuery() {
     return document.querySelector('div[role="button"][aria-label*="Pesquisar por imagem"]');
 }
