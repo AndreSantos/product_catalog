@@ -97,7 +97,7 @@ export async function lens(photoUrl) {
     }
     
     log('Photo inferrence: opening search box.');
-    await page.waitForFunction(() => searchByImageIconButtonQuery(), {timeout: 5000});
+    await page.waitForFunction(() => searchByImageIconButtonQuery());
     await page.evaluate(() => searchByImageIconButtonQuery().click());
     // await page.locator('div[role="button"][aria-label*="Pesquisar por imagem"]').click();
     waitMs(100);
