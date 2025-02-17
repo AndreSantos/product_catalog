@@ -113,7 +113,7 @@ export async function lens(photoUrl) {
     //await page.evaluate(() => {
     //    Array.from(document.querySelectorAll('div[role="button"]')).filter(el => el.textContent === 'Pesquisa')[0].click();
     //});
-    await page.evaluate(() => imageUrlInputQuery().nextElementSibling.click());
+    await page.evaluate(() => document.querySelector('input[placeholder*="Colar link da imagem"]').nextElementSibling.click());
     log('Photo inferrence: clicked on search.');
     waitMs(3000);
 
