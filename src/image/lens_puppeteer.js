@@ -58,7 +58,7 @@ export async function resetTabsAndOpenLens() {
     });
     page.setDefaultNavigationTimeout(60000);
 
-    log(`Photo inferrence: oepning lens.`);
+    log(`Photo inferrence: opening lens.`);
     await page.goto('https://lens.google.com');
     waitMs(5000);
 }
@@ -77,7 +77,7 @@ export async function lens(photoUrl) {
     
     //const encodedURL = encodeURIComponent(photoUrl);
     //const requestURL = `https://lens.google.com/uploadbyurl?re=df&url=${encodedURL}&hl=en&re=df&st=${+ new Date()}&ep=gisbubu`;
-    let page = await getOrInitializeBrowser();
+    await getOrInitializeBrowser();
     
     idx = (idx + 1) % 20;
     await page.screenshot({path: `./logs/photo-${idx}-start.jpg`});
@@ -107,7 +107,14 @@ export async function lens(photoUrl) {
     waitMs(100);
 
     log('Photo inferrence: pasting photo URL.');
-    await page.waitForFunction(() => !!document.querySelector('input[placeholder*="Colar link da imagem"]'));
+    try {
+        await page.screenshot({path: `./logs/photo-${idx}-middle.jpg`});
+        await page.waitForFunction(() => !!document.querySelector('input[placeholder*="Colar link da imagem"]'));
+    } catch (err) {
+        log(err);
+        await page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
+        return undefined;
+    }
     await page.evaluate((url) => document.querySelector('input[placeholder*="Colar link da imagem"]').value = url, photoUrl);
     log('Photo inferrence: pasted photo URL.');
     waitMs(100);
@@ -134,7 +141,6 @@ export async function lens(photoUrl) {
     }
     waitMs(1000);
     log('Photo inferrence: looking up values...');
-    await page.screenshot({path: `./logs/photo-${idx}-middle.jpg`});
 
     const PHOTO_REGEX = /Lego\D*(\d{4,7})(?:$|\D*)/ig;
     for (let i = 0; i < 5; i++) {
@@ -178,7 +184,9 @@ export async function lens(photoUrl) {
 }
 
 export async function takeErrorScreenshot() {
-    const page = await getOrInitializeBrowser();
+    if (!page) {
+        return;
+    }
     const previousIdx = (idx > 0 ? idx : 20) - 1;
     page.screenshot({path: `./logs/photo-${previousIdx}-end.jpg`});
 }
