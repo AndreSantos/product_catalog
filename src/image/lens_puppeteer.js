@@ -33,7 +33,7 @@ async function getOrInitializeBrowser() {
             headless: true
         });
 
-        resetTabsAndOpenLens();
+        await resetTabsAndOpenLens();
     }
     return page;
 }
