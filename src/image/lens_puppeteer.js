@@ -33,29 +33,34 @@ async function getOrInitializeBrowser() {
             headless: true
         });
 
-        const pages = await browser.pages();
-        log(`Photo inferrence: closing ${pages.length} tabs.`);
-        for (const page of pages) {
-            if (!await page.isClosed()) {
-                await page.close();
-            }
-        }
-
-        page = await browser.newPage();
-        await page.setRequestInterception(true);
-        page.on('request', request => {
-            if (['image', 'font', 'other'].includes(request.resourceType())) {
-                request.abort();
-            } else {
-                request.continue();
-            }
-        });
-        page.setDefaultNavigationTimeout(60000);
-
-        await page.goto('https://lens.google.com');
-        waitMs(5000);
+        resetTabsAndOpenLens();
     }
     return page;
+}
+
+export async function resetTabsAndOpenLens() {
+    log(`Photo inferrence: closing ${pages.length} tabs.`);
+    const pages = await browser.pages();
+    for (const page of pages) {
+        if (!await page.isClosed()) {
+            await page.close();
+        }
+    }
+
+    page = await browser.newPage();
+    await page.setRequestInterception(true);
+    page.on('request', request => {
+        if (['image', 'font', 'other'].includes(request.resourceType())) {
+            request.abort();
+        } else {
+            request.continue();
+        }
+    });
+    page.setDefaultNavigationTimeout(60000);
+
+    log(`Photo inferrence: oepning lens.`);
+    await page.goto('https://lens.google.com');
+    waitMs(5000);
 }
 
 async function waitMs(ms) {
