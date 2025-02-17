@@ -42,6 +42,9 @@
                 <% if (item.discount) { %>
                   <span class="discount"><%= Math.round(parseFloat(item.discount) * 100) %>%</span>
                 <% } %>
+                <% if (item.repost) { %>
+                  <b>R</b>
+                <% } %>
                 <button class="item-delete-button" onclick="deleteItem(<%= setId %>, <%= item.id %>)">X</button>
               </li>
             <% }); %>

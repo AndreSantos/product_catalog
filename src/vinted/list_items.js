@@ -29,6 +29,7 @@ export async function searchItems(query) {
       user_id: item.user.id,
       user_login: item.user.login,
       photos: item.photo ? [item.photo.url] : [],
+      firstPhotoDominantColor: item.photo?.dominant_color 
     }))
   };
 }

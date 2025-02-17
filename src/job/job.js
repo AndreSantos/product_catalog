@@ -93,8 +93,10 @@ function checkIfRepost(item, itemsCache) {
 	for (let items of Object.values(itemsCache)) {
 		const maybeRepost = items.some(it => 
 			it.user_id === item.user_id &&
-			it.photos.length > 0 &&
-			it.photos[0] === item.photos[0]);
+			it.brand === item.brand &&
+			it.status === item.status &&
+			it.title === item.title &&
+			it.firstPhotoDominantColor === item.firstPhotoDominantColor);
 		if (maybeRepost) {
 			return maybeRepost;
 		}
