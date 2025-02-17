@@ -38,7 +38,7 @@ function shouldDiscardBrand(brand) {
 	if (!brand || brand.trim().length === 0) {
 		return false;
 	}
-	const isLego = [/lego/i, /technic/i, /city/i].some(exp => !!brand.match(exp));
+	const isLego = [/lego/i, /technic/i, /city/i, /space/i, /speed champions/i].some(exp => !!brand.match(exp));
 	return !isLego;
 }
 
