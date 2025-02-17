@@ -97,15 +97,13 @@ export async function lens(photoUrl) {
     }
     
     log('Photo inferrence: opening search box.');
-    await page.waitForFunction(() => searchByImageIconButtonQuery());
-    await page.evaluate(() => searchByImageIconButtonQuery().click());
-    // await page.locator('div[role="button"][aria-label*="Pesquisar por imagem"]').click();
+    await page.waitForFunction(() => !!document.querySelector('div[role="button"][aria-label*="Pesquisar por imagem"]'));
+    await page.evaluate(() => document.querySelector('div[role="button"][aria-label*="Pesquisar por imagem"]').click());
     waitMs(100);
 
     log('Photo inferrence: pasting photo URL.');
-    await page.waitForFunction(() => imageUrlInputQuery(), {timeout: 5000});
-    await page.evaluate(() => imageUrlInputQuery().value = photoUrl);
-    // await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
+    await page.waitForFunction(() => !!document.querySelector('input[placeholder*="Colar link da imagem"]'));
+    await page.evaluate((url) => document.querySelector('input[placeholder*="Colar link da imagem"]').value = url, photoUrl);
     log('Photo inferrence: pasted photo URL.');
     waitMs(100);
     
@@ -178,11 +176,4 @@ export async function takeErrorScreenshot() {
     const page = await getOrInitializeBrowser();
     const previousIdx = (idx > 0 ? idx : 20) - 1;
     page.screenshot({path: `./logs/photo-${previousIdx}-end.jpg`});
-}
-
-function searchByImageIconButtonQuery() {
-    return document.querySelector('div[role="button"][aria-label*="Pesquisar por imagem"]');
-}
-function imageUrlInputQuery() {
-    return document.querySelector('input[placeholder*="Colar link da imagem"]');
 }
