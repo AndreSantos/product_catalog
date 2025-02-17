@@ -39,8 +39,8 @@ async function getOrInitializeBrowser() {
 }
 
 export async function resetTabsAndOpenLens() {
-    log(`Photo inferrence: closing ${pages.length} tabs.`);
     const pages = await browser.pages();
+    log(`Photo inferrence: closing ${pages.length} tabs.`);
     for (const page of pages) {
         if (!await page.isClosed()) {
             await page.close();
