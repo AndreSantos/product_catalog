@@ -96,21 +96,26 @@ export async function lens(photoUrl) {
         log('Photo inferrence: state was already cleaned up.');
     }
     
-    log('Photo inferrence: opening search box (if closed).');
-    await page.locator('div[role="button"][aria-label*="Pesquisar por imagem"]').click();
+    log('Photo inferrence: opening search box.');
+    await page.waitForFunction(() => searchByImageIconButtonQuery(), {timeout: 5000});
+    await page.evaluate(() => searchByImageIconButtonQuery().click());
+    // await page.locator('div[role="button"][aria-label*="Pesquisar por imagem"]').click();
     waitMs(100);
 
     log('Photo inferrence: pasting photo URL.');
-    await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
+    await page.waitForFunction(() => imageUrlInputQuery(), {timeout: 5000});
+    await page.evaluate(() => imageUrlInputQuery().value = photoUrl);
+    // await page.locator('input').filter(input => input.placeholder === 'Colar link da imagem').fill(photoUrl);
     log('Photo inferrence: pasted photo URL.');
     waitMs(100);
     
-    await page.waitForFunction(() => {
-        return Array.from(document.querySelectorAll('div[role="button"]')).filter(el => el.textContent === 'Pesquisa').length > 0;
-    });
-    await page.evaluate(() => {
-        Array.from(document.querySelectorAll('div[role="button"]')).filter(el => el.textContent === 'Pesquisa')[0].click();
-    });
+    // await page.waitForFunction(() => {
+    //    return Array.from(document.querySelectorAll('div[role="button"]')).filter(el => el.textContent === 'Pesquisa').length > 0;
+    //});
+    //await page.evaluate(() => {
+    //    Array.from(document.querySelectorAll('div[role="button"]')).filter(el => el.textContent === 'Pesquisa')[0].click();
+    //});
+    await page.evaluate(() => imageUrlInputQuery().nextElementSibling.click());
     log('Photo inferrence: clicked on search.');
     waitMs(3000);
 
@@ -167,4 +172,11 @@ export async function lens(photoUrl) {
     
     page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
     return undefined;
+}
+
+function searchByImageIconButtonQuery() {
+    return document.querySelector('div[role="button"][aria-label*="Pesquisar por imagem"]');
+}
+function imageUrlInputQuery() {
+    return document.querySelector('input[placeholder*="Colar link da imagem"]');
 }
