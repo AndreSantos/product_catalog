@@ -12,7 +12,8 @@ export function sanitizeValue(str, user_login) {
 	return str
 		.replaceAll(`${user_login}`, '')
 		.replaceAll(/("|'|´|`|-|\.|,|;|:|!|\?)/ig, ' ')
-		.replaceAll(/Star Wars|Vintage|Disney|Western|City|Technic|System|Speed Champions/ig, '')
+		.replaceAll(/Castle|Indiana Jones|Star Wars|Ninjago|Vintage|Disney|Western|City|Technic|System|Speed Champions|Marvel/ig, '')
+		.replaceAll(/Custom|groot|big|small|viking|3in1/ig, ' ')
 		.replaceAll(/(á|à|ã)/ig, 'a')
 		.replaceAll(/ç/ig, 'c')
 		.replaceAll(/(é|è|ê)/ig, 'e')
@@ -26,7 +27,7 @@ export function sanitizeValue(str, user_login) {
 
 export function extraSanitizationBeforeDiscardStep(str) {
 	return str.toLowerCase()
-		.replaceAll(/ \d+ /ig, ''); // Remove numbers like set IDs, but keep bricklinkg IDs like pi146
+		.replaceAll(/(^| )\d+ /ig, ''); // Remove numbers like set IDs, but keep bricklinkg IDs like pi146
 }
 
 function shouldDiscard(badExpressions, str) {

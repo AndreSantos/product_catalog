@@ -11,9 +11,9 @@ async function runJob() {
     let waitingTimeInMins;
     if (!iterationStats.totalItems) {
         clearVintedCookie();
-        waitingTimeInMins = 7;
+        waitingTimeInMins = 3;
     } else if (iterationStats.pastItems < 5) {
-		waitingTimeInMins = 7;
+		waitingTimeInMins = 5;
 	} else if (iterationStats.pastItems < 10) {
 		waitingTimeInMins = 9;
 	} else if (iterationStats.pastItems < 20) {
