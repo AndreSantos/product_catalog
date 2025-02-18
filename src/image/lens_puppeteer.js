@@ -152,7 +152,8 @@ export async function lens(photoUrl) {
         if (results.length >= 4) {
             const freq = {};
             results.forEach(r => {
-                const set = [...r.matchAll(PHOTO_REGEX)][0];
+                const resultWithoutYear = r.replaceAll(/(^| )(19|20)\d{2}( |$)/ig, ' ');
+                const set = [...resultWithoutYear.matchAll(PHOTO_REGEX)][0];
                 if (set) {
                     freq[set[1]] = (freq[set[1]] ?? 0) + 1;
                 }

@@ -19,15 +19,15 @@ export function sanitizeValue(str, user_login) {
 		.replaceAll(/(é|è|ê)/ig, 'e')
 		.replaceAll(/î/ig, 'i')
 		.replaceAll(/(ú)/ig, 'u')
-		.replaceAll(/\d{1,3} ?x/ig, ' ')			// ex: 10x or 10 x
-		.replaceAll(/(19|20)\d{2}( |$)/ig, ' ')		// ex: 1998
+		.replaceAll(/\d{1,3} ?x/ig, ' ')				// ex: 10x or 10 x
+		.replaceAll(/(^| )(19|20)\d{2}( |$)/ig, ' ')	// ex: 1998
 		.replaceAll(/\d{3,5}\s+pi?e?ce?s/ig, '')
 		.replaceAll(/\s+/ig, ' ');
 }
 
 export function extraSanitizationBeforeDiscardStep(str) {
 	return str.toLowerCase()
-		.replaceAll(/(^| )\d+ /ig, ''); // Remove numbers like set IDs, but keep bricklinkg IDs like pi146
+		.replaceAll(/(^| )\d+($| )/ig, ''); // Remove numbers like set IDs, but keep bricklinkg IDs like pi146
 }
 
 function shouldDiscard(badExpressions, str) {
