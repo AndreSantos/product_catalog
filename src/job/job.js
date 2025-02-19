@@ -134,6 +134,13 @@ export async function job() {
 	};
 	const descriptionCache = {};
 	log('Starting new iteration.');
+
+	log('Clearing up old entries in the cache.');
+	for (const key of Object.keys(itemsCache)) {
+		itemsCache[key] = itemsCache[key].filter(item => 
+			iteration.start - new Date(item.time) <= 1000 * 60 * 60 * 32
+		);
+	}
 	const response = await searchItems({text: 'lego'});
 	iteration.totalItems = response.items.length;
 	for (let [index, item] of response.items.entries()) {
