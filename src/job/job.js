@@ -12,8 +12,8 @@ export function sanitizeValue(str, user_login) {
 	return str
 		.replaceAll(`${user_login}`, '')
 		.replaceAll(/("|'|´|`|-|\.|,|;|:|!|\?)/ig, ' ')
-		.replaceAll(/Castle|Indiana Jones|Star Wars|Ninjago|Vintage|Disney|Western|City|Technic|System|Speed Champions|Marvel/ig, '')
-		.replaceAll(/Custom|groot|big|small|viking|3in1/ig, ' ')
+		.replaceAll(/Fantasy Era|Castle|Indiana Jones|Star Wars|Ninjago|Vintage|Disney|Western|City|Technic|System|Speed Champions|Marvel/ig, '')
+		.replaceAll(/Custom|groot|big|small|viking|3in1|Vendo|Vend/ig, ' ')
 		.replaceAll(/(á|à|ã)/ig, 'a')
 		.replaceAll(/ç/ig, 'c')
 		.replaceAll(/(é|è|ê)/ig, 'e')

@@ -11,15 +11,15 @@ async function runJob() {
     let waitingTimeInMins;
     if (!iterationStats.totalItems) {
         clearVintedCookie();
-        waitingTimeInMins = 3;
+        waitingTimeInMins = 4;
     } else if (iterationStats.pastItems < 5) {
 		waitingTimeInMins = 5;
 	} else if (iterationStats.pastItems < 10) {
-		waitingTimeInMins = 9;
+		waitingTimeInMins = 7;
 	} else if (iterationStats.pastItems < 20) {
-		waitingTimeInMins = 12;
+		waitingTimeInMins = 9;
 	} else if (iterationStats.pastItems < 30) {
-		waitingTimeInMins = 15;
+		waitingTimeInMins = 12;
 	} else {
 		waitingTimeInMins = 25;
 	}

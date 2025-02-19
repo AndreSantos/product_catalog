@@ -167,6 +167,7 @@ export async function lens(photoUrl) {
                 }
             });
             const result = max * 2 > total;
+            log(freq);
             if (result) {
                 log(`Photo inferrence: ${maxv}`);
             } else {
