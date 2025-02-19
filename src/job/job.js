@@ -149,7 +149,8 @@ export async function job() {
 
 		const repost = checkIfRepost(item, itemsCache);
 		if (repost) {
-			log(`Is a repost.`);
+			log(`Is a repost of...`);
+			log(repost);
 			iteration.repost++;
 			item.isRepost = true;
 			const inferredSets = getInferredSets(repost);
@@ -255,8 +256,12 @@ export async function job() {
 		item.created_at = item.created_at ?? iteration.start.toString();
 		
 		const inferredSets = getInferredSets(item);
-		const areAllUnwantedItems = inferredSets.every(s => unwantedSets[s]);
+
+		const cacheKey = inferredSets.length > 0 ? inferredSets.join(' + ') : 'undetermined';
+		itemsCache[cacheKey] = itemsCache[cacheKey] || [];
+		itemsCache[cacheKey] = [...itemsCache[cacheKey], item].sort((a, b) => a.price > b.price);
 		
+		const areAllUnwantedItems = inferredSets.every(s => unwantedSets[s]);
 		if (areAllUnwantedItems) {
 			if (inferredSets.length) {
 				log(`Unwanted set(s) ${inferredSets}.`);
@@ -265,9 +270,6 @@ export async function job() {
 			}
 			iteration.unwantedItems++;
 		} else {
-			const cacheKey = inferredSets.join(' + ');
-			itemsCache[cacheKey] = itemsCache[cacheKey] || [];
-			itemsCache[cacheKey] = [...itemsCache[cacheKey], item].sort((a, b) => a.price > b.price);
 			log(`Inferred sets: ${cacheKey}`);
 			if (isPossibleGold(inferredSets, item.price, prices, true)) {
 				iteration.possibleGold++;
