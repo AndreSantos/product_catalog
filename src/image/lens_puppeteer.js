@@ -107,14 +107,8 @@ export async function lens(photoUrl) {
     waitMs(100);
 
     log('Photo inferrence: pasting photo URL.');
-    try {
-        await page.screenshot({path: `./logs/photo-${idx}-middle.jpg`});
-        await page.waitForFunction(() => !!document.querySelector('input[placeholder*="Colar link da imagem"]'));
-    } catch (err) {
-        log(err);
-        await page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
-        return undefined;
-    }
+    await page.screenshot({path: `./logs/photo-${idx}-middle.jpg`});
+    await page.waitForFunction(() => !!document.querySelector('input[placeholder*="Colar link da imagem"]'));
     await page.evaluate((url) => document.querySelector('input[placeholder*="Colar link da imagem"]').value = url, photoUrl);
     log('Photo inferrence: pasted photo URL.');
     waitMs(100);

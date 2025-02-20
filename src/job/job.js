@@ -12,13 +12,15 @@ export function sanitizeValue(str, user_login) {
 	return str
 		.replaceAll(`${user_login}`, '')
 		.replaceAll(/("|'|´|`|-|\.|,|;|:|!|\?)/ig, ' ')
-		.replaceAll(/Fantasy Era|Castle|Indiana Jones|Star Wars|Ninjago|Vintage|Disney|Western|City|Technic|System|Speed Champions|Marvel/ig, '')
-		.replaceAll(/Custom|groot|big|small|viking|3in1|Vendo|Vend/ig, ' ')
+		.replaceAll(/Vend/ig, ' ')
 		.replaceAll(/(á|à|ã)/ig, 'a')
 		.replaceAll(/ç/ig, 'c')
 		.replaceAll(/(é|è|ê)/ig, 'e')
 		.replaceAll(/î/ig, 'i')
 		.replaceAll(/(ú)/ig, 'u')
+		.replaceAll(/Batman|Fantasy Era|Castle|Indiana Jones|Star Wars|Ninjago|Vintage|Disney|Western|City|Technic|System|Speed Champions|Marvel/ig, '')
+		.replaceAll(/Seas|Barracuda|Custom|groot|big|small|viking|3in1|Vendo|set/ig, ' ')
+		.replaceAll(/Black|Rosso|Neuf/ig, ' ')
 		.replaceAll(/\d{1,3} ?x/ig, ' ')				// ex: 10x or 10 x
 		.replaceAll(/(^| )(19|20)\d{2}( |$)/ig, ' ')	// ex: 1998
 		.replaceAll(/\d{3,5}\s+pi?e?ce?s/ig, '')
@@ -92,7 +94,7 @@ function isPossibleGold(inferredSets, price, pricesCache, shouldLog) {
 
 function checkIfRepost(item, itemsCache) {
 	for (let items of Object.values(itemsCache)) {
-		const maybeRepost = items.some(it => 
+		const maybeRepost = items.find(it => 
 			it.user_id === item.user_id &&
 			it.brand === item.brand &&
 			it.status === item.status &&
