@@ -20,6 +20,7 @@ process.on('SIGQUIT', cleanup);
 
 function log(str) {
 	console.log(new Date().toLocaleString(), str);
+    return `${str}\n`;
 }
 
 async function getOrInitializeBrowser() {
@@ -83,11 +84,12 @@ export async function lens(photoUrl) {
     await page.screenshot({path: `./logs/photo-${idx}-start.jpg`});
     waitMs(100);
 
+    let s = "";
     log('Photo inferrence: checking GDPR...');
     const gdprButton = await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0]");
     if (gdprButton) {
         await page.evaluate("Array.from(document.querySelectorAll('button')).filter(el => el.textContent === 'Accept all' || el.textContent === 'Aceitar tudo')[0].click()");
-        log('Photo inferrence: accepted Lens GDPR.');
+        s += log('Photo inferrence: accepted Lens GDPR.');
         waitMs(1000);
     }
     
@@ -95,22 +97,22 @@ export async function lens(photoUrl) {
         await page.locator('button[aria-label*="Reduzir menu pendente"]')
             .setTimeout(500)
             .click();
-        log('Photo inferrence: was searching another image, reset the state.');
+        s += log('Photo inferrence: was searching another image, reset the state.');
         waitMs(1000);
     } catch(e) {
-        log('Photo inferrence: state was already cleaned up.');
+        s += log('Photo inferrence: state was already cleaned up.');
     }
     
-    log('Photo inferrence: opening search box.');
+    s += log('Photo inferrence: opening search box.');
     await page.waitForFunction(() => !!document.querySelector('div[role="button"][aria-label*="Pesquisar por imagem"]'));
     await page.evaluate(() => document.querySelector('div[role="button"][aria-label*="Pesquisar por imagem"]').click());
     waitMs(100);
 
-    log('Photo inferrence: pasting photo URL.');
+    s += log('Photo inferrence: pasting photo URL.');
     await page.screenshot({path: `./logs/photo-${idx}-middle.jpg`});
     await page.waitForFunction(() => !!document.querySelector('input[placeholder*="Colar link da imagem"]'));
     await page.evaluate((url) => document.querySelector('input[placeholder*="Colar link da imagem"]').value = url, photoUrl);
-    log('Photo inferrence: pasted photo URL.');
+    s += log('Photo inferrence: pasted photo URL.');
     waitMs(100);
     
     // await page.waitForFunction(() => {
@@ -120,7 +122,7 @@ export async function lens(photoUrl) {
     //    Array.from(document.querySelectorAll('div[role="button"]')).filter(el => el.textContent === 'Pesquisa')[0].click();
     //});
     await page.evaluate(() => document.querySelector('input[placeholder*="Colar link da imagem"]').nextElementSibling.click());
-    log('Photo inferrence: clicked on search.');
+    s += log('Photo inferrence: clicked on search.');
     waitMs(3000);
 
     log('Photo inferrence: hide image preview if opened.');
@@ -128,13 +130,13 @@ export async function lens(photoUrl) {
         await page.locator('button[aria-label*="Reduzir menu pendente"]')
             .setTimeout(15000)
             .click();
-        log('Photo inferrence: hid image preview.');
+        s += log('Photo inferrence: hid image preview.');
         // Await same button not visible (using .clientHeight).
     } catch(e) {
-        log('Photo inferrence: image preview not opened.');
+        s += log('Photo inferrence: image preview not opened.');
     }
     waitMs(1000);
-    log('Photo inferrence: looking up values...');
+    s += log('Photo inferrence: looking up values...');
 
     const PHOTO_REGEX = /Lego\D*(\d{4,7})(?:$|\D*)/ig;
     for (let i = 0; i < 5; i++) {
@@ -142,7 +144,7 @@ export async function lens(photoUrl) {
         const resultsToLog = [...results];
         resultsToLog.length = Math.min(resultsToLog.length, 10);
         log(`Photo inferrence: frequencies attempt ${i}: `);
-        log(resultsToLog);
+        s += log(resultsToLog);
         if (results.length >= 4) {
             const freq = {};
             results.forEach(r => {
@@ -161,22 +163,28 @@ export async function lens(photoUrl) {
                 }
             });
             const result = max * 2 > total;
-            log(freq);
+            s += log(freq);
             if (result) {
-                log(`Photo inferrence: ${maxv}`);
+                s += log(`Photo inferrence: ${maxv}`);
             } else {
-                log("Photo inferrence: didn't photo infer any sets.");
+                s += log("Photo inferrence: didn't photo infer any sets.");
             }
             
             await page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
-            return result ? maxv : undefined;
+            return {
+                logs: s,
+                set: result ? maxv : undefined
+            };
         }
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        waitMs(1000);
     }
-    log('Photo inferrence: no values after 5s.');
+    s += log('Photo inferrence: no values after 5s.');
     
-    page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
-    return undefined;
+    await page.screenshot({path: `./logs/photo-${idx}-end.jpg`});
+    return {
+        logs: s,
+        set: undefined
+    };
 }
 
 export async function takeErrorScreenshot() {

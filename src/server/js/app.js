@@ -22,6 +22,15 @@ function updateBadExpressionTestResult(target) {
     target.classList.add(result ? "pass" : "fail");
 }
 
+function toggleIterationLog(idx) {
+    const iterationLog = document.querySelector(`#iteration-log-"${idx}"`);
+    if (iterationLog.classList.contains("hide")) {
+        iterationLog.classList.add("hide");
+    } else {
+        iterationLog.classList.remove("hide");
+    }
+}
+
 document.addEventListener("input", async (event) => {
     if (event.target.classList.contains('bad-expression-test')) {
         updateBadExpressionTestResult(event.target);

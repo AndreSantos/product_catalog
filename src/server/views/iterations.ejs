@@ -21,8 +21,8 @@
       <th>-R</th>
     </thead>
     <tbody>
-      <% iterations.reverse().forEach(function (iteration) { %>
-        <tr>
+      <% iterations.reverse().forEach(function (iteration, idx) { %>
+        <tr id="iteration-<%= idx %>" onclick="toggleIterationLog(<%= idx %>)">
           <td><%= iteration.start.replace("T", " ").slice(5, -8) %></td>
           <td><%= iteration.end.replace("T", " ").slice(5, -8) %></td>
           <td><%= iteration.totalItems %></td>
@@ -38,6 +38,52 @@
           <td><%= iteration.unwantedUsers %></td>
           <td><%= iteration.repost %></td>
         </tr>
+        <table class="iteration-log hide" id="iteration-log-<%= idx %>">
+          <tbody>
+            <% (iteration.items || []).forEach(function (item) { %>
+              <tr>
+                <td><%= item %></td>
+                <td>
+                  <%= if (item.pastItem) { %>
+                    Past item
+                  <% } %>
+                  <%= if (item.repost) { %>
+                    Repost
+                  <% } %>
+                  <%= if (item.unwantedUser) { %>
+                    Unwanted user <%= item.unwantedUser %>
+                  <% } %>
+                  <%= if (item.titleDiscarded) { %>
+                    Title discarded (<%= item.titleDiscarded %>)
+                  <% } %>
+                  <%= if (item.brandDiscarded) { %>
+                    Brand
+                  <% } %>
+                  <%= if (item.descriptionDiscarded) { %>
+                    Description discarded (<%= item.descriptionDiscarded %>)
+                  <% } %>
+                  <%= if (item.unwantedSets) { %>
+                    Unwanted: <%= item.unwantedSets %>
+                  <% } %>
+                  <%= if (item.notInferred) { %>
+                    Not inferred
+                  <% } %>
+                  <%= if (item.inferredGold) { %>
+                    <b>Inferred Gold</b>: <%= item.inferredGold %> (<%= item.maxPrice %>)
+                  <% } %>
+                  <%= if (item.inferred) { %>
+                    Inferred: <%= item.inferred %> (<%= item.maxPrice %>)
+                  <% } %>
+                </td>
+                <td>
+                  <%= if (item.photoRecognition) { %>
+                    <%= item.photoRecognition %>
+                  <% } %>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
       <% }); %>
     </thead>
   </table>

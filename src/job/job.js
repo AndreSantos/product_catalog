@@ -138,6 +138,7 @@ export async function job() {
 		possibleGold: 0,
 		photoFailure: 0,
 		repost: 0,
+		items: [],
 	};
 	const descriptionCache = {};
 	log('Starting new iteration.');
@@ -155,6 +156,7 @@ export async function job() {
 		if (itemsRead[item.id]) {
 			log(`Skipping past item.`);
 			iteration.pastItems++;
+			iteration.items.push({item, pastItem: true});
 			continue;
 		}
 		log(item);
@@ -163,36 +165,39 @@ export async function job() {
 
 		const repost = checkIfRepost(item, itemsCache);
 		if (repost) {
-			log(`Is a repost of...`);
+			log(`Is a repost of:`);
 			log(repost);
 			iteration.repost++;
 			item.isRepost = true;
 			const inferredSets = getInferredSets(repost);
 			const cacheKey = inferredSets.join(' + ');
-			itemsCache[cacheKey] = itemsCache[cacheKey] || [];
-			itemsCache[cacheKey] = [...itemsCache[cacheKey], item].sort((a, b) => a.price > b.price);
+			addToCache(item, cacheKey, itemsCache);
 			if (isPossibleGold(inferredSets, item.price, prices, true)) {
 				iteration.possibleGold++;
 				const maxPrice = getMaxPrice(inferredSets, prices);
 				sendMail(cacheKey, item, maxPrice);
 			}
+			iteration.items.push({item, repost: true});
 			continue;
 		}
 		if (unwantedUsers.includes(item.user_id) || unwantedUsers.includes(item.user_login)) {
-			iteration.unwantedUsers++;
 			log(`Discarded due to unwanted user ${item.user_id} / ${item.user_login}.`);
+			iteration.unwantedUsers++;
+			iteration.items.push({item, unwantedUser: item.user_login});
 			continue;
 		}
 		const title = sanitizeValue(item.title, item.user_login);
 		if (shouldDiscard(badExpressions, title)) {
 			log(`Discarded due to title (${item.title}) by expression: ${shouldDiscard(badExpressions, title)}.`);
 			iteration.discardedItems++;
+			iteration.items.push({item, titleDiscarded: shouldDiscard(badExpressions, title)});
 			continue;
 		}
 			
 		if (shouldDiscardBrand(item.brand)) {
 			log(`Discarded due to brand (${item.brand}).`);
 			iteration.discardedItems++;
+			iteration.items.push({item, brandDiscarded: true});
 			continue;
 		}
 		const titleSets = [...title.matchAll(/[^0-9]*(\d{4,7})[^0-9]?\D*/g)].map(m => m[1]);
@@ -236,6 +241,7 @@ export async function job() {
 				log(`Discarded due to description (${description}) by expression: ${shouldDiscard(badExpressions, description)}.`);
 				iteration.discardedItems++;
 				addToCache(item, 'discarded', itemsCache);
+				iteration.items.push({item, descriptionDiscarded: shouldDiscard(badExpressions, description)});
 				continue;
 			}
 		} else {
@@ -243,15 +249,17 @@ export async function job() {
 				log(`Description not present.`);
 			}
 		}
+		let lensResult;
 		if (!item.infer.title.length && !item.infer.description.length) {
 			log(`Falling back to inferring photo.`);
 			if (item.photos && item.photos.length > 0) {
 				iteration.photoTest++;
 				try {
-					const photoInferredSet = await lens(item.photos[0]);
+					lensResult = await lens(item.photos[0]);
+					const photoInferredSet = lensResult.set;
 					item.infer.photo = photoInferredSet ? [photoInferredSet] : []; 
 				} catch (e) {
-					console.log(e);
+					log(e);
 					await takeErrorScreenshot();
 					await resetTabsAndOpenLens();
 					iteration.photoFailure++;
@@ -278,16 +286,21 @@ export async function job() {
 		if (areAllUnwantedItems) {
 			if (inferredSets.length) {
 				log(`Unwanted set(s) ${inferredSets}.`);
+				iteration.items.push({item, unwantedSets: cacheKey, photoRecognition: lensResult?.logs});
 			} else {
 				log(`Didn't infer set.`);
+				iteration.items.push({item, notInferred: true, photoRecognition: lensResult?.logs});
 			}
 			iteration.unwantedItems++;
 		} else {
 			log(`Inferred sets: ${cacheKey}`);
+			const maxPrice = getMaxPrice(inferredSets, prices);
 			if (isPossibleGold(inferredSets, item.price, prices, true)) {
 				iteration.possibleGold++;
-				const maxPrice = getMaxPrice(inferredSets, prices);
 				sendMail(cacheKey, item, maxPrice);
+				iteration.items.push({item, inferredGold: cacheKey, maxPrice, photoRecognition: lensResult?.logs});
+			} else {
+				iteration.items.push({item, inferred: cacheKey, maxPrice, photoRecognition: lensResult?.logs});
 			}
 		}
 		persistData(itemsCache, itemsRead);
