@@ -21,7 +21,7 @@ export function sanitizeValue(str, user_login) {
 		.replaceAll(/Seas|Barracuda|Custom|groot|big|grande|small|viking|3in1|Vendre|Vendo|Vends|set/ig, ' ')
 		.replaceAll(/Vend/ig, ' ')
 		.replaceAll(/Black|Rosso|Brown|Neuf|rode|gris/ig, ' ')
-		.replaceAll(/(^| )(a|las|il|de)( |$)/ig, ' ')
+		.replaceAll(/(^| )(a|las|il)( |$)/ig, ' ')
 		.replaceAll(/\d{1,3} ?x/ig, ' ')				// ex: 10x or 10 x
 		.replaceAll(/(^| )(19|20)\d{2}( |$)/ig, ' ')	// ex: 1998
 		.replaceAll(/\d{3,5}\s+pi?e?ce?s/ig, '')

@@ -44,39 +44,39 @@
               <tr>
                 <td><%= item %></td>
                 <td>
-                  <%= if (item.pastItem) { %>
+                  <% if (item.pastItem) { %>
                     Past item
                   <% } %>
-                  <%= if (item.repost) { %>
+                  <% if (item.repost) { %>
                     Repost
                   <% } %>
-                  <%= if (item.unwantedUser) { %>
+                  <% if (item.unwantedUser) { %>
                     Unwanted user <%= item.unwantedUser %>
                   <% } %>
-                  <%= if (item.titleDiscarded) { %>
+                  <% if (item.titleDiscarded) { %>
                     Title discarded (<%= item.titleDiscarded %>)
                   <% } %>
-                  <%= if (item.brandDiscarded) { %>
+                  <% if (item.brandDiscarded) { %>
                     Brand
                   <% } %>
-                  <%= if (item.descriptionDiscarded) { %>
+                  <% if (item.descriptionDiscarded) { %>
                     Description discarded (<%= item.descriptionDiscarded %>)
                   <% } %>
-                  <%= if (item.unwantedSets) { %>
+                  <% if (item.unwantedSets) { %>
                     Unwanted: <%= item.unwantedSets %>
                   <% } %>
-                  <%= if (item.notInferred) { %>
+                  <% if (item.notInferred) { %>
                     Not inferred
                   <% } %>
-                  <%= if (item.inferredGold) { %>
+                  <% if (item.inferredGold) { %>
                     <b>Inferred Gold</b>: <%= item.inferredGold %> (<%= item.maxPrice %>)
                   <% } %>
-                  <%= if (item.inferred) { %>
+                  <% if (item.inferred) { %>
                     Inferred: <%= item.inferred %> (<%= item.maxPrice %>)
                   <% } %>
                 </td>
                 <td>
-                  <%= if (item.photoRecognition) { %>
+                  <% if (item.photoRecognition) { %>
                     <%= item.photoRecognition %>
                   <% } %>
                 </td>

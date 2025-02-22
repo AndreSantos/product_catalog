@@ -192,5 +192,9 @@ export async function takeErrorScreenshot() {
         return;
     }
     const previousIdx = (idx > 0 ? idx : 20) - 1;
-    page.screenshot({path: `./logs/photo-${previousIdx}-end.jpg`});
+    try {
+        await page.screenshot({path: `./logs/photo-${previousIdx}-end.jpg`});
+    } catch (e) {
+        // Swallow exception if it fails to take screenshot when there's an error.
+    }
 }
