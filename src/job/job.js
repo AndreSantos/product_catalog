@@ -107,6 +107,11 @@ function checkIfRepost(item, itemsCache) {
 	return false;
 }
 
+function addToCache(item, cacheKey, itemsCache) {
+	itemsCache[cacheKey] = itemsCache[cacheKey] || [];
+	itemsCache[cacheKey] = [...itemsCache[cacheKey], item].sort((a, b) => a.price > b.price);
+}
+
 export async function job() {
 	const data = readData();
 	const itemsCache = data.itemsCache;
@@ -230,6 +235,7 @@ export async function job() {
 			if (shouldDiscard(badExpressions, description)) {
 				log(`Discarded due to description (${description}) by expression: ${shouldDiscard(badExpressions, description)}.`);
 				iteration.discardedItems++;
+				addToCache(item, 'discarded', itemsCache);
 				continue;
 			}
 		} else {
@@ -265,10 +271,8 @@ export async function job() {
 		item.created_at = item.created_at ?? iteration.start.toString();
 		
 		const inferredSets = getInferredSets(item);
-
 		const cacheKey = inferredSets.length > 0 ? inferredSets.join(' + ') : 'undetermined';
-		itemsCache[cacheKey] = itemsCache[cacheKey] || [];
-		itemsCache[cacheKey] = [...itemsCache[cacheKey], item].sort((a, b) => a.price > b.price);
+		addToCache(item, cacheKey, itemsCache);
 		
 		const areAllUnwantedItems = inferredSets.every(s => unwantedSets[s]);
 		if (areAllUnwantedItems) {
