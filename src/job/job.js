@@ -12,15 +12,16 @@ export function sanitizeValue(str, user_login) {
 	return str
 		.replaceAll(`${user_login}`, '')
 		.replaceAll(/("|'|´|`|-|\.|,|;|:|!|\?)/ig, ' ')
-		.replaceAll(/Vend/ig, ' ')
 		.replaceAll(/(á|à|ã)/ig, 'a')
 		.replaceAll(/ç/ig, 'c')
 		.replaceAll(/(é|è|ê)/ig, 'e')
 		.replaceAll(/î/ig, 'i')
 		.replaceAll(/(ú)/ig, 'u')
 		.replaceAll(/Batman|Fantasy Era|Castle|Indiana Jones|Star Wars|Ninjago|Vintage|Disney|Western|City|Technic|System|Speed Champions|Marvel/ig, '')
-		.replaceAll(/Seas|Barracuda|Custom|groot|big|small|viking|3in1|Vendo|set/ig, ' ')
-		.replaceAll(/Black|Rosso|Neuf/ig, ' ')
+		.replaceAll(/Seas|Barracuda|Custom|groot|big|grande|small|viking|3in1|Vendre|Vendo|Vends|set/ig, ' ')
+		.replaceAll(/Vend/ig, ' ')
+		.replaceAll(/Black|Rosso|Brown|Neuf|rode|gris/ig, ' ')
+		.replaceAll(/(^| )(a|las|il|de)( |$)/ig, ' ')
 		.replaceAll(/\d{1,3} ?x/ig, ' ')				// ex: 10x or 10 x
 		.replaceAll(/(^| )(19|20)\d{2}( |$)/ig, ' ')	// ex: 1998
 		.replaceAll(/\d{3,5}\s+pi?e?ce?s/ig, '')
@@ -89,7 +90,7 @@ function isPossibleGold(inferredSets, price, pricesCache, shouldLog) {
 	if (shouldLog) {
 		log(`Item price (max): ${price} (${maxPrice})`);
 	}
-	return price <= maxPrice && !(price <= 5 && maxPrice >= 25);
+	return price <= maxPrice && !(price <= 5 && maxPrice >= 25) && !(price <= 15 && maxPrice >= 100);
 }
 
 function checkIfRepost(item, itemsCache) {
